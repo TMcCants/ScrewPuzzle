@@ -1,0 +1,23 @@
+{
+  "name": "ScrewPuzzle.Tests.EditMode",
+  "rootNamespace": "ScrewPuzzle.Tests",
+  "references": [
+    "ScrewPuzzle.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNITY_INCLUDE_TESTS"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

@@ -47,8 +47,30 @@ The working rhythm is:
 
 The goal is for Tamika to understand the codebase well enough to explain its systems, safely modify them, and eventually extend the game independently.
 
-## Status
+## V0.1 Technical Foundation
 
-**Product definition in progress.**
+The first playable vertical slice is now implemented for Unity 6. It includes:
 
-Unity implementation has not started yet. The next step is to lock the one-page Game Brief and exact Version 0.1 scope before beginning implementation.
+- one portrait radio level
+- nine colored screws
+- per-screw blocking dependencies
+- a five-slot tray
+- match-three clearing
+- a full-tray loss state
+- restart controls
+- staged radio-part release
+- a final restoration and radio pulse effect
+
+The level uses simple generated shapes so gameplay can be tested before permanent art exists.
+
+## Open and Play
+
+1. Add this repository folder as a project in Unity Hub.
+2. Open it with Unity `6000.3.23f1` or a compatible Unity 6 editor.
+3. Open `Assets/Scenes/Level01_Radio.unity`.
+4. Set the Game view to a portrait ratio such as `9:16`.
+5. Press Play.
+
+For the intended safe solution, clear the three red screws, then the three blue screws, then the three yellow screws. Some mixed-color choices will fill the tray and demonstrate the loss state.
+
+Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) before changing gameplay rules and [`docs/UNITY_SETUP.md`](docs/UNITY_SETUP.md) before replacing the generated prototype visuals.
