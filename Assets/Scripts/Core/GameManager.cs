@@ -72,7 +72,7 @@ namespace ScrewPuzzle
             }
 
             State = LevelState.Lost;
-            ShowResult("Tray full!\nTry a different order.");
+            ShowResult("Game Over!\nThe Tray is full.");
         }
 
         public void CheckForWin()
