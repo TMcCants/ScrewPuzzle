@@ -25,6 +25,7 @@ namespace ScrewPuzzle
         private SpriteRenderer screwRenderer;
         private Color normalColor;
         private bool isMoving;
+        private Coroutine blockedFeedbackRoutine;
 
         public ScrewColorId ColorId { get { return colorId; } }
         public bool IsRemovedFromObject { get; private set; }
@@ -72,6 +73,7 @@ namespace ScrewPuzzle
 
             if (dependency != null && !dependency.AreAllBlockersRemoved())
             {
+                PlayBlockedFeedback();
                 gameManager.ShowTemporaryMessage("That screw is still blocked.");
                 return;
             }
@@ -133,6 +135,40 @@ namespace ScrewPuzzle
             transform.position = targetPosition;
             isMoving = false;
 
+        }
+
+        private void PlayBlockedFeedback()
+        {
+            // Ignore repeated taps until the current shake finishes.
+            // This prevents multiple coroutines from fighting over the screw's position.
+            if (blockedFeedbackRoutine == null)
+            {
+                blockedFeedbackRoutine = StartCoroutine(BlockedFeedbackRoutine());
+            }
+        }
+
+        private IEnumerator BlockedFeedbackRoutine()
+        {
+            Vector3 startPosition = transform.localPosition;
+            float elapsed = 0f;
+            const float duration = 0.28f;
+            const float shakeDistance = 0.14f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / duration);
+                float strength = 1f - progress;
+                float horizontalShake = Mathf.Sin(progress * Mathf.PI * 4f)
+                    * shakeDistance
+                    * strength;
+
+                transform.localPosition = startPosition + (Vector3.right * horizontalShake);
+                yield return null;
+            }
+
+            transform.localPosition = startPosition;
+            blockedFeedbackRoutine = null;
         }
 
         private IEnumerator ClearRoutine()

@@ -37,7 +37,9 @@ Select open screws in this order by color: red, blue, yellow, red, blue. Confirm
 
 ### Blocking path
 
-At the start, click any dim screw. Confirm that it does not move and the status text says it is blocked.
+At the start, click any dim screw. Confirm that it shakes briefly, stays attached to the radio,
+and the status text says it is blocked. Click it rapidly several times and confirm that the screw
+always returns to its original position.
 
 ## Tamika's First Controlled Change
 

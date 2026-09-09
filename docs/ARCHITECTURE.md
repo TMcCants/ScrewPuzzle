@@ -23,11 +23,13 @@ Owns one screw.
 - receives a click or tap through `OnMouseDown`
 - refuses input when already removed or moving
 - consults its dependency component
+- shakes briefly when the player taps it while blocked
 - asks the tray to accept it
 - animates itself into and within the tray
 - shrinks away when its set clears
 
-Safe changes: screw movement speed and the blocked visual alpha.
+Safe changes: screw movement speed, blocked visual alpha, blocked-feedback duration,
+and blocked-feedback shake distance.
 
 Do not add match or win logic here. A screw should not know what every other screw is doing.
 
