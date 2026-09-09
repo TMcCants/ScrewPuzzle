@@ -27,7 +27,9 @@ The saved scene contains one bootstrap object. All visible prototype objects are
 1. Select all three red screws.
 2. Select all three blue screws.
 3. Select all three yellow screws.
-4. Confirm that each set clears, radio parts loosen, the radio reassembles, its display pulses, and the restored overlay appears.
+4. Confirm that each set clears and the radio parts loosen.
+5. On the final match, confirm that the radio reassembles, its display flickers three times,
+   the radio performs one scale pop, and the restored overlay appears after a short hold.
 
 ### Loss path
 

@@ -166,24 +166,48 @@ namespace ScrewPuzzle
 
         private IEnumerator PulseRadio()
         {
+            if (radioRoot == null || displayGlow == null)
+            {
+                yield break;
+            }
+
             Vector3 originalScale = radioRoot.localScale;
             Color originalGlowColor = displayGlow.color;
-            float elapsed = 0f;
-            const float duration = 1.1f;
+            Color poweredGlowColor = new Color(1f, 0.78f, 0.18f);
 
-            while (elapsed < duration)
+            // An old radio flickers briefly before its display stays on.
+            // The pauses are intentionally short so the win still feels responsive.
+            const int flickerCount = 3;
+
+            for (int flicker = 0; flicker < flickerCount; flicker++)
+            {
+                displayGlow.color = poweredGlowColor;
+                yield return new WaitForSeconds(0.08f);
+
+                displayGlow.color = Color.Lerp(originalGlowColor, poweredGlowColor, 0.2f);
+                yield return new WaitForSeconds(0.06f);
+            }
+
+            // One clear scale "pop" is easier to read than several tiny wobbles.
+            float elapsed = 0f;
+            const float popDuration = 0.55f;
+
+            while (elapsed < popDuration)
             {
                 elapsed += Time.deltaTime;
-                float pulse = Mathf.Sin((elapsed / duration) * Mathf.PI * 4f) * 0.04f;
-                radioRoot.localScale = originalScale * (1f + pulse);
+                float progress = Mathf.Clamp01(elapsed / popDuration);
+                float pop = Mathf.Sin(progress * Mathf.PI) * 0.08f;
 
-                float brightness = 0.55f + Mathf.Abs(Mathf.Sin(elapsed * 9f)) * 0.45f;
-                displayGlow.color = Color.Lerp(originalGlowColor, new Color(1f, 0.85f, 0.25f), brightness);
+                radioRoot.localScale = originalScale * (1f + pop);
+                displayGlow.color = Color.Lerp(originalGlowColor, poweredGlowColor, progress);
                 yield return null;
             }
 
             radioRoot.localScale = originalScale;
-            displayGlow.color = new Color(1f, 0.78f, 0.18f);
+            displayGlow.color = poweredGlowColor;
+
+            // Let the player see the restored radio before the result overlay appears.
+            yield return new WaitForSeconds(0.25f);
         }
     }
 }

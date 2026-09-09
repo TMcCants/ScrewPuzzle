@@ -85,9 +85,12 @@ Each `RadioPart` contains:
 - the position offset used when it loosens
 - the rotation used when it loosens
 
-When all of a part's holding screws leave the radio, the part shifts. When the whole puzzle is won, every part returns to its original position and the radio display pulses.
+When all of a part's holding screws leave the radio, the part shifts. When the whole puzzle is won,
+every part returns to its original position and the radio runs its power-on sequence.
 
-Safe changes: release offsets, release rotations, restoration duration, pulse size, and glow color.
+Safe changes: release offsets, release rotations, restoration duration, power-on flicker timing,
+completion-pop size, and glow color. The final effect deliberately uses three readable stages:
+display flicker, one scale pop, and a short hold before the result overlay appears.
 
 ### `RadioLevelBootstrap.cs`
 
