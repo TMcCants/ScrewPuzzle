@@ -9,6 +9,16 @@
 5. Choose a portrait Game view such as `9:16`.
 6. Press Play.
 
+## Opening the Toy-Car Level
+
+1. Stop Play Mode.
+2. In the Project window, open `Assets/Scenes/Level02_ToyCar.unity`.
+3. Press Play.
+4. Use red, blue, then yellow for the intended winning route.
+
+There is no level-selection screen yet. Switching scenes manually is intentional for this V0.2
+test slice.
+
 The saved scene contains one bootstrap object. All visible prototype objects are generated when Play begins.
 
 ## Controls

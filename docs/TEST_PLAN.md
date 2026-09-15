@@ -33,3 +33,18 @@ The radio level is the safety net while reusable level data is introduced. After
 refactor, rerun the complete win path and intentional loss path. The screen layout, blockers,
 tray capacity, match size, restoration sequence, and result messages must behave exactly as they
 did before the refactor.
+
+## V0.2 Toy-Car Level
+
+Open `Assets/Scenes/Level02_ToyCar.unity` and run these checks:
+
+| Test | Expected result |
+|---|---|
+| Start the scene | `TOY CAR` appears and all nine screws are visible |
+| Tap a dim screw | It shakes, stays attached, and shows the blocked message |
+| Select red, blue, yellow, red, blue | The five-slot tray fills and Game Over appears |
+| Select red set, blue set, then yellow set | All three sets clear and the car parts loosen |
+| Finish the winning route | The car reassembles, headlights flash, the car moves, and the restored overlay appears |
+| Press Play Again | The toy-car scene reloads cleanly |
+
+The toy-car level passes only when both outcome paths work and the Console contains no red errors.

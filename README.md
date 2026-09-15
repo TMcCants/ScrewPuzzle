@@ -65,10 +65,10 @@ The level uses simple generated shapes so gameplay can be tested before permanen
 
 ## V0.2 Multi-Level Foundation — In Progress
 
-The radio's puzzle configuration is being separated from its prototype visuals. A reusable
-`LevelDefinition` now owns tray capacity, match size, screw colors, screw positions, blocker
-indexes, and object-specific completion messages. This is the first step toward adding a second
-object without duplicating the puzzle systems.
+The radio and toy-car levels now share the same prototype builder and gameplay systems. A reusable
+`LevelDefinition` owns tray capacity, match size, screw colors, screw positions, blocker indexes,
+and object-specific completion messages. Each object keeps its own visual construction and final
+restoration effect.
 
 ## Open and Play
 
@@ -77,6 +77,9 @@ object without duplicating the puzzle systems.
 3. Open `Assets/Scenes/Level01_Radio.unity`.
 4. Set the Game view to a portrait ratio such as `9:16`.
 5. Press Play.
+
+To test Level 2, open `Assets/Scenes/Level02_ToyCar.unity` and press Play. Level selection and
+automatic unlocking are planned for the next V0.2 slice.
 
 For the intended safe solution, clear the three red screws, then the three blue screws, then the three yellow screws. Some mixed-color choices will fill the tray and demonstrate the loss state.
 

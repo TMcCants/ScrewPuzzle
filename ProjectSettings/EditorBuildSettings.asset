@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level01_Radio.unity
     guid: 61f718ea3c3c4cc49983a91587e265d4
+  - enabled: 1
+    path: Assets/Scenes/Level02_ToyCar.unity
+    guid: 1c9e46b7d1e89b7a328d989672c07f19
   m_configObjects: {}

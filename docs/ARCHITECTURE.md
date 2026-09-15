@@ -127,6 +127,22 @@ throughout the builder.
 
 This is assembly code, not a gameplay-rule owner. It exists so V0.1 is immediately playable without permanent art or prefab work. When real art arrives, replace this builder with scene objects and prefabs while retaining the five gameplay systems above.
 
+### `PrototypeLevelBuilder.cs`
+
+Creates the temporary pieces every prototype level shares: camera, background, tray, UI, screws,
+blocker references, and simple rectangle/circle visuals. Object bootstraps call these helpers so
+they do not copy the puzzle setup code.
+
+This remains prototype infrastructure. Final art can replace the generated shapes without
+changing `Screw`, `TrayManager`, `GameManager`, or the level definitions.
+
+### `ToyCarLevelBootstrap.cs` and `ToyCarRestoration.cs`
+
+`ToyCarLevelBootstrap` owns only the toy car's level data, shapes, and part assignments. Its
+restoration controller loosens the roof, hood, and wheel assembly during play. On completion, it
+reassembles the car, flashes the headlights, and plays a short forward movement before displaying
+the result overlay.
+
 ## V0.1 Level Data
 
 The radio has nine screws:
@@ -138,6 +154,12 @@ The radio has nine screws:
 | Yellow | 3 | Radio case |
 
 Five screws begin selectable. That is intentional: the player can make a poor mixed-color sequence and fill the five-slot tray. The simplest winning route is red, blue, yellow.
+
+## V0.2 Level Data
+
+The toy car also uses nine screws, a five-slot tray, and match-three clearing. It deliberately
+keeps those rules constant so the second-level test isolates whether the reusable architecture,
+new object visuals, blockers, and car-specific restoration work correctly.
 
 ## Deliberately Absent
 
