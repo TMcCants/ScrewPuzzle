@@ -8,7 +8,7 @@ namespace ScrewPuzzle
     /// Connects puzzle progress to the radio's visible response.
     /// Each part loosens when all screws assigned to it leave the radio.
     /// </summary>
-    public sealed class RadioRestoration : MonoBehaviour
+    public sealed class RadioRestoration : RestorationController
     {
         [Serializable]
         public sealed class RadioPart
@@ -33,7 +33,7 @@ namespace ScrewPuzzle
             CacheOriginalPartPositions();
         }
 
-        public void HandleScrewRemoved(Screw removedScrew)
+        public override void HandleScrewRemoved(Screw removedScrew)
         {
             foreach (RadioPart part in parts)
             {
@@ -45,7 +45,7 @@ namespace ScrewPuzzle
             }
         }
 
-        public void PlayFinalRestoration(Action onFinished)
+        public override void PlayFinalRestoration(Action onFinished)
         {
             StartCoroutine(FinalRestorationRoutine(onFinished));
         }

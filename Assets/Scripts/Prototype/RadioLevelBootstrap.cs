@@ -6,7 +6,8 @@ using UnityEngine.UI;
 namespace ScrewPuzzle
 {
     /// <summary>
-    /// Builds the V0.1 radio level from simple shapes when the scene starts.
+    /// Builds the prototype radio level from simple shapes when the scene starts.
+    /// Its puzzle layout comes from a reusable LevelDefinition.
     /// This keeps the repository immediately playable without requiring art assets.
     /// Replace this builder with hand-authored prefabs later; gameplay scripts do not depend on it.
     /// </summary>
@@ -27,6 +28,7 @@ namespace ScrewPuzzle
 
         private void BuildLevel()
         {
+            LevelDefinition level = CreateRadioLevelDefinition();
             Camera mainCamera = BuildCamera();
             BuildBackground(mainCamera);
 
@@ -80,11 +82,15 @@ namespace ScrewPuzzle
             CreateCircle("Left Dial", radioRoot, new Vector3(0.65f, -0.6f, 0f), 0.72f, darkMetal, 4);
             CreateCircle("Right Dial", radioRoot, new Vector3(2.2f, -0.6f, 0f), 0.72f, darkMetal, 4);
 
-            Transform[] traySlots = BuildTray();
-            UiReferences ui = BuildUi(gameManager);
+            Transform[] traySlots = BuildTray(level.TrayCapacity);
+            UiReferences ui = BuildUi(gameManager, level);
 
-            Screw[] screws = BuildScrews(radioRoot, trayManager, gameManager);
-            ConfigureBlockers(screws);
+            Screw[] screws = BuildScrews(
+                radioRoot,
+                trayManager,
+                gameManager,
+                level.Screws);
+            ConfigureBlockers(screws, level.Screws);
 
             RadioRestoration.RadioPart[] radioParts = new RadioRestoration.RadioPart[]
             {
@@ -94,14 +100,42 @@ namespace ScrewPuzzle
             };
 
             radioRestoration.Configure(radioRoot, displayGlow, radioParts);
-            trayManager.Configure(traySlots, 3, gameManager);
+            trayManager.Configure(traySlots, level.MatchSize, gameManager);
             gameManager.Configure(
                 trayManager,
                 radioRestoration,
                 ui.statusText,
                 ui.resultOverlay,
                 ui.resultTitle,
-                screws.Length);
+                screws.Length,
+                level.RestoredStatusMessage,
+                level.RestoredResultMessage);
+        }
+
+        private LevelDefinition CreateRadioLevelDefinition()
+        {
+            // Blocker numbers refer to positions in this same screw array.
+            // For example, screw 4 stays blocked until screw 1 is removed.
+            ScrewDefinition[] screws =
+            {
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(-2.75f, 1.55f, 0f)),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(0f, 1.55f, 0f)),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(2.75f, 1.55f, 0f)),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-2.75f, 0.1f, 0f)),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0f, 0.1f, 0f), 1),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(2.75f, 0.1f, 0f), 2),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-2.75f, -1.45f, 0f)),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0f, -1.45f, 0f), 4),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(2.75f, -1.45f, 0f), 3)
+            };
+
+            return new LevelDefinition(
+                "Vintage Radio",
+                "Radio restored!",
+                "RESTORED!\nThe radio is alive.",
+                5,
+                3,
+                screws);
         }
 
         private Camera BuildCamera()
@@ -135,7 +169,7 @@ namespace ScrewPuzzle
             background.position = new Vector3(0f, 0f, 2f);
         }
 
-        private Transform[] BuildTray()
+        private Transform[] BuildTray(int capacity)
         {
             Transform trayRoot = new GameObject("Holding Tray").transform;
             trayRoot.position = new Vector3(0f, -4.2f, 0f);
@@ -143,15 +177,16 @@ namespace ScrewPuzzle
                 "Tray Background",
                 trayRoot,
                 Vector3.zero,
-                new Vector2(7.3f, 1.25f),
+                new Vector2((capacity * 1.3f) + 0.8f, 1.25f),
                 new Color(0.16f, 0.16f, 0.19f),
                 1);
 
-            Transform[] slots = new Transform[5];
+            Transform[] slots = new Transform[capacity];
+            float firstSlotX = -((capacity - 1) * 1.3f) / 2f;
 
             for (int index = 0; index < slots.Length; index++)
             {
-                float x = -2.6f + (index * 1.3f);
+                float x = firstSlotX + (index * 1.3f);
                 slots[index] = CreateCircle(
                     "Tray Slot " + (index + 1),
                     trayRoot,
@@ -167,50 +202,26 @@ namespace ScrewPuzzle
         private Screw[] BuildScrews(
             Transform radioRoot,
             TrayManager trayManager,
-            GameManager gameManager)
+            GameManager gameManager,
+            ScrewDefinition[] screwDefinitions)
         {
-            Vector3[] positions =
-            {
-                new Vector3(-2.75f, 1.55f, 0f),
-                new Vector3(0f, 1.55f, 0f),
-                new Vector3(2.75f, 1.55f, 0f),
-                new Vector3(-2.75f, 0.1f, 0f),
-                new Vector3(0f, 0.1f, 0f),
-                new Vector3(2.75f, 0.1f, 0f),
-                new Vector3(-2.75f, -1.45f, 0f),
-                new Vector3(0f, -1.45f, 0f),
-                new Vector3(2.75f, -1.45f, 0f)
-            };
+            Screw[] screws = new Screw[screwDefinitions.Length];
 
-            ScrewColorId[] colors =
+            for (int index = 0; index < screwDefinitions.Length; index++)
             {
-                ScrewColorId.Red,
-                ScrewColorId.Red,
-                ScrewColorId.Red,
-                ScrewColorId.Blue,
-                ScrewColorId.Blue,
-                ScrewColorId.Blue,
-                ScrewColorId.Yellow,
-                ScrewColorId.Yellow,
-                ScrewColorId.Yellow
-            };
-
-            Screw[] screws = new Screw[positions.Length];
-
-            for (int index = 0; index < positions.Length; index++)
-            {
+                ScrewDefinition definition = screwDefinitions[index];
                 Transform screwVisual = CreateCircle(
-                    colors[index] + " Screw " + (index + 1),
+                    definition.ColorId + " Screw " + (index + 1),
                     radioRoot,
-                    positions[index],
+                    definition.Position,
                     0.62f,
-                    ColorFor(colors[index]),
+                    ColorFor(definition.ColorId),
                     10);
 
                 screwVisual.gameObject.AddComponent<CircleCollider2D>();
                 ScrewDependency dependency = screwVisual.gameObject.AddComponent<ScrewDependency>();
                 Screw screw = screwVisual.gameObject.AddComponent<Screw>();
-                screw.Configure(colors[index], dependency, trayManager, gameManager);
+                screw.Configure(definition.ColorId, dependency, trayManager, gameManager);
                 screws[index] = screw;
 
                 CreateRectangle(
@@ -225,24 +236,30 @@ namespace ScrewPuzzle
             return screws;
         }
 
-        private void ConfigureBlockers(Screw[] screws)
+        private void ConfigureBlockers(
+            Screw[] screws,
+            ScrewDefinition[] screwDefinitions)
         {
-            // Five screws begin open, so a careless mixed-color sequence can fill the tray.
-            // A safe route is red set, blue set, then yellow set.
-            SetBlockers(screws[0]);
-            SetBlockers(screws[1]);
-            SetBlockers(screws[2]);
-            SetBlockers(screws[3]);
-            SetBlockers(screws[4], screws[1]);
-            SetBlockers(screws[5], screws[2]);
-            SetBlockers(screws[6]);
-            SetBlockers(screws[7], screws[4]);
-            SetBlockers(screws[8], screws[3]);
-        }
+            for (int screwIndex = 0; screwIndex < screws.Length; screwIndex++)
+            {
+                List<Screw> blockers = new List<Screw>();
 
-        private void SetBlockers(Screw screw, params Screw[] blockers)
-        {
-            screw.GetComponent<ScrewDependency>().Configure(blockers);
+                foreach (int blockerIndex in screwDefinitions[screwIndex].BlockerIndexes)
+                {
+                    if (blockerIndex < 0 || blockerIndex >= screws.Length)
+                    {
+                        Debug.LogError(
+                            "Screw " + screwIndex + " has invalid blocker index " + blockerIndex + ".");
+                        continue;
+                    }
+
+                    blockers.Add(screws[blockerIndex]);
+                }
+
+                screws[screwIndex]
+                    .GetComponent<ScrewDependency>()
+                    .Configure(blockers.ToArray());
+            }
         }
 
         private RadioRestoration.RadioPart MakeRadioPart(
@@ -277,7 +294,7 @@ namespace ScrewPuzzle
             }
         }
 
-        private UiReferences BuildUi(GameManager gameManager)
+        private UiReferences BuildUi(GameManager gameManager, LevelDefinition level)
         {
             GameObject canvasObject = new GameObject("UI");
             Canvas canvas = canvasObject.AddComponent<Canvas>();
@@ -307,7 +324,7 @@ namespace ScrewPuzzle
             Text instruction = CreateText(
                 "Instructions",
                 canvas.transform,
-                "Tap open screws. Match 3 colors before the tray fills.",
+                "Tap open screws. Match " + level.MatchSize + " of one color before the tray fills.",
                 30,
                 TextAnchor.MiddleCenter,
                 Color.white);

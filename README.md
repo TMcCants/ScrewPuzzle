@@ -63,6 +63,13 @@ The first playable vertical slice is now implemented for Unity 6. It includes:
 
 The level uses simple generated shapes so gameplay can be tested before permanent art exists.
 
+## V0.2 Multi-Level Foundation — In Progress
+
+The radio's puzzle configuration is being separated from its prototype visuals. A reusable
+`LevelDefinition` now owns tray capacity, match size, screw colors, screw positions, blocker
+indexes, and object-specific completion messages. This is the first step toward adding a second
+object without duplicating the puzzle systems.
+
 ## Open and Play
 
 1. Add this repository folder as a project in Unity Hub.

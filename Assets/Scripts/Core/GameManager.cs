@@ -19,11 +19,13 @@ namespace ScrewPuzzle
         }
 
         [SerializeField] private TrayManager trayManager;
-        [SerializeField] private RadioRestoration radioRestoration;
+        [SerializeField] private RestorationController restorationController;
         [SerializeField] private Text statusText;
         [SerializeField] private GameObject resultOverlay;
         [SerializeField] private Text resultTitle;
         [SerializeField] private int requiredScrewCount;
+        [SerializeField] private string restoredStatusMessage = "Object restored!";
+        [SerializeField] private string restoredResultMessage = "RESTORED!";
 
         private int removedScrewCount;
         private int clearedScrewCount;
@@ -54,7 +56,7 @@ namespace ScrewPuzzle
         public void NotifyScrewRemovedFromObject(Screw screw)
         {
             removedScrewCount++;
-            radioRestoration.HandleScrewRemoved(screw);
+            restorationController.HandleScrewRemoved(screw);
             UpdateStatusText();
         }
 
@@ -88,8 +90,8 @@ namespace ScrewPuzzle
             if (allRequiredScrewsCleared && trayIsEmpty)
             {
                 State = LevelState.Won;
-                statusText.text = "Radio restored!";
-                radioRestoration.PlayFinalRestoration(OnRestorationFinished);
+                statusText.text = restoredStatusMessage;
+                restorationController.PlayFinalRestoration(OnRestorationFinished);
             }
         }
 
@@ -115,23 +117,27 @@ namespace ScrewPuzzle
 
         public void Configure(
             TrayManager newTrayManager,
-            RadioRestoration newRadioRestoration,
+            RestorationController newRestorationController,
             Text newStatusText,
             GameObject newResultOverlay,
             Text newResultTitle,
-            int newRequiredScrewCount)
+            int newRequiredScrewCount,
+            string newRestoredStatusMessage,
+            string newRestoredResultMessage)
         {
             trayManager = newTrayManager;
-            radioRestoration = newRadioRestoration;
+            restorationController = newRestorationController;
             statusText = newStatusText;
             resultOverlay = newResultOverlay;
             resultTitle = newResultTitle;
             requiredScrewCount = newRequiredScrewCount;
+            restoredStatusMessage = newRestoredStatusMessage;
+            restoredResultMessage = newRestoredResultMessage;
         }
 
         private void OnRestorationFinished()
         {
-            ShowResult("RESTORED!\nThe radio is alive.");
+            ShowResult(restoredResultMessage);
         }
 
         private void ShowResult(string title)

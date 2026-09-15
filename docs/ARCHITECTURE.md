@@ -16,6 +16,23 @@ The important design principle is that no individual screw decides the whole gam
 
 ## Script Ownership
 
+### `LevelDefinition.cs`
+
+Contains the changeable data for one puzzle level:
+
+- level name and completion messages
+- tray capacity and match size
+- every screw's color and position
+- blocker indexes that point to other screws in the same level
+
+`LevelDefinition` does not build visuals or run gameplay. That separation lets a future level
+reuse the same screw, tray, and game-state systems with a different layout. For now, the radio
+definition is created in code by `RadioLevelBootstrap`; a later content pass can move these
+definitions into Unity assets after the level format is proven.
+
+Safe changes: wording, tray capacity, match size, screw positions, colors, and blocker indexes.
+After changing level data, always test both a winning route and a full-tray losing route.
+
 ### `Screw.cs`
 
 Owns one screw.
@@ -94,9 +111,19 @@ Safe changes: release offsets, release rotations, restoration duration, power-on
 completion-pop size, and glow color. The final effect deliberately uses three readable stages:
 display flicker, one scale pop, and a short hold before the result overlay appears.
 
+### `RestorationController.cs`
+
+Defines the small contract shared by every restorable object: respond when a screw leaves and
+play a final restoration sequence. `GameManager` talks to this general controller instead of
+depending directly on the radio. `RadioRestoration` supplies the radio-specific animation; a toy
+car can later supply a different animation without changing the game-state rules.
+
 ### `RadioLevelBootstrap.cs`
 
-Builds this temporary prototype level from simple shapes at runtime. It creates the camera, radio, screws, tray, UI, dependencies, and restoration-part assignments.
+Builds this temporary prototype level from simple shapes at runtime. It creates the camera,
+radio, screws, tray, UI, dependencies, and restoration-part assignments. It now reads the
+radio's puzzle layout and rule settings from `LevelDefinition` instead of embedding those values
+throughout the builder.
 
 This is assembly code, not a gameplay-rule owner. It exists so V0.1 is immediately playable without permanent art or prefab work. When real art arrives, replace this builder with scene objects and prefabs while retaining the five gameplay systems above.
 
