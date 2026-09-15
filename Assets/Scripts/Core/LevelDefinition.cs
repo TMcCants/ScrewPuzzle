@@ -8,7 +8,10 @@ namespace ScrewPuzzle
     /// </summary>
     public sealed class LevelDefinition
     {
+        public int LevelNumber { get; }
         public string LevelName { get; }
+        public string NextSceneName { get; }
+        public string WinButtonLabel { get; }
         public string RestoredStatusMessage { get; }
         public string RestoredResultMessage { get; }
         public int TrayCapacity { get; }
@@ -16,14 +19,20 @@ namespace ScrewPuzzle
         public ScrewDefinition[] Screws { get; }
 
         public LevelDefinition(
+            int levelNumber,
             string levelName,
+            string nextSceneName,
+            string winButtonLabel,
             string restoredStatusMessage,
             string restoredResultMessage,
             int trayCapacity,
             int matchSize,
             ScrewDefinition[] screws)
         {
+            LevelNumber = levelNumber;
             LevelName = levelName;
+            NextSceneName = nextSceneName;
+            WinButtonLabel = winButtonLabel;
             RestoredStatusMessage = restoredStatusMessage;
             RestoredResultMessage = restoredResultMessage;
             TrayCapacity = trayCapacity;

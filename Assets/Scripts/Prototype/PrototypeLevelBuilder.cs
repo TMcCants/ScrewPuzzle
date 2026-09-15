@@ -192,11 +192,16 @@ namespace ScrewPuzzle
                 new Color(1f, 0.82f, 0.38f));
             SetRect(resultTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 100f), new Vector2(900f, 260f));
 
-            Button overlayRestart = CreateButton("Overlay Restart Button", overlay.transform, "PLAY AGAIN");
-            SetRect(overlayRestart.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -120f), new Vector2(400f, 110f));
-            overlayRestart.onClick.AddListener(gameManager.RestartLevel);
+            Button resultActionButton = CreateButton("Result Action Button", overlay.transform, "PLAY AGAIN");
+            SetRect(resultActionButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -120f), new Vector2(400f, 110f));
+            Text resultActionLabel = resultActionButton.GetComponentInChildren<Text>();
 
-            return new PrototypeUiReferences(status, overlay, resultTitle);
+            return new PrototypeUiReferences(
+                status,
+                overlay,
+                resultTitle,
+                resultActionButton,
+                resultActionLabel);
         }
 
         public static Transform CreateRectangle(
@@ -263,7 +268,7 @@ namespace ScrewPuzzle
             }
         }
 
-        private static Button CreateButton(string objectName, Transform parent, string label)
+        public static Button CreateButton(string objectName, Transform parent, string label)
         {
             GameObject buttonObject = new GameObject(objectName);
             buttonObject.transform.SetParent(parent, false);
@@ -280,7 +285,7 @@ namespace ScrewPuzzle
             return button;
         }
 
-        private static Text CreateText(
+        public static Text CreateText(
             string objectName,
             Transform parent,
             string value,
@@ -299,7 +304,7 @@ namespace ScrewPuzzle
             return text;
         }
 
-        private static void SetRect(
+        public static void SetRect(
             RectTransform rect,
             Vector2 anchorMin,
             Vector2 anchorMax,
@@ -373,15 +378,21 @@ namespace ScrewPuzzle
         public Text StatusText { get; }
         public GameObject ResultOverlay { get; }
         public Text ResultTitle { get; }
+        public Button ResultActionButton { get; }
+        public Text ResultActionLabel { get; }
 
         public PrototypeUiReferences(
             Text statusText,
             GameObject resultOverlay,
-            Text resultTitle)
+            Text resultTitle,
+            Button resultActionButton,
+            Text resultActionLabel)
         {
             StatusText = statusText;
             ResultOverlay = resultOverlay;
             ResultTitle = resultTitle;
+            ResultActionButton = resultActionButton;
+            ResultActionLabel = resultActionLabel;
         }
     }
 }

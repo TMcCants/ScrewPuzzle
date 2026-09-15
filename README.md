@@ -68,18 +68,19 @@ The level uses simple generated shapes so gameplay can be tested before permanen
 The radio and toy-car levels now share the same prototype builder and gameplay systems. A reusable
 `LevelDefinition` owns tray capacity, match size, screw colors, screw positions, blocker indexes,
 and object-specific completion messages. Each object keeps its own visual construction and final
-restoration effect.
+restoration effect. A level-selection screen and one-value local save unlock the toy car after the
+radio is completed.
 
 ## Open and Play
 
 1. Add this repository folder as a project in Unity Hub.
 2. Open it with Unity `6000.3.23f1` or a compatible Unity 6 editor.
-3. Open `Assets/Scenes/Level01_Radio.unity`.
+3. Open `Assets/Scenes/LevelSelect.unity`.
 4. Set the Game view to a portrait ratio such as `9:16`.
 5. Press Play.
 
-To test Level 2, open `Assets/Scenes/Level02_ToyCar.unity` and press Play. Level selection and
-automatic unlocking are planned for the next V0.2 slice.
+Level 1 begins unlocked. Completing the radio unlocks the toy car and saves that unlock on the
+local device.
 
 For the intended safe solution, clear the three red screws, then the three blue screws, then the three yellow screws. Some mixed-color choices will fill the tray and demonstrate the loss state.
 

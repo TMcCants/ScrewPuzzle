@@ -99,7 +99,12 @@ namespace ScrewPuzzle
                 ui.StatusText,
                 ui.ResultOverlay,
                 ui.ResultTitle,
+                ui.ResultActionButton,
+                ui.ResultActionLabel,
                 screws.Length,
+                level.LevelNumber,
+                level.NextSceneName,
+                level.WinButtonLabel,
                 level.RestoredStatusMessage,
                 level.RestoredResultMessage);
         }
@@ -121,7 +126,10 @@ namespace ScrewPuzzle
             };
 
             return new LevelDefinition(
+                1,
                 "Vintage Radio",
+                "Level02_ToyCar",
+                "NEXT LEVEL",
                 "Radio restored!",
                 "RESTORED!\nThe radio is alive.",
                 5,

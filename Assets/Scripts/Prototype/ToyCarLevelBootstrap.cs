@@ -130,7 +130,12 @@ namespace ScrewPuzzle
                 ui.StatusText,
                 ui.ResultOverlay,
                 ui.ResultTitle,
+                ui.ResultActionButton,
+                ui.ResultActionLabel,
                 screws.Length,
+                level.LevelNumber,
+                level.NextSceneName,
+                level.WinButtonLabel,
                 level.RestoredStatusMessage,
                 level.RestoredResultMessage);
         }
@@ -151,7 +156,10 @@ namespace ScrewPuzzle
             };
 
             return new LevelDefinition(
+                2,
                 "Toy Car",
+                "LevelSelect",
+                "LEVEL SELECT",
                 "Toy car restored!",
                 "RESTORED!\nReady to roll.",
                 5,

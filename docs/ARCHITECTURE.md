@@ -21,6 +21,7 @@ The important design principle is that no individual screw decides the whole gam
 Contains the changeable data for one puzzle level:
 
 - level name and completion messages
+- level number, next scene, and win-button wording
 - tray capacity and match size
 - every screw's color and position
 - blocker indexes that point to other screws in the same level
@@ -32,6 +33,15 @@ definitions into Unity assets after the level format is proven.
 
 Safe changes: wording, tray capacity, match size, screw positions, colors, and blocker indexes.
 After changing level data, always test both a winning route and a full-tray losing route.
+
+### `ProgressManager.cs`
+
+Stores one integer through Unity `PlayerPrefs`: the highest unlocked level. Level 1 is the default.
+Completing Level 1 stores Level 2 as unlocked, and `PlayerPrefs.Save()` writes the change to the
+local device.
+
+This is intentionally not a general save-data system. It does not store scores, stars, settings,
+currencies, boosters, or player accounts.
 
 ### `Screw.cs`
 
@@ -52,9 +62,11 @@ Do not add match or win logic here. A screw should not know what every other scr
 
 ### `ScrewDependency.cs`
 
-Owns the blocking list for one screw. `AreAllBlockersRemoved()` returns true only when every referenced blocker has left the radio.
+Owns the blocking list for one screw. `AreAllBlockersRemoved()` returns true only when every
+referenced blocker has left the puzzle object.
 
-Safe change: update the blocker references for a screw. In the prototype, those references are assigned inside `RadioLevelBootstrap.ConfigureBlockers()`.
+Safe change: update the blocker indexes in a level's `ScrewDefinition` entries. The shared
+`PrototypeLevelBuilder` converts those indexes into screw references.
 
 An empty blocker list means the screw is open immediately.
 
@@ -143,6 +155,12 @@ restoration controller loosens the roof, hood, and wheel assembly during play. O
 reassembles the car, flashes the headlights, and plays a short forward movement before displaying
 the result overlay.
 
+### `LevelSelectBootstrap.cs`
+
+Builds the temporary level-selection screen. It always enables the radio button and asks
+`ProgressManager` whether the toy-car button should be enabled. Scene names remain explicit and
+beginner-readable while the game contains only two levels.
+
 ## V0.1 Level Data
 
 The radio has nine screws:
@@ -163,4 +181,7 @@ new object visuals, blockers, and car-specific restoration work correctly.
 
 ## Deliberately Absent
 
-There is no save file, level map, currency, advertising, purchase system, collection, booster, analytics, achievement, or cloud integration in this architecture. Adding any of those before the core loop is validated would make this learning build harder to reason about without improving V0.1.
+There is no score/star system, currency, advertising, purchase system, collection, booster,
+analytics, achievement, account, or cloud-save integration. V0.2 saves only the highest unlocked
+level locally. Adding the larger systems before the multi-level loop is validated would make the
+learning build harder to reason about without improving the current alpha.

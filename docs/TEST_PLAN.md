@@ -48,3 +48,20 @@ Open `Assets/Scenes/Level02_ToyCar.unity` and run these checks:
 | Press Play Again | The toy-car scene reloads cleanly |
 
 The toy-car level passes only when both outcome paths work and the Console contains no red errors.
+
+## V0.2 Level Selection and Local Unlock
+
+Start from `Assets/Scenes/LevelSelect.unity`.
+
+| Test | Expected result |
+|---|---|
+| First run | Radio is available and Toy Car is locked |
+| Lose the radio level | Play Again reloads the radio; Toy Car remains locked |
+| Win the radio level | Next Level opens the toy-car scene and saves the unlock |
+| Lose the toy-car level | Play Again reloads the toy car |
+| Win the toy-car level | Level Select returns to the selection screen |
+| Return to level selection | Both Radio and Toy Car are available |
+| Stop and restart Play Mode | Toy Car remains unlocked |
+
+The flow passes only when scene navigation, button wording, and the persisted unlock all behave
+correctly with no Console errors.

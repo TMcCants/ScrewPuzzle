@@ -5,7 +5,7 @@
 1. Install Unity `6000.3.23f1` through Unity Hub. A later compatible Unity 6 patch should also work; let Unity make a local backup before upgrading.
 2. In Unity Hub, choose **Add** and select the repository folder.
 3. Let Unity import packages and generate its local `Library` folder.
-4. Open `Assets/Scenes/Level01_Radio.unity`.
+4. Open `Assets/Scenes/LevelSelect.unity`.
 5. Choose a portrait Game view such as `9:16`.
 6. Press Play.
 
@@ -16,10 +16,21 @@
 3. Press Play.
 4. Use red, blue, then yellow for the intended winning route.
 
-There is no level-selection screen yet. Switching scenes manually is intentional for this V0.2
-test slice.
+Opening the toy-car scene directly remains useful for isolated testing, but normal play now begins
+from the level-selection scene.
 
-The saved scene contains one bootstrap object. All visible prototype objects are generated when Play begins.
+Each saved scene contains one bootstrap object. All visible prototype objects are generated when
+Play begins.
+
+## Testing the Level Flow
+
+1. Open `Assets/Scenes/LevelSelect.unity` and press Play.
+2. Confirm that Level 1 is available.
+3. If this is the first run, confirm that Level 2 is locked.
+4. Complete the radio level and click **Next Level**.
+5. Complete the toy-car level and click **Level Select**.
+6. Confirm that the toy-car button is now unlocked.
+7. Stop and start Play Mode again; confirm that Level 2 remains unlocked.
 
 ## Controls
 
@@ -55,9 +66,13 @@ always returns to its original position.
 
 Start with a configuration change, not a rewrite.
 
-Recommended exercise: open `RadioLevelBootstrap.cs`, find `ColorFor`, change the blue screw color slightly, save, and return to Unity. After compilation, play the scene and confirm the change.
+Recommended exercise: open `PrototypeLevelBuilder.cs`, find `ColorFor`, change the blue screw
+color slightly, save, and return to Unity. After compilation, play a level and confirm the change.
 
-Then try one rule change: in `BuildLevel`, change the `3` passed to `trayManager.Configure` to `2`. This intentionally makes the current nine-screw level impossible to finish cleanly because nine is not divisible by two. That is useful evidence that match size and level color counts must be designed together. Change it back to `3` afterward.
+Then try one rule change: in a level's `LevelDefinition`, change its match size from `3` to `2`.
+This intentionally makes the current nine-screw level impossible to finish cleanly because nine is
+not divisible by two. That is useful evidence that match size and level color counts must be
+designed together. Change it back to `3` afterward.
 
 ## Replacing Prototype Art Later
 

@@ -23,7 +23,12 @@ namespace ScrewPuzzle
         [SerializeField] private Text statusText;
         [SerializeField] private GameObject resultOverlay;
         [SerializeField] private Text resultTitle;
+        [SerializeField] private Button resultActionButton;
+        [SerializeField] private Text resultActionLabel;
         [SerializeField] private int requiredScrewCount;
+        [SerializeField] private int levelNumber;
+        [SerializeField] private string nextSceneName;
+        [SerializeField] private string winButtonLabel = "CONTINUE";
         [SerializeField] private string restoredStatusMessage = "Object restored!";
         [SerializeField] private string restoredResultMessage = "RESTORED!";
 
@@ -74,6 +79,7 @@ namespace ScrewPuzzle
             }
 
             State = LevelState.Lost;
+            SetResultButtonLabel("PLAY AGAIN");
             ShowResult("Game Over!\nThe Tray is full.");
         }
 
@@ -90,6 +96,7 @@ namespace ScrewPuzzle
             if (allRequiredScrewsCleared && trayIsEmpty)
             {
                 State = LevelState.Won;
+                ProgressManager.RecordLevelCompleted(levelNumber);
                 statusText.text = restoredStatusMessage;
                 restorationController.PlayFinalRestoration(OnRestorationFinished);
             }
@@ -121,7 +128,12 @@ namespace ScrewPuzzle
             Text newStatusText,
             GameObject newResultOverlay,
             Text newResultTitle,
+            Button newResultActionButton,
+            Text newResultActionLabel,
             int newRequiredScrewCount,
+            int newLevelNumber,
+            string newNextSceneName,
+            string newWinButtonLabel,
             string newRestoredStatusMessage,
             string newRestoredResultMessage)
         {
@@ -130,14 +142,44 @@ namespace ScrewPuzzle
             statusText = newStatusText;
             resultOverlay = newResultOverlay;
             resultTitle = newResultTitle;
+            resultActionButton = newResultActionButton;
+            resultActionLabel = newResultActionLabel;
             requiredScrewCount = newRequiredScrewCount;
+            levelNumber = newLevelNumber;
+            nextSceneName = newNextSceneName;
+            winButtonLabel = newWinButtonLabel;
             restoredStatusMessage = newRestoredStatusMessage;
             restoredResultMessage = newRestoredResultMessage;
+
+            if (resultActionButton != null)
+            {
+                resultActionButton.onClick.AddListener(HandleResultAction);
+            }
         }
 
         private void OnRestorationFinished()
         {
+            SetResultButtonLabel(winButtonLabel);
             ShowResult(restoredResultMessage);
+        }
+
+        private void HandleResultAction()
+        {
+            if (State == LevelState.Won && !string.IsNullOrEmpty(nextSceneName))
+            {
+                SceneManager.LoadScene(nextSceneName);
+                return;
+            }
+
+            RestartLevel();
+        }
+
+        private void SetResultButtonLabel(string label)
+        {
+            if (resultActionLabel != null)
+            {
+                resultActionLabel.text = label;
+            }
         }
 
         private void ShowResult(string title)
