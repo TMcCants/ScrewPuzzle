@@ -50,6 +50,10 @@ Generates the prototype's short interaction cues at runtime and plays them throu
 full restoration each have a distinct cue. No imported audio clips or scene assignments are
 required for this prototype pass.
 
+The player's sound preference is stored as a single `PlayerPrefs` value. The gameplay UI toggles
+that value and updates the shared audio source immediately; the saved choice persists across
+levels and future app sessions.
+
 This is deliberately a feedback service, not a gameplay-rule owner. `Screw` reports blocked
 input and `TrayManager` reports accepted selections and matches; neither system waits for audio
 before continuing. Final recorded sound effects can replace the generated clips without changing

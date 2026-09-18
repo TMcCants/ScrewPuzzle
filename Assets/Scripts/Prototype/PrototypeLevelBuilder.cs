@@ -166,6 +166,22 @@ namespace ScrewPuzzle
                 Color.white);
             SetRect(instruction.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -210f), new Vector2(980f, 70f));
 
+            Button soundButton = CreateButton("Sound Button", canvas.transform, "SOUND: ON");
+            SetRect(
+                soundButton.GetComponent<RectTransform>(),
+                new Vector2(1f, 1f),
+                new Vector2(1f, 1f),
+                new Vector2(-145f, -300f),
+                new Vector2(250f, 70f));
+            Text soundLabel = soundButton.GetComponentInChildren<Text>();
+            soundLabel.fontSize = 24;
+            UpdateSoundButtonLabel(soundLabel);
+            soundButton.onClick.AddListener(() =>
+            {
+                FeedbackAudio.ToggleSound();
+                UpdateSoundButtonLabel(soundLabel);
+            });
+
             Text status = CreateText(
                 "Status",
                 canvas.transform,
@@ -308,6 +324,14 @@ namespace ScrewPuzzle
             text.alignment = alignment;
             text.color = color;
             return text;
+        }
+
+        private static void UpdateSoundButtonLabel(Text label)
+        {
+            if (label != null)
+            {
+                label.text = FeedbackAudio.IsSoundEnabled ? "SOUND: ON" : "SOUND: OFF";
+            }
         }
 
         public static void SetRect(

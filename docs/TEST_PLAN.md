@@ -36,10 +36,14 @@ Run the following checks in both the radio and toy-car levels with the device vo
 | Clear the final matching set | A warm four-note victory cue begins with restoration |
 | Tap a blocked screw rapidly | Each accepted tap responds without changing the screw position |
 | Replay either level | Sounds remain restrained and do not delay input or animation |
+| Tap SOUND: ON | Label changes to SOUND: OFF and all feedback becomes silent |
+| Change levels while muted | SOUND: OFF remains visible and the next level stays silent |
+| Stop and restart Play Mode while muted | SOUND: OFF remains saved and gameplay stays silent |
+| Tap SOUND: OFF | Label changes to SOUND: ON and one confirmation tick plays |
 
-This slice passes only when all three states are distinguishable by sound, both levels retain
-their original gameplay behavior, and the Unity Console contains no audio-listener warnings or
-red errors.
+This slice passes only when all five feedback states are distinguishable by sound, the saved
+sound preference behaves correctly, both levels retain their original gameplay behavior, and the
+Unity Console contains no audio-listener warnings or red errors.
 
 ## Exit Requirement
 

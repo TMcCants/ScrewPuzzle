@@ -10,6 +10,7 @@ namespace ScrewPuzzle
     public sealed class FeedbackAudio : MonoBehaviour
     {
         private const int SampleRate = 44100;
+        private const string SoundEnabledKey = "SoundEnabled";
 
         private static FeedbackAudio instance;
 
@@ -47,6 +48,7 @@ namespace ScrewPuzzle
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false;
             audioSource.spatialBlend = 0f;
+            audioSource.mute = !IsSoundEnabled;
 
             selectedClip = CreateSelectedClip();
             blockedClip = CreateBlockedClip();
@@ -80,9 +82,33 @@ namespace ScrewPuzzle
             Instance.Play(Instance.victoryClip, 0.42f);
         }
 
+        public static bool IsSoundEnabled
+        {
+            get { return PlayerPrefs.GetInt(SoundEnabledKey, 1) == 1; }
+        }
+
+        public static bool ToggleSound()
+        {
+            bool isEnabled = !IsSoundEnabled;
+            PlayerPrefs.SetInt(SoundEnabledKey, isEnabled ? 1 : 0);
+            PlayerPrefs.Save();
+
+            if (instance != null && instance.audioSource != null)
+            {
+                instance.audioSource.mute = !isEnabled;
+            }
+
+            if (isEnabled)
+            {
+                PlaySelected();
+            }
+
+            return isEnabled;
+        }
+
         private void Play(AudioClip clip, float volume)
         {
-            if (audioSource != null && clip != null)
+            if (IsSoundEnabled && audioSource != null && clip != null)
             {
                 audioSource.PlayOneShot(clip, volume);
             }
