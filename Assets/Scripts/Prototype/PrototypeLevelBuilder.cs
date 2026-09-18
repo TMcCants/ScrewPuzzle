@@ -30,6 +30,12 @@ namespace ScrewPuzzle
             camera.transform.position = new Vector3(0f, 0f, -10f);
             camera.backgroundColor = backgroundColor;
             camera.clearFlags = CameraClearFlags.SolidColor;
+
+            if (Object.FindFirstObjectByType<AudioListener>() == null)
+            {
+                camera.gameObject.AddComponent<AudioListener>();
+            }
+
             return camera;
         }
 

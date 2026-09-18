@@ -36,7 +36,8 @@ Run the following checks in both the radio and toy-car levels with the device vo
 | Replay either level | Sounds remain restrained and do not delay input or animation |
 
 This slice passes only when all three states are distinguishable by sound, both levels retain
-their original gameplay behavior, and the Unity Console contains no red errors.
+their original gameplay behavior, and the Unity Console contains no audio-listener warnings or
+red errors.
 
 ## Exit Requirement
 
