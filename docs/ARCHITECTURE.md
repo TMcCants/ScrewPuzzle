@@ -69,7 +69,8 @@ Owns one screw.
 - shakes briefly when the player taps it while blocked
 - asks the tray to accept it
 - animates itself into and within the tray
-- shrinks away when its set clears
+- gives a small settle pulse when it reaches a tray slot
+- brightens and pops before shrinking away when its set clears
 
 Safe changes: screw movement speed, blocked visual alpha, blocked-feedback duration,
 and blocked-feedback shake distance.
@@ -96,6 +97,7 @@ Owns the live tray.
 - removes a matching set
 - compacts the remaining screws
 - reports an unusable full tray to `GameManager`
+- plays the tray's damped Game Over shake before the result overlay appears
 
 Safe changes:
 

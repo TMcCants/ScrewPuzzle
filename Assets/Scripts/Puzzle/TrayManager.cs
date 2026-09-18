@@ -15,6 +15,7 @@ namespace ScrewPuzzle
         [SerializeField] private GameManager gameManager;
 
         private readonly List<Screw> heldScrews = new List<Screw>();
+        private Transform trayRoot;
 
         public int HeldCount { get { return heldScrews.Count; } }
         public int Capacity { get { return traySlots == null ? 0 : traySlots.Length; } }
@@ -39,6 +40,35 @@ namespace ScrewPuzzle
             traySlots = newTraySlots;
             matchSize = newMatchSize;
             gameManager = newGameManager;
+            trayRoot = traySlots != null && traySlots.Length > 0 ? traySlots[0].parent : null;
+        }
+
+        public IEnumerator PlayFullTrayFeedback()
+        {
+            if (trayRoot == null)
+            {
+                yield break;
+            }
+
+            Vector3 originalPosition = trayRoot.localPosition;
+            Vector3 originalScale = trayRoot.localScale;
+            float elapsed = 0f;
+            const float duration = 0.32f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / duration);
+                float strength = 1f - progress;
+                float horizontalShake = Mathf.Sin(progress * Mathf.PI * 5f) * 0.13f * strength;
+                float scalePulse = Mathf.Sin(progress * Mathf.PI) * 0.035f;
+                trayRoot.localPosition = originalPosition + (Vector3.right * horizontalShake);
+                trayRoot.localScale = originalScale * (1f + scalePulse);
+                yield return null;
+            }
+
+            trayRoot.localPosition = originalPosition;
+            trayRoot.localScale = originalScale;
         }
 
         private IEnumerator EvaluateAfterMovement()

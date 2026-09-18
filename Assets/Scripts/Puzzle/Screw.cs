@@ -93,12 +93,12 @@ namespace ScrewPuzzle
             }
 
             gameManager.NotifyScrewRemovedFromObject(this);
-            StartCoroutine(MoveRoutine(targetPosition));
+            StartCoroutine(MoveRoutine(targetPosition, true));
         }
 
         public void MoveToAnotherTraySlot(Vector3 targetPosition)
         {
-            StartCoroutine(MoveRoutine(targetPosition));
+            StartCoroutine(MoveRoutine(targetPosition, false));
         }
 
         public void ClearFromTray()
@@ -119,7 +119,7 @@ namespace ScrewPuzzle
             gameManager = newGameManager;
         }
 
-        private IEnumerator MoveRoutine(Vector3 targetPosition)
+        private IEnumerator MoveRoutine(Vector3 targetPosition, bool playArrivalPulse)
         {
             Vector3 startPosition = transform.position;
             float elapsed = 0f;
@@ -136,6 +136,28 @@ namespace ScrewPuzzle
             transform.position = targetPosition;
             isMoving = false;
 
+            if (playArrivalPulse)
+            {
+                yield return ArrivalPulseRoutine();
+            }
+        }
+
+        private IEnumerator ArrivalPulseRoutine()
+        {
+            Vector3 originalScale = transform.localScale;
+            float elapsed = 0f;
+            const float duration = 0.12f;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / duration);
+                float pulse = Mathf.Sin(progress * Mathf.PI) * 0.1f;
+                transform.localScale = originalScale * (1f + pulse);
+                yield return null;
+            }
+
+            transform.localScale = originalScale;
         }
 
         private void PlayBlockedFeedback()
@@ -175,8 +197,34 @@ namespace ScrewPuzzle
         private IEnumerator ClearRoutine()
         {
             Vector3 startScale = transform.localScale;
+            Color startColor = screwRenderer == null ? normalColor : screwRenderer.color;
             float elapsed = 0f;
-            const float clearDuration = 0.2f;
+            const float glowDuration = 0.09f;
+
+            while (elapsed < glowDuration)
+            {
+                elapsed += Time.deltaTime;
+                float progress = Mathf.Clamp01(elapsed / glowDuration);
+                float pulse = Mathf.Sin(progress * Mathf.PI);
+                transform.localScale = startScale * (1f + (pulse * 0.16f));
+
+                if (screwRenderer != null)
+                {
+                    screwRenderer.color = Color.Lerp(startColor, Color.white, pulse * 0.65f);
+                }
+
+                yield return null;
+            }
+
+            transform.localScale = startScale;
+
+            if (screwRenderer != null)
+            {
+                screwRenderer.color = startColor;
+            }
+
+            elapsed = 0f;
+            const float clearDuration = 0.16f;
 
             while (elapsed < clearDuration)
             {

@@ -81,7 +81,7 @@ namespace ScrewPuzzle
             State = LevelState.Lost;
             FeedbackAudio.PlayLoss();
             SetResultButtonLabel("PLAY AGAIN");
-            ShowResult("Game Over!\nThe Tray is full.");
+            StartCoroutine(GameOverFeedbackRoutine());
         }
 
         public void CheckForWin()
@@ -163,6 +163,16 @@ namespace ScrewPuzzle
         {
             SetResultButtonLabel(winButtonLabel);
             ShowResult(restoredResultMessage);
+        }
+
+        private IEnumerator GameOverFeedbackRoutine()
+        {
+            if (trayManager != null)
+            {
+                yield return trayManager.PlayFullTrayFeedback();
+            }
+
+            ShowResult("Game Over!\nThe Tray is full.");
         }
 
         private void HandleResultAction()
