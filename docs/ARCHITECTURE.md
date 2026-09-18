@@ -46,8 +46,9 @@ currencies, boosters, or player accounts.
 ### `FeedbackAudio.cs`
 
 Generates the prototype's short interaction cues at runtime and plays them through one persistent
-2D audio source. A successful screw selection, a blocked screw, and a cleared match each have a
-distinct cue. No imported audio clips or scene assignments are required for this prototype pass.
+2D audio source. A successful screw selection, a blocked screw, a cleared match, Game Over, and
+full restoration each have a distinct cue. No imported audio clips or scene assignments are
+required for this prototype pass.
 
 This is deliberately a feedback service, not a gameplay-rule owner. `Screw` reports blocked
 input and `TrayManager` reports accepted selections and matches; neither system waits for audio

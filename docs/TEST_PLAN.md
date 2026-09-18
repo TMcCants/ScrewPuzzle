@@ -32,6 +32,8 @@ Run the following checks in both the radio and toy-car levels with the device vo
 | Tap a bright screw | A short mechanical selection tick plays once |
 | Tap a dim screw | A distinct low blocked cue plays with the shake |
 | Clear three same-color screws | A brighter three-note match cue plays once |
+| Fill the tray without a match | A short descending Game Over cue plays once |
+| Clear the final matching set | A warm four-note victory cue begins with restoration |
 | Tap a blocked screw rapidly | Each accepted tap responds without changing the screw position |
 | Replay either level | Sounds remain restrained and do not delay input or animation |
 

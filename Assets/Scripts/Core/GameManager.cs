@@ -79,6 +79,7 @@ namespace ScrewPuzzle
             }
 
             State = LevelState.Lost;
+            FeedbackAudio.PlayLoss();
             SetResultButtonLabel("PLAY AGAIN");
             ShowResult("Game Over!\nThe Tray is full.");
         }
@@ -98,6 +99,7 @@ namespace ScrewPuzzle
                 State = LevelState.Won;
                 ProgressManager.RecordLevelCompleted(levelNumber);
                 statusText.text = restoredStatusMessage;
+                FeedbackAudio.PlayVictory();
                 restorationController.PlayFinalRestoration(OnRestorationFinished);
             }
         }

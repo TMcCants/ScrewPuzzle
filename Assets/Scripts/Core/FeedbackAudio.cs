@@ -17,6 +17,8 @@ namespace ScrewPuzzle
         private AudioClip selectedClip;
         private AudioClip blockedClip;
         private AudioClip matchClip;
+        private AudioClip lossClip;
+        private AudioClip victoryClip;
 
         private static FeedbackAudio Instance
         {
@@ -49,6 +51,8 @@ namespace ScrewPuzzle
             selectedClip = CreateSelectedClip();
             blockedClip = CreateBlockedClip();
             matchClip = CreateMatchClip();
+            lossClip = CreateLossClip();
+            victoryClip = CreateVictoryClip();
         }
 
         public static void PlaySelected()
@@ -64,6 +68,16 @@ namespace ScrewPuzzle
         public static void PlayMatch()
         {
             Instance.Play(Instance.matchClip, 0.38f);
+        }
+
+        public static void PlayLoss()
+        {
+            Instance.Play(Instance.lossClip, 0.34f);
+        }
+
+        public static void PlayVictory()
+        {
+            Instance.Play(Instance.victoryClip, 0.42f);
         }
 
         private void Play(AudioClip clip, float volume)
@@ -134,6 +148,53 @@ namespace ScrewPuzzle
             }
 
             return CreateClip("Match Cleared", samples);
+        }
+
+        private static AudioClip CreateLossClip()
+        {
+            const float duration = 0.48f;
+            int sampleCount = Mathf.CeilToInt(SampleRate * duration);
+            float[] samples = new float[sampleCount];
+            float[] notes = { 330f, 247f, 185f };
+
+            for (int index = 0; index < sampleCount; index++)
+            {
+                float time = index / (float)SampleRate;
+                float noteDuration = duration / notes.Length;
+                int noteIndex = Mathf.Min(Mathf.FloorToInt(time / noteDuration), notes.Length - 1);
+                float noteProgress = (time - (noteIndex * noteDuration)) / noteDuration;
+                float attack = Mathf.Clamp01(noteProgress / 0.08f);
+                float envelope = attack * Mathf.Pow(1f - noteProgress, 1.5f);
+                float fundamental = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * time);
+                float lowerTone = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * 0.5f * time) * 0.22f;
+                samples[index] = (fundamental + lowerTone) * envelope * 0.48f;
+            }
+
+            return CreateClip("Game Over", samples);
+        }
+
+        private static AudioClip CreateVictoryClip()
+        {
+            const float duration = 0.72f;
+            int sampleCount = Mathf.CeilToInt(SampleRate * duration);
+            float[] samples = new float[sampleCount];
+            float[] notes = { 523f, 659f, 784f, 1046f };
+
+            for (int index = 0; index < sampleCount; index++)
+            {
+                float time = index / (float)SampleRate;
+                float noteDuration = duration / notes.Length;
+                int noteIndex = Mathf.Min(Mathf.FloorToInt(time / noteDuration), notes.Length - 1);
+                float noteProgress = (time - (noteIndex * noteDuration)) / noteDuration;
+                float attack = Mathf.Clamp01(noteProgress / 0.06f);
+                float envelope = attack * Mathf.Pow(1f - noteProgress, 0.7f);
+                float fundamental = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * time);
+                float warmOvertone = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * 2f * time) * 0.16f;
+                float shimmer = Mathf.Sin(2f * Mathf.PI * notes[noteIndex] * 3f * time) * 0.06f;
+                samples[index] = (fundamental + warmOvertone + shimmer) * envelope * 0.42f;
+            }
+
+            return CreateClip("Restoration Victory", samples);
         }
 
         private static AudioClip CreateClip(string clipName, float[] samples)
