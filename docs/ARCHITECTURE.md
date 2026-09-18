@@ -43,6 +43,17 @@ local device.
 This is intentionally not a general save-data system. It does not store scores, stars, settings,
 currencies, boosters, or player accounts.
 
+### `FeedbackAudio.cs`
+
+Generates the prototype's short interaction cues at runtime and plays them through one persistent
+2D audio source. A successful screw selection, a blocked screw, and a cleared match each have a
+distinct cue. No imported audio clips or scene assignments are required for this prototype pass.
+
+This is deliberately a feedback service, not a gameplay-rule owner. `Screw` reports blocked
+input and `TrayManager` reports accepted selections and matches; neither system waits for audio
+before continuing. Final recorded sound effects can replace the generated clips without changing
+the puzzle rules.
+
 ### `Screw.cs`
 
 Owns one screw.

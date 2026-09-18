@@ -74,6 +74,7 @@ namespace ScrewPuzzle
             if (dependency != null && !dependency.AreAllBlockersRemoved())
             {
                 PlayBlockedFeedback();
+                FeedbackAudio.PlayBlocked();
                 gameManager.ShowTemporaryMessage("That screw is still blocked.");
                 return;
             }

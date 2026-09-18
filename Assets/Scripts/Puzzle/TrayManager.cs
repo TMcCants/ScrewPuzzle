@@ -29,6 +29,7 @@ namespace ScrewPuzzle
 
             heldScrews.Add(screw);
             screw.MoveToTray(traySlots[heldScrews.Count - 1].position);
+            FeedbackAudio.PlaySelected();
             StartCoroutine(EvaluateAfterMovement());
             return true;
         }
@@ -91,6 +92,7 @@ namespace ScrewPuzzle
                 matchedScrew.ClearFromTray();
             }
 
+            FeedbackAudio.PlayMatch();
             MoveRemainingScrewsIntoOpenSlots();
             gameManager.NotifyScrewsCleared(matchedScrews.Count);
 

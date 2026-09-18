@@ -23,6 +23,21 @@ Open **Window → General → Test Runner**, select **EditMode**, and run all te
 | Press Restart during play | Level reloads cleanly |
 | Press Play Again after win/loss | Level reloads cleanly |
 
+## V0.4 Interaction Audio
+
+Run the following checks in both the radio and toy-car levels with the device volume audible:
+
+| Test | Expected result |
+|---|---|
+| Tap a bright screw | A short mechanical selection tick plays once |
+| Tap a dim screw | A distinct low blocked cue plays with the shake |
+| Clear three same-color screws | A brighter three-note match cue plays once |
+| Tap a blocked screw rapidly | Each accepted tap responds without changing the screw position |
+| Replay either level | Sounds remain restrained and do not delay input or animation |
+
+This slice passes only when all three states are distinguishable by sound, both levels retain
+their original gameplay behavior, and the Unity Console contains no red errors.
+
 ## Exit Requirement
 
 V0.1 passes only when both the win path and the intentional loss path work from a clean scene reload and the Unity Console contains no red errors.
