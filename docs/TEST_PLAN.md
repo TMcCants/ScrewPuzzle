@@ -88,3 +88,14 @@ Start from `Assets/Scenes/LevelSelect.unity`.
 
 The flow passes only when scene navigation, button wording, and the persisted unlock all behave
 correctly with no Console errors.
+
+## V0.4 Android Device Validation
+
+Build and install version `0.4.0` with Android version code `2`, then verify on a physical phone:
+
+- both levels accept comfortable touch input
+- all five feedback sounds remain pleasant through the phone speaker
+- SOUND ON/OFF persists after fully closing and reopening the app
+- tray-arrival, match-clear, and full-tray visual effects remain readable at phone scale
+- radio-to-toy-car unlocking remains saved
+- no content is clipped by the camera cutout or bottom navigation area
