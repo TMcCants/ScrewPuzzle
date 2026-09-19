@@ -34,47 +34,103 @@ namespace ScrewPuzzle
             Transform radioRoot = new GameObject("Vintage Radio").transform;
             radioRoot.position = new Vector3(0f, 0.65f, 0f);
 
-            Transform backPanel = PrototypeLevelBuilder.CreateRectangle(
+            Transform backPanel = PrototypeLevelBuilder.CreateResourceSprite(
                 "Radio Case",
                 radioRoot,
                 Vector3.zero,
+                "Art/Radio/Radio_Case",
                 new Vector2(6.8f, 4.3f),
-                radioBrown,
+                Color.white,
                 1);
 
-            Transform faceplate = PrototypeLevelBuilder.CreateRectangle(
-                "Faceplate",
-                radioRoot,
-                new Vector3(0f, 0.15f, 0f),
+            if (backPanel == null)
+            {
+                backPanel = PrototypeLevelBuilder.CreateRectangle(
+                    "Radio Case",
+                    radioRoot,
+                    Vector3.zero,
+                    new Vector2(6.8f, 4.3f),
+                    radioBrown,
+                    1);
+            }
+
+            Transform faceplate = new GameObject("Faceplate").transform;
+            faceplate.SetParent(radioRoot, false);
+            faceplate.localPosition = new Vector3(0f, 0.15f, 0f);
+            Transform faceplateVisual = PrototypeLevelBuilder.CreateResourceSprite(
+                "Faceplate Visual",
+                faceplate,
+                Vector3.zero,
+                "Art/Radio/Radio_Faceplate",
                 new Vector2(6.15f, 3.35f),
-                radioTan,
+                Color.white,
                 2);
 
-            Transform speakerGrille = new GameObject("Speaker Grille").transform;
-            speakerGrille.SetParent(radioRoot, false);
-            speakerGrille.localPosition = new Vector3(-1.65f, 0.15f, 0f);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Grille Background",
-                speakerGrille,
-                Vector3.zero,
+            if (faceplateVisual == null)
+            {
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Faceplate Visual",
+                    faceplate,
+                    Vector3.zero,
+                    new Vector2(6.15f, 3.35f),
+                    radioTan,
+                    2);
+            }
+
+            Transform speakerGrille = PrototypeLevelBuilder.CreateResourceSprite(
+                "Speaker Grille",
+                radioRoot,
+                new Vector3(-1.65f, 0.15f, 0f),
+                "Art/Radio/Radio_Speaker_Grille",
                 new Vector2(2.35f, 2.45f),
-                darkMetal,
+                Color.white,
                 3);
 
-            CreateSpeakerLines(speakerGrille);
+            if (speakerGrille == null)
+            {
+                speakerGrille = new GameObject("Speaker Grille").transform;
+                speakerGrille.SetParent(radioRoot, false);
+                speakerGrille.localPosition = new Vector3(-1.65f, 0.15f, 0f);
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Grille Background",
+                    speakerGrille,
+                    Vector3.zero,
+                    new Vector2(2.35f, 2.45f),
+                    darkMetal,
+                    3);
+                CreateSpeakerLines(speakerGrille);
+            }
+
+            Transform display = PrototypeLevelBuilder.CreateResourceSprite(
+                "Radio Display",
+                faceplate,
+                new Vector3(1.45f, 0.45f, 0f),
+                "Art/Radio/Radio_Display",
+                new Vector2(2.15f, 0.65f),
+                Color.white,
+                4);
+
+            if (display == null)
+            {
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Radio Display",
+                    faceplate,
+                    new Vector3(1.45f, 0.45f, 0f),
+                    new Vector2(2.15f, 0.65f),
+                    new Color(0.15f, 0.12f, 0.09f),
+                    4);
+            }
 
             SpriteRenderer displayGlow = PrototypeLevelBuilder.CreateRectangle(
-                "Radio Display",
-                radioRoot,
-                new Vector3(1.45f, 0.6f, 0f),
-                new Vector2(2.15f, 0.65f),
+                "Radio Display Glow",
+                faceplate,
+                new Vector3(1.45f, 0.45f, 0f),
+                new Vector2(0.07f, 0.46f),
                 new Color(0.26f, 0.20f, 0.12f),
-                4).GetComponent<SpriteRenderer>();
+                5).GetComponent<SpriteRenderer>();
 
-            PrototypeLevelBuilder.CreateCircle(
-                "Left Dial", radioRoot, new Vector3(0.65f, -0.6f, 0f), 0.72f, darkMetal, 4);
-            PrototypeLevelBuilder.CreateCircle(
-                "Right Dial", radioRoot, new Vector3(2.2f, -0.6f, 0f), 0.72f, darkMetal, 4);
+            CreateDial(faceplate, "Left Dial", new Vector3(0.65f, -0.75f, 0f));
+            CreateDial(faceplate, "Right Dial", new Vector3(2.2f, -0.75f, 0f));
 
             Transform[] traySlots = PrototypeLevelBuilder.BuildTray(level.TrayCapacity);
             PrototypeUiReferences ui = PrototypeLevelBuilder.BuildUi(gameManager, level);
@@ -148,6 +204,29 @@ namespace ScrewPuzzle
                     new Vector3(0f, y, 0f),
                     new Vector2(1.85f, 0.06f),
                     new Color(0.32f, 0.30f, 0.27f),
+                    4);
+            }
+        }
+
+        private void CreateDial(Transform faceplate, string dialName, Vector3 localPosition)
+        {
+            Transform dial = PrototypeLevelBuilder.CreateResourceSprite(
+                dialName,
+                faceplate,
+                localPosition,
+                "Art/Radio/Radio_Knob",
+                new Vector2(0.78f, 0.78f),
+                Color.white,
+                4);
+
+            if (dial == null)
+            {
+                PrototypeLevelBuilder.CreateCircle(
+                    dialName,
+                    faceplate,
+                    localPosition,
+                    0.72f,
+                    darkMetal,
                     4);
             }
         }

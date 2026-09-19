@@ -83,7 +83,7 @@ The approved image intentionally locks the direction, not every generated detail
 
 1. Reusable workshop background — implemented
 2. Reusable screw, tray, button, and typography system — implemented
-3. Radio artwork and restoration-part integration
+3. Radio artwork and restoration-part integration — implemented
 4. Toy-car artwork in the same material language
 5. Level-select screen
 6. Lunyx app icon and loading screen
@@ -103,6 +103,11 @@ The interface uses the reusable blank plate at `Assets/Resources/Art/UI/Button_P
 button text remains live and editable. DejaVu Sans supplies clean instructional text and the
 display title; DejaVu Serif Bold supplies restrained accent headings and control labels. The sound
 control uses the same system at reduced visual emphasis.
+
+The production radio is assembled from transparent layers in `Assets/Resources/Art/Radio`:
+cabinet case, removable faceplate, speaker grille, tuning display, and reusable knob. The live
+nine-screw grid remains code-driven, and the display's amber indicator remains a runtime effect so
+the established release and final-restoration animations retain their gameplay meaning.
 
 ## Avoid
 

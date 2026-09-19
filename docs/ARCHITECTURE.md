@@ -150,12 +150,15 @@ car can later supply a different animation without changing the game-state rules
 
 ### `RadioLevelBootstrap.cs`
 
-Builds this temporary prototype level from simple shapes at runtime. It creates the camera,
-radio, screws, tray, UI, dependencies, and restoration-part assignments. It now reads the
-radio's puzzle layout and rule settings from `LevelDefinition` instead of embedding those values
-throughout the builder.
+Builds the radio level at runtime. It creates the camera, layered production radio, screws, tray,
+UI, dependencies, and restoration-part assignments. The cabinet, faceplate, grille, display, and
+knob textures load from `Resources/Art/Radio`; generated shapes remain as missing-resource
+fallbacks. It reads the radio's puzzle layout and rule settings from `LevelDefinition` instead of
+embedding those values throughout the builder.
 
-This is assembly code, not a gameplay-rule owner. It exists so V0.1 is immediately playable without permanent art or prefab work. When real art arrives, replace this builder with scene objects and prefabs while retaining the five gameplay systems above.
+This is assembly code, not a gameplay-rule owner. The unscaled faceplate root owns its display,
+glow, and knobs so those pieces release and restore as one coherent physical assembly. The grille
+and cabinet remain independent restoration layers.
 
 ### `PrototypeLevelBuilder.cs`
 

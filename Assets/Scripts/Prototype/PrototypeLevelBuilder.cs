@@ -353,6 +353,37 @@ namespace ScrewPuzzle
             return circle.transform;
         }
 
+        public static Transform CreateResourceSprite(
+            string objectName,
+            Transform parent,
+            Vector3 localPosition,
+            string resourcePath,
+            Vector2 size,
+            Color color,
+            int sortingOrder)
+        {
+            Sprite sprite = LoadResourceSprite(resourcePath);
+
+            if (sprite == null)
+            {
+                return null;
+            }
+
+            Transform spriteObject = CreateSpriteObject(
+                objectName,
+                parent,
+                localPosition,
+                sprite,
+                color,
+                sortingOrder);
+            Vector2 spriteSize = sprite.bounds.size;
+            spriteObject.localScale = new Vector3(
+                size.x / spriteSize.x,
+                size.y / spriteSize.y,
+                1f);
+            return spriteObject;
+        }
+
         private static Transform CreateSpriteObject(
             string objectName,
             Transform parent,

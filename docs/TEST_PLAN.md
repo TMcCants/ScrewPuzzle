@@ -135,3 +135,17 @@ Run Level Select and both gameplay scenes, then confirm:
 - long result messages wrap cleanly without clipping
 - all touch targets remain comfortable near device cutouts and navigation areas
 - the Unity Console contains no missing-font, missing-resource, or sliced-sprite errors
+
+## V0.5 Vintage Radio Artwork
+
+Run `Level01_Radio` and confirm:
+
+- the walnut cabinet, brass faceplate, speaker grille, display, and two knobs align cleanly
+- all nine gameplay screws retain their exact positions and remain obvious at phone scale
+- clearing the three red screws loosens the faceplate together with its display and knobs
+- clearing the three blue screws loosens only the speaker grille
+- clearing the three yellow screws loosens only the outer cabinet layer
+- the final restoration returns every layer to its original alignment
+- the display indicator flickers amber and the radio performs its final scale pop
+- win, loss, Restart, sound, and progression behavior remain unchanged
+- the Unity Console contains no missing-resource, texture, alpha, or rendering errors
