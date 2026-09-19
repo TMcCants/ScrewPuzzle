@@ -195,6 +195,14 @@ The radio card is always enabled. The toy-car card asks `ProgressManager` whethe
 unlocked, then controls its button state, thumbnail tint, status label, and scene action. Scene
 names remain explicit and beginner-readable while the game contains only two levels.
 
+### `LoadingScreenBootstrap.cs`
+
+Builds the first scene in the Android player. It reuses the workshop background, displays the
+approved Lunyx/ScrewPuzzle launcher art with live title and studio text, animates the three puzzle
+colors, and asynchronously prepares Level Select. A short minimum display time prevents the
+branding from flashing past on fast devices; gameplay scenes remain directly playable in the
+Editor for quick testing.
+
 ## V0.1 Level Data
 
 The radio has nine screws:

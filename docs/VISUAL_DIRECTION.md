@@ -86,7 +86,7 @@ The approved image intentionally locks the direction, not every generated detail
 3. Radio artwork and restoration-part integration — implemented
 4. Toy-car artwork in the same material language — implemented
 5. Level-select screen — implemented
-6. Lunyx app icon and loading screen
+6. Lunyx app icon and loading screen — implemented
 7. Android visual-regression pass
 
 The production background lives at
@@ -120,6 +120,11 @@ The level-select screen uses a reusable blank walnut-and-brass card from
 production textures used by the playable level, while level names, availability, lock messaging,
 and progress guidance remain live Unity text. Locked content is dimmed without hiding the object
 silhouette or the requirement needed to unlock it.
+
+The Android launcher icon lives at `Assets/Resources/Art/Branding/App_Icon.png` and uses one
+oversized brass screw, the three gameplay colors, aged walnut, and a subtle amber crescent cue.
+The `Loading` scene assembles that icon over the shared workshop background with live title and
+studio text, then opens Level Select after a restrained three-color loading animation.
 
 ## Avoid
 

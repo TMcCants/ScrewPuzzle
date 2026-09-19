@@ -78,7 +78,8 @@ radio is completed.
 
 1. Add this repository folder as a project in Unity Hub.
 2. Open it with Unity `6000.3.23f1` or a compatible Unity 6 editor.
-3. Open `Assets/Scenes/LevelSelect.unity`.
+3. Open `Assets/Scenes/Loading.unity` to test the complete startup flow, or open
+   `Assets/Scenes/LevelSelect.unity` to skip directly to level selection.
 4. Set the Game view to a portrait ratio such as `9:16`.
 5. Press Play.
 

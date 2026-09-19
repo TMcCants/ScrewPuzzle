@@ -178,3 +178,16 @@ Run `LevelSelect` and confirm:
 - completing the radio unlocks the toy-car card and the unlocked state persists after restarting Play Mode
 - no card, label, or thumbnail is clipped by a device cutout or bottom navigation area
 - the Unity Console contains no missing-resource, texture, font, or rendering errors
+
+## V0.5 App Icon and Loading Screen
+
+Open `Loading` and confirm:
+
+- the approved brass-screw icon is sharp, centered, and fully visible inside the portrait screen
+- `SCREWPUZZLE`, the Lunyx studio credit, and `RESTORING...` remain readable at phone scale
+- the icon breathes subtly and the red, blue, and yellow loading dots pulse in sequence
+- the loading screen remains visible briefly, then opens Level Select without a flash or pause
+- opening Level Select directly still works for quick gameplay testing
+- Android Player settings show the approved art for adaptive, round, and legacy icon sizes
+- an installed Android build uses the approved icon in the launcher and recent-apps view
+- the Unity Console contains no missing-scene, missing-resource, font, texture, or loading errors
