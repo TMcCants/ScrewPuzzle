@@ -82,7 +82,7 @@ The approved image intentionally locks the direction, not every generated detail
 ## Implementation Order
 
 1. Reusable workshop background — implemented
-2. Reusable screw and tray system — implemented; button and typography system next
+2. Reusable screw, tray, button, and typography system — implemented
 3. Radio artwork and restoration-part integration
 4. Toy-car artwork in the same material language
 5. Level-select screen
@@ -98,6 +98,11 @@ The shared gameplay hardware lives in `Assets/Resources/Art/Hardware`. A neutral
 screw sprite is tinted by the existing gameplay colors, while the exact five-slot tray uses the
 locked charcoal-metal and brass material language. `PrototypeLevelBuilder` retains its generated
 circle-and-rectangle fallback for missing resources and non-five-slot level experiments.
+
+The interface uses the reusable blank plate at `Assets/Resources/Art/UI/Button_Plate.png` so
+button text remains live and editable. DejaVu Sans supplies clean instructional text and the
+display title; DejaVu Serif Bold supplies restrained accent headings and control labels. The sound
+control uses the same system at reduced visual emphasis.
 
 ## Avoid
 

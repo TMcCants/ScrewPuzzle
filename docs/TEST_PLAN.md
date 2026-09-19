@@ -122,3 +122,16 @@ Run both gameplay scenes and confirm:
 - arrival pulse, blocked shake, match pop, and full-tray shake still play without visual clipping
 - match clearing, tray compaction, win, and loss behavior are unchanged
 - the Unity Console contains no missing-resource, texture, alpha, or rendering errors
+
+## V0.5 Buttons and Typography
+
+Run Level Select and both gameplay scenes, then confirm:
+
+- the title, headings, instructions, status, and controls form a clear hierarchy at phone scale
+- all button labels remain centered and comfortably inside the brass frame
+- level-select buttons, Restart, Continue, and Play Again respond visually when pressed
+- the locked Level 2 button is visibly disabled without becoming unreadable
+- the sound control remains readable but does not compete with the puzzle object
+- long result messages wrap cleanly without clipping
+- all touch targets remain comfortable near device cutouts and navigation areas
+- the Unity Console contains no missing-font, missing-resource, or sliced-sprite errors

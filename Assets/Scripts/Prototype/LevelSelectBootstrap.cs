@@ -42,9 +42,10 @@ namespace ScrewPuzzle
                 "Title",
                 canvas.transform,
                 "SCREWPUZZLE",
-                64,
+                70,
                 TextAnchor.MiddleCenter,
-                new Color(1f, 0.82f, 0.38f));
+                new Color(0.89f, 0.66f, 0.29f));
+            PrototypeLevelBuilder.StyleTitle(title);
             PrototypeLevelBuilder.SetRect(
                 title.rectTransform,
                 new Vector2(0.5f, 1f),
@@ -58,7 +59,8 @@ namespace ScrewPuzzle
                 "SELECT A LEVEL",
                 36,
                 TextAnchor.MiddleCenter,
-                Color.white);
+                new Color(0.95f, 0.89f, 0.76f));
+            PrototypeLevelBuilder.StyleAccentHeading(subtitle);
             PrototypeLevelBuilder.SetRect(
                 subtitle.rectTransform,
                 new Vector2(0.5f, 1f),
@@ -109,7 +111,7 @@ namespace ScrewPuzzle
                 progressMessage,
                 30,
                 TextAnchor.MiddleCenter,
-                new Color(0.82f, 0.82f, 0.86f));
+                new Color(0.86f, 0.81f, 0.71f));
             PrototypeLevelBuilder.SetRect(
                 progress.rectTransform,
                 new Vector2(0.5f, 0.5f),
@@ -123,7 +125,7 @@ namespace ScrewPuzzle
                 "Progress saves on this device.",
                 24,
                 TextAnchor.MiddleCenter,
-                new Color(0.58f, 0.58f, 0.64f));
+                new Color(0.66f, 0.62f, 0.55f));
             PrototypeLevelBuilder.SetRect(
                 saveNote.rectTransform,
                 new Vector2(0.5f, 0f),

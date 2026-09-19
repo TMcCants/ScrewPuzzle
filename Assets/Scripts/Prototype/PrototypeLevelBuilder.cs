@@ -15,8 +15,17 @@ namespace ScrewPuzzle
         private static Sprite circleSprite;
         private static Sprite neutralScrewSprite;
         private static Sprite fiveSlotTraySprite;
+        private static Sprite buttonPlateSprite;
         private static bool neutralScrewSpriteLoaded;
         private static bool fiveSlotTraySpriteLoaded;
+        private static bool buttonPlateSpriteLoaded;
+        private static Font bodyFont;
+        private static Font displayFont;
+        private static Font accentFont;
+
+        private static readonly Color WarmCream = new Color(0.95f, 0.89f, 0.76f);
+        private static readonly Color WarmAmber = new Color(0.89f, 0.66f, 0.29f);
+        private static readonly Color MutedCream = new Color(0.74f, 0.69f, 0.60f);
 
         public static Camera BuildCamera(Color backgroundColor)
         {
@@ -219,18 +228,20 @@ namespace ScrewPuzzle
                 "Title",
                 canvas.transform,
                 "SCREWPUZZLE",
-                56,
+                60,
                 TextAnchor.MiddleCenter,
-                new Color(1f, 0.82f, 0.38f));
+                WarmAmber);
+            StyleTitle(title);
             SetRect(title.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -75f), new Vector2(900f, 80f));
 
             Text levelName = CreateText(
                 "Level Name",
                 canvas.transform,
                 level.LevelName.ToUpperInvariant(),
-                34,
+                38,
                 TextAnchor.MiddleCenter,
-                Color.white);
+                WarmCream);
+            StyleAccentHeading(levelName);
             SetRect(levelName.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -145f), new Vector2(900f, 60f));
 
             Text instruction = CreateText(
@@ -239,7 +250,7 @@ namespace ScrewPuzzle
                 "Tap open screws. Match " + level.MatchSize + " of one color before the tray fills.",
                 28,
                 TextAnchor.MiddleCenter,
-                Color.white);
+                WarmCream);
             SetRect(instruction.rectTransform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -210f), new Vector2(980f, 70f));
 
             Button soundButton = CreateButton("Sound Button", canvas.transform, "SOUND: ON");
@@ -247,10 +258,10 @@ namespace ScrewPuzzle
                 soundButton.GetComponent<RectTransform>(),
                 new Vector2(1f, 1f),
                 new Vector2(1f, 1f),
-                new Vector2(-145f, -300f),
-                new Vector2(250f, 70f));
+                new Vector2(-125f, -290f),
+                new Vector2(220f, 64f));
+            StyleSecondaryButton(soundButton);
             Text soundLabel = soundButton.GetComponentInChildren<Text>();
-            soundLabel.fontSize = 24;
             UpdateSoundButtonLabel(soundLabel);
             soundButton.onClick.AddListener(() =>
             {
@@ -262,19 +273,20 @@ namespace ScrewPuzzle
                 "Status",
                 canvas.transform,
                 "Cleared 0 / " + level.Screws.Length,
-                34,
+                32,
                 TextAnchor.MiddleCenter,
-                Color.white);
+                WarmCream);
+            status.fontStyle = FontStyle.Bold;
             SetRect(status.rectTransform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 220f), new Vector2(700f, 70f));
 
             Button restartButton = CreateButton("Restart Button", canvas.transform, "RESTART");
-            SetRect(restartButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 110f), new Vector2(330f, 90f));
+            SetRect(restartButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 110f), new Vector2(360f, 94f));
             restartButton.onClick.AddListener(gameManager.RestartLevel);
 
             GameObject overlay = new GameObject("Result Overlay");
             overlay.transform.SetParent(canvas.transform, false);
             Image overlayImage = overlay.AddComponent<Image>();
-            overlayImage.color = new Color(0.04f, 0.03f, 0.05f, 0.94f);
+            overlayImage.color = new Color(0.055f, 0.04f, 0.03f, 0.95f);
             RectTransform overlayRect = overlay.GetComponent<RectTransform>();
             overlayRect.anchorMin = Vector2.zero;
             overlayRect.anchorMax = Vector2.one;
@@ -287,11 +299,12 @@ namespace ScrewPuzzle
                 "RESTORED!",
                 62,
                 TextAnchor.MiddleCenter,
-                new Color(1f, 0.82f, 0.38f));
+                WarmAmber);
+            StyleAccentHeading(resultTitle);
             SetRect(resultTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 100f), new Vector2(900f, 260f));
 
             Button resultActionButton = CreateButton("Result Action Button", overlay.transform, "PLAY AGAIN");
-            SetRect(resultActionButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -120f), new Vector2(400f, 110f));
+            SetRect(resultActionButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -120f), new Vector2(420f, 112f));
             Text resultActionLabel = resultActionButton.GetComponentInChildren<Text>();
 
             return new PrototypeUiReferences(
@@ -389,15 +402,48 @@ namespace ScrewPuzzle
             GameObject buttonObject = new GameObject(objectName);
             buttonObject.transform.SetParent(parent, false);
             Image image = buttonObject.AddComponent<Image>();
-            image.color = new Color(0.72f, 0.38f, 0.12f);
-            Button button = buttonObject.AddComponent<Button>();
+            Sprite plateSprite = GetButtonPlateSprite();
 
-            Text text = CreateText("Label", buttonObject.transform, label, 30, TextAnchor.MiddleCenter, Color.white);
+            if (plateSprite != null)
+            {
+                image.sprite = plateSprite;
+                image.type = Image.Type.Sliced;
+                image.color = Color.white;
+            }
+            else
+            {
+                image.color = new Color(0.27f, 0.20f, 0.15f);
+            }
+
+            Button button = buttonObject.AddComponent<Button>();
+            button.targetGraphic = image;
+            button.transition = Selectable.Transition.ColorTint;
+            ColorBlock colors = button.colors;
+            colors.normalColor = Color.white;
+            colors.highlightedColor = new Color(1f, 0.96f, 0.84f);
+            colors.pressedColor = new Color(0.72f, 0.68f, 0.62f);
+            colors.selectedColor = colors.highlightedColor;
+            colors.disabledColor = new Color(0.46f, 0.44f, 0.42f, 0.78f);
+            colors.colorMultiplier = 1f;
+            colors.fadeDuration = 0.08f;
+            button.colors = colors;
+
+            Navigation navigation = button.navigation;
+            navigation.mode = Navigation.Mode.None;
+            button.navigation = navigation;
+
+            Text text = CreateText("Label", buttonObject.transform, label, 30, TextAnchor.MiddleCenter, WarmCream);
+            text.font = GetAccentFont();
+            text.fontStyle = FontStyle.Normal;
+            text.resizeTextForBestFit = true;
+            text.resizeTextMinSize = 20;
+            text.resizeTextMaxSize = 34;
+            AddTextShadow(text, new Vector2(2f, -2f));
             RectTransform textRect = text.rectTransform;
             textRect.anchorMin = Vector2.zero;
             textRect.anchorMax = Vector2.one;
-            textRect.offsetMin = Vector2.zero;
-            textRect.offsetMax = Vector2.zero;
+            textRect.offsetMin = new Vector2(18f, 8f);
+            textRect.offsetMax = new Vector2(-18f, -8f);
             return button;
         }
 
@@ -412,12 +458,85 @@ namespace ScrewPuzzle
             GameObject textObject = new GameObject(objectName);
             textObject.transform.SetParent(parent, false);
             Text text = textObject.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            text.font = GetBodyFont();
             text.text = value;
             text.fontSize = fontSize;
             text.alignment = alignment;
             text.color = color;
+            text.lineSpacing = 1f;
             return text;
+        }
+
+        public static void StyleTitle(Text text)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            text.font = GetDisplayFont();
+            text.fontStyle = FontStyle.Normal;
+            text.color = WarmAmber;
+            AddTextShadow(text, new Vector2(3f, -3f));
+        }
+
+        public static void StyleAccentHeading(Text text)
+        {
+            if (text == null)
+            {
+                return;
+            }
+
+            text.font = GetAccentFont();
+            text.fontStyle = FontStyle.Normal;
+            AddTextShadow(text, new Vector2(2f, -2f));
+        }
+
+        public static void StyleSecondaryButton(Button button)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            Image image = button.GetComponent<Image>();
+
+            if (image != null)
+            {
+                image.color = new Color(0.72f, 0.72f, 0.72f, 0.90f);
+            }
+
+            ColorBlock colors = button.colors;
+            colors.normalColor = new Color(0.72f, 0.72f, 0.72f, 0.90f);
+            colors.highlightedColor = new Color(0.82f, 0.80f, 0.74f, 0.95f);
+            colors.pressedColor = new Color(0.54f, 0.52f, 0.48f, 0.92f);
+            colors.selectedColor = colors.normalColor;
+            colors.disabledColor = new Color(0.38f, 0.37f, 0.35f, 0.70f);
+            button.colors = colors;
+
+            Text label = button.GetComponentInChildren<Text>();
+
+            if (label != null)
+            {
+                label.font = GetBodyFont();
+                label.fontStyle = FontStyle.Bold;
+                label.fontSize = 22;
+                label.resizeTextMaxSize = 22;
+                label.color = MutedCream;
+            }
+        }
+
+        private static void AddTextShadow(Text text, Vector2 distance)
+        {
+            if (text.GetComponent<Shadow>() != null)
+            {
+                return;
+            }
+
+            Shadow shadow = text.gameObject.AddComponent<Shadow>();
+            shadow.effectColor = new Color(0.05f, 0.025f, 0.015f, 0.88f);
+            shadow.effectDistance = distance;
+            shadow.useGraphicAlpha = true;
         }
 
         private static void UpdateSoundButtonLabel(Text label)
@@ -501,6 +620,74 @@ namespace ScrewPuzzle
             }
 
             return fiveSlotTraySprite;
+        }
+
+        private static Sprite GetButtonPlateSprite()
+        {
+            if (!buttonPlateSpriteLoaded)
+            {
+                buttonPlateSpriteLoaded = true;
+                Texture2D texture = Resources.Load<Texture2D>("Art/UI/Button_Plate");
+
+                if (texture != null)
+                {
+                    buttonPlateSprite = Sprite.Create(
+                        texture,
+                        new Rect(0f, 0f, texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f),
+                        100f,
+                        0,
+                        SpriteMeshType.FullRect,
+                        new Vector4(82f, 82f, 82f, 82f));
+                }
+            }
+
+            return buttonPlateSprite;
+        }
+
+        private static Font GetBodyFont()
+        {
+            if (bodyFont == null)
+            {
+                bodyFont = Resources.Load<Font>("Fonts/DejaVuSans");
+
+                if (bodyFont == null)
+                {
+                    bodyFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                }
+            }
+
+            return bodyFont;
+        }
+
+        private static Font GetDisplayFont()
+        {
+            if (displayFont == null)
+            {
+                displayFont = Resources.Load<Font>("Fonts/DejaVuSans-Bold");
+
+                if (displayFont == null)
+                {
+                    displayFont = GetBodyFont();
+                }
+            }
+
+            return displayFont;
+        }
+
+        private static Font GetAccentFont()
+        {
+            if (accentFont == null)
+            {
+                accentFont = Resources.Load<Font>("Fonts/DejaVuSerif-Bold");
+
+                if (accentFont == null)
+                {
+                    accentFont = GetDisplayFont();
+                }
+            }
+
+            return accentFont;
         }
 
         private static Sprite LoadResourceSprite(string resourcePath)

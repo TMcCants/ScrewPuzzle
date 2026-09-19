@@ -165,6 +165,11 @@ textures from `Resources/Art/Hardware`, creates runtime sprites, and preserves t
 fallback if either resource is unavailable. Object bootstraps call these helpers so they do not
 copy the puzzle setup code.
 
+It also owns the shared runtime UI styling. Buttons load a reusable sliced plate from
+`Resources/Art/UI`, while titles, headings, body copy, and controls load their appropriate fonts
+from `Resources/Fonts`. Resource fallbacks keep the prototype usable if an art or font import is
+missing.
+
 This remains prototype infrastructure. Final art can replace the generated shapes without
 changing `Screw`, `TrayManager`, `GameManager`, or the level definitions.
 
