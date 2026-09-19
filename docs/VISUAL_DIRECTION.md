@@ -81,13 +81,18 @@ The approved image intentionally locks the direction, not every generated detail
 
 ## Implementation Order
 
-1. Reusable workshop background
+1. Reusable workshop background — implemented
 2. Reusable screw, tray, button, and typography system
 3. Radio artwork and restoration-part integration
 4. Toy-car artwork in the same material language
 5. Level-select screen
 6. Lunyx app icon and loading screen
 7. Android visual-regression pass
+
+The production background lives at
+`Assets/Resources/Art/Workshop_Background.png`. Both gameplay bootstraps load it through the
+shared `PrototypeLevelBuilder`; a plain-color fallback protects level startup if the resource is
+missing.
 
 ## Avoid
 
@@ -98,4 +103,3 @@ The approved image intentionally locks the direction, not every generated detail
 - Childish cartoon proportions
 - Excessive steampunk gears, rivets, or ornamental framing
 - Art details that obscure blockers, screw colors, tray capacity, or tap targets
-

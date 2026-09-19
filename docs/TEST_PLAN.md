@@ -99,3 +99,13 @@ Build and install version `0.4.0` with Android version code `2`, then verify on 
 - tray-arrival, match-clear, and full-tray visual effects remain readable at phone scale
 - radio-to-toy-car unlocking remains saved
 - no content is clipped by the camera cutout or bottom navigation area
+
+## V0.5 Workshop Background
+
+Run both gameplay scenes and confirm:
+
+- the warm workshop background fills the portrait camera with no exposed edges
+- the radio, toy car, screws, tray, instructions, and controls remain easy to read
+- no sharp background prop appears behind an interactive screw
+- the background remains stationary through match, loss, restoration, and scene transitions
+- the Unity Console contains no missing-resource, texture, or rendering errors

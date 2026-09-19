@@ -41,6 +41,27 @@ namespace ScrewPuzzle
 
         public static void BuildBackground(Color backgroundColor)
         {
+            Texture2D workshopTexture = Resources.Load<Texture2D>("Art/Workshop_Background");
+
+            if (workshopTexture != null)
+            {
+                const float backgroundHeight = 15f;
+                float pixelsPerUnit = workshopTexture.height / backgroundHeight;
+                Sprite workshopSprite = Sprite.Create(
+                    workshopTexture,
+                    new Rect(0f, 0f, workshopTexture.width, workshopTexture.height),
+                    new Vector2(0.5f, 0.5f),
+                    pixelsPerUnit);
+
+                GameObject backgroundObject = new GameObject("Workshop Background");
+                backgroundObject.transform.position = new Vector3(0f, 0f, 2f);
+                SpriteRenderer backgroundRenderer = backgroundObject.AddComponent<SpriteRenderer>();
+                backgroundRenderer.sprite = workshopSprite;
+                backgroundRenderer.sortingOrder = -10;
+                return;
+            }
+
+            // Retain a plain-color fallback so a missing art resource cannot break a level.
             Transform background = CreateRectangle(
                 "Workshop Background",
                 null,
