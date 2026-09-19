@@ -122,12 +122,12 @@ namespace ScrewPuzzle
             SpriteRenderer upperHeadlight = CreateHeadlight(
                 "Upper Headlight",
                 carRoot,
-                new Vector3(3f, -0.12f, 0f),
+                new Vector3(3f, 0.1f, 0f),
                 0.38f);
             SpriteRenderer lowerHeadlight = CreateHeadlight(
                 "Lower Headlight",
                 carRoot,
-                new Vector3(3f, -0.48f, 0f),
+                new Vector3(3f, -0.18f, 0f),
                 0.31f);
 
             if (!hasProductionChassis)
