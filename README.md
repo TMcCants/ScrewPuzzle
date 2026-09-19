@@ -1,5 +1,8 @@
 # ScrewPuzzle
 
+The locked V0.5 art direction is documented in
+[`docs/VISUAL_DIRECTION.md`](docs/VISUAL_DIRECTION.md).
+
 A small, expandable Unity puzzle game built as both a commercial learning project and a complete game-shipping exercise.
 
 ## Current Product Direction
