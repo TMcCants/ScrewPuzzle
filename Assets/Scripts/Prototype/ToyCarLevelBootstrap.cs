@@ -58,7 +58,7 @@ namespace ScrewPuzzle
 
             Transform roof = new GameObject("Car Roof").transform;
             roof.SetParent(carRoot, false);
-            roof.localPosition = new Vector3(-0.6f, 1.08f, 0f);
+            roof.localPosition = new Vector3(-0.6f, 0.8f, 0f);
             Transform roofVisual = PrototypeLevelBuilder.CreateResourceSprite(
                 "Roof Assembly",
                 roof,
@@ -97,7 +97,7 @@ namespace ScrewPuzzle
             Transform hood = PrototypeLevelBuilder.CreateResourceSprite(
                 "Car Hood",
                 carRoot,
-                new Vector3(2.05f, 0.32f, 0f),
+                new Vector3(1.85f, 0f, 0f),
                 "Art/ToyCar/ToyCar_Hood",
                 new Vector2(2.35f, 0.76f),
                 Color.white,
@@ -122,12 +122,12 @@ namespace ScrewPuzzle
             SpriteRenderer upperHeadlight = CreateHeadlight(
                 "Upper Headlight",
                 carRoot,
-                new Vector3(3.22f, 0.42f, 0f),
+                new Vector3(3f, -0.12f, 0f),
                 0.38f);
             SpriteRenderer lowerHeadlight = CreateHeadlight(
                 "Lower Headlight",
                 carRoot,
-                new Vector3(3.22f, -0.12f, 0f),
+                new Vector3(3f, -0.48f, 0f),
                 0.31f);
 
             if (!hasProductionChassis)

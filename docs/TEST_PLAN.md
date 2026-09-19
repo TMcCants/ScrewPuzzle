@@ -154,7 +154,8 @@ Run `Level01_Radio` and confirm:
 
 Run `Level02_ToyCar` and confirm:
 
-- the teal body, cream roof and windows, hood, brass details, rubber wheels, and headlights align cleanly
+- the roof pillars, hood, and headlights sit against the body with no unintended floating gaps
+- the teal body, cream roof and windows, brass details, and rubber wheels align cleanly
 - all nine gameplay screws remain visible, readable, and comfortably tappable at phone scale
 - clearing the three red screws loosens the complete roof and window assembly
 - clearing the three blue screws loosens only the hood

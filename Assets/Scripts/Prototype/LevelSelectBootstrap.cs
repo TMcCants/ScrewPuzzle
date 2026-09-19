@@ -213,10 +213,10 @@ namespace ScrewPuzzle
                 new Vector2(10f, -8f), new Vector2(570f, 272f), tint);
             CreateResourceImage(
                 "Toy Car Roof", parent, "Art/ToyCar/ToyCar_Roof",
-                new Vector2(-38f, 78f), new Vector2(293f, 146f), tint);
+                new Vector2(-38f, 56f), new Vector2(293f, 146f), tint);
             CreateResourceImage(
                 "Toy Car Hood", parent, "Art/ToyCar/ToyCar_Hood",
-                new Vector2(175f, 18f), new Vector2(188f, 61f), tint);
+                new Vector2(159f, -8f), new Vector2(188f, 61f), tint);
             CreateResourceImage(
                 "Rear Wheel", parent, "Art/ToyCar/ToyCar_Wheel",
                 new Vector2(-147f, -64f), new Vector2(114f, 114f), tint);
@@ -225,10 +225,10 @@ namespace ScrewPuzzle
                 new Vector2(215f, -64f), new Vector2(114f, 114f), tint);
             CreateResourceImage(
                 "Upper Headlight", parent, "Art/ToyCar/ToyCar_Headlight",
-                new Vector2(269f, 26f), new Vector2(31f, 31f), tint);
+                new Vector2(251f, -17f), new Vector2(31f, 31f), tint);
             CreateResourceImage(
                 "Lower Headlight", parent, "Art/ToyCar/ToyCar_Headlight",
-                new Vector2(269f, -18f), new Vector2(25f, 25f), tint);
+                new Vector2(251f, -47f), new Vector2(25f, 25f), tint);
         }
 
         private void AddCardLabels(Transform parent, string levelNumber, string levelName, string status, bool locked)
