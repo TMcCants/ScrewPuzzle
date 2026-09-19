@@ -163,3 +163,17 @@ Run `Level02_ToyCar` and confirm:
 - both headlights flash three times and the car performs its short forward movement
 - win, loss, Restart, sound, and progression behavior remain unchanged
 - the Unity Console contains no missing-resource, texture, alpha, or rendering errors
+
+## V0.5 Level Select Artwork
+
+Run `LevelSelect` and confirm:
+
+- the title, subtitle, two walnut-and-brass cards, progress message, and save note fit the portrait screen
+- the radio card uses the production radio artwork and opens `Level01_Radio`
+- an unlocked toy-car card uses the production car artwork and opens `Level02_ToyCar`
+- both cards give visible pressed/highlighted feedback without washing out their labels
+- when Level 2 is locked, its card, thumbnail, status, and `LOCKED` label are visibly disabled
+- the locked toy-car card cannot be opened and the progress message explains how to unlock it
+- completing the radio unlocks the toy-car card and the unlocked state persists after restarting Play Mode
+- no card, label, or thumbnail is clipped by a device cutout or bottom navigation area
+- the Unity Console contains no missing-resource, texture, font, or rendering errors

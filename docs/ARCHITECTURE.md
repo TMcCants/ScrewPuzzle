@@ -187,9 +187,13 @@ the result overlay.
 
 ### `LevelSelectBootstrap.cs`
 
-Builds the temporary level-selection screen. It always enables the radio button and asks
-`ProgressManager` whether the toy-car button should be enabled. Scene names remain explicit and
-beginner-readable while the game contains only two levels.
+Builds the workshop level-selection screen. It loads a reusable walnut-and-brass card surface from
+`Resources/Art/UI`, then assembles each card's thumbnail from the same production radio or toy-car
+textures used by its playable level. All labels and state messages remain live Unity text.
+
+The radio card is always enabled. The toy-car card asks `ProgressManager` whether Level 2 is
+unlocked, then controls its button state, thumbnail tint, status label, and scene action. Scene
+names remain explicit and beginner-readable while the game contains only two levels.
 
 ## V0.1 Level Data
 

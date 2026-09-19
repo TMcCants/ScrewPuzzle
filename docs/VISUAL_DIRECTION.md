@@ -85,7 +85,7 @@ The approved image intentionally locks the direction, not every generated detail
 2. Reusable screw, tray, button, and typography system — implemented
 3. Radio artwork and restoration-part integration — implemented
 4. Toy-car artwork in the same material language — implemented
-5. Level-select screen
+5. Level-select screen — implemented
 6. Lunyx app icon and loading screen
 7. Android visual-regression pass
 
@@ -114,6 +114,12 @@ teal pressed-metal body, removable cream roof and windows, removable hood, reusa
 tintable headlight. The existing live screws remain above the artwork. Roof, hood, and wheel
 assembly still loosen independently, while the headlights remain runtime-controlled for the final
 three-flash start effect.
+
+The level-select screen uses a reusable blank walnut-and-brass card from
+`Assets/Resources/Art/UI/Level_Select_Card.png`. Each card assembles its preview from the same
+production textures used by the playable level, while level names, availability, lock messaging,
+and progress guidance remain live Unity text. Locked content is dimmed without hiding the object
+silhouette or the requirement needed to unlock it.
 
 ## Avoid
 
