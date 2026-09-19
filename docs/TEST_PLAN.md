@@ -109,3 +109,16 @@ Run both gameplay scenes and confirm:
 - no sharp background prop appears behind an interactive screw
 - the background remains stationary through match, loss, restoration, and scene transitions
 - the Unity Console contains no missing-resource, texture, or rendering errors
+
+## V0.5 Gameplay Hardware
+
+Run both gameplay scenes and confirm:
+
+- every screw uses the new dimensional metal head while remaining clearly red, blue, or yellow
+- blocked screws are visibly dim but their slot and silhouette stay readable
+- the tray shows exactly five evenly spaced recessed slots
+- each arriving screw settles in the center of its matching tray recess
+- screw tap areas still feel comfortable and no nearby screw is selected accidentally
+- arrival pulse, blocked shake, match pop, and full-tray shake still play without visual clipping
+- match clearing, tray compaction, win, and loss behavior are unchanged
+- the Unity Console contains no missing-resource, texture, alpha, or rendering errors

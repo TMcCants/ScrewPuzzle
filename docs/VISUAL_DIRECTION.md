@@ -82,7 +82,7 @@ The approved image intentionally locks the direction, not every generated detail
 ## Implementation Order
 
 1. Reusable workshop background — implemented
-2. Reusable screw, tray, button, and typography system
+2. Reusable screw and tray system — implemented; button and typography system next
 3. Radio artwork and restoration-part integration
 4. Toy-car artwork in the same material language
 5. Level-select screen
@@ -93,6 +93,11 @@ The production background lives at
 `Assets/Resources/Art/Workshop_Background.jpg`. Both gameplay bootstraps load it through the
 shared `PrototypeLevelBuilder`; a plain-color fallback protects level startup if the resource is
 missing.
+
+The shared gameplay hardware lives in `Assets/Resources/Art/Hardware`. A neutral dimensional
+screw sprite is tinted by the existing gameplay colors, while the exact five-slot tray uses the
+locked charcoal-metal and brass material language. `PrototypeLevelBuilder` retains its generated
+circle-and-rectangle fallback for missing resources and non-five-slot level experiments.
 
 ## Avoid
 

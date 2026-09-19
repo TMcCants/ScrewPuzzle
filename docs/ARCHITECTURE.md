@@ -159,9 +159,11 @@ This is assembly code, not a gameplay-rule owner. It exists so V0.1 is immediate
 
 ### `PrototypeLevelBuilder.cs`
 
-Creates the temporary pieces every prototype level shares: camera, background, tray, UI, screws,
-blocker references, and simple rectangle/circle visuals. Object bootstraps call these helpers so
-they do not copy the puzzle setup code.
+Creates the pieces every prototype level shares: camera, background, tray, UI, screws, blocker
+references, and fallback rectangle/circle visuals. It loads the reusable screw and five-slot tray
+textures from `Resources/Art/Hardware`, creates runtime sprites, and preserves the generated-shape
+fallback if either resource is unavailable. Object bootstraps call these helpers so they do not
+copy the puzzle setup code.
 
 This remains prototype infrastructure. Final art can replace the generated shapes without
 changing `Screw`, `TrayManager`, `GameManager`, or the level definitions.

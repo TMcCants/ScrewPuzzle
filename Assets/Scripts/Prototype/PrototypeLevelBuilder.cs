@@ -13,6 +13,10 @@ namespace ScrewPuzzle
     {
         private static Sprite squareSprite;
         private static Sprite circleSprite;
+        private static Sprite neutralScrewSprite;
+        private static Sprite fiveSlotTraySprite;
+        private static bool neutralScrewSpriteLoaded;
+        private static bool fiveSlotTraySpriteLoaded;
 
         public static Camera BuildCamera(Color backgroundColor)
         {
@@ -76,13 +80,29 @@ namespace ScrewPuzzle
         {
             Transform trayRoot = new GameObject("Holding Tray").transform;
             trayRoot.position = new Vector3(0f, -4.2f, 0f);
-            CreateRectangle(
-                "Tray Background",
-                trayRoot,
-                Vector3.zero,
-                new Vector2((capacity * 1.3f) + 0.8f, 1.25f),
-                new Color(0.16f, 0.16f, 0.19f),
-                1);
+            Sprite traySprite = capacity == 5 ? GetFiveSlotTraySprite() : null;
+
+            if (traySprite != null)
+            {
+                Transform trayVisual = CreateSpriteObject(
+                    "Tray Background",
+                    trayRoot,
+                    Vector3.zero,
+                    traySprite,
+                    Color.white,
+                    1);
+                trayVisual.localScale = Vector3.one * 7.95f;
+            }
+            else
+            {
+                CreateRectangle(
+                    "Tray Background",
+                    trayRoot,
+                    Vector3.zero,
+                    new Vector2((capacity * 1.3f) + 0.8f, 1.25f),
+                    new Color(0.16f, 0.16f, 0.19f),
+                    1);
+            }
 
             Transform[] slots = new Transform[capacity];
             float firstSlotX = -((capacity - 1) * 1.3f) / 2f;
@@ -90,13 +110,22 @@ namespace ScrewPuzzle
             for (int index = 0; index < slots.Length; index++)
             {
                 float x = firstSlotX + (index * 1.3f);
-                slots[index] = CreateCircle(
-                    "Tray Slot " + (index + 1),
-                    trayRoot,
-                    new Vector3(x, 0f, 0f),
-                    0.85f,
-                    new Color(0.28f, 0.28f, 0.32f),
-                    2);
+                if (traySprite != null)
+                {
+                    slots[index] = new GameObject("Tray Slot " + (index + 1)).transform;
+                    slots[index].SetParent(trayRoot, false);
+                    slots[index].localPosition = new Vector3(x, 0.14f, 0f);
+                }
+                else
+                {
+                    slots[index] = CreateCircle(
+                        "Tray Slot " + (index + 1),
+                        trayRoot,
+                        new Vector3(x, 0f, 0f),
+                        0.85f,
+                        new Color(0.28f, 0.28f, 0.32f),
+                        2);
+                }
             }
 
             return slots;
@@ -109,31 +138,57 @@ namespace ScrewPuzzle
             ScrewDefinition[] screwDefinitions)
         {
             Screw[] screws = new Screw[screwDefinitions.Length];
+            Sprite screwSprite = GetNeutralScrewSprite();
 
             for (int index = 0; index < screwDefinitions.Length; index++)
             {
                 ScrewDefinition definition = screwDefinitions[index];
-                Transform screwVisual = CreateCircle(
-                    definition.ColorId + " Screw " + (index + 1),
-                    objectRoot,
-                    definition.Position,
-                    0.62f,
-                    ColorFor(definition.ColorId),
-                    10);
+                Transform screwVisual;
 
-                screwVisual.gameObject.AddComponent<CircleCollider2D>();
+                if (screwSprite != null)
+                {
+                    screwVisual = CreateSpriteObject(
+                        definition.ColorId + " Screw " + (index + 1),
+                        objectRoot,
+                        definition.Position,
+                        screwSprite,
+                        ColorFor(definition.ColorId),
+                        10);
+                    screwVisual.localScale = Vector3.one * 0.92f;
+                }
+                else
+                {
+                    screwVisual = CreateCircle(
+                        definition.ColorId + " Screw " + (index + 1),
+                        objectRoot,
+                        definition.Position,
+                        0.62f,
+                        ColorFor(definition.ColorId),
+                        10);
+                }
+
+                CircleCollider2D collider = screwVisual.gameObject.AddComponent<CircleCollider2D>();
+
+                if (screwSprite != null)
+                {
+                    collider.radius = 0.34f;
+                }
+
                 ScrewDependency dependency = screwVisual.gameObject.AddComponent<ScrewDependency>();
                 Screw screw = screwVisual.gameObject.AddComponent<Screw>();
                 screw.Configure(definition.ColorId, dependency, trayManager, gameManager);
                 screws[index] = screw;
 
-                CreateRectangle(
-                    "Screw Slot",
-                    screwVisual,
-                    Vector3.zero,
-                    new Vector2(0.34f, 0.08f),
-                    new Color(0.18f, 0.16f, 0.14f),
-                    11);
+                if (screwSprite == null)
+                {
+                    CreateRectangle(
+                        "Screw Slot",
+                        screwVisual,
+                        Vector3.zero,
+                        new Vector2(0.34f, 0.08f),
+                        new Color(0.18f, 0.16f, 0.14f),
+                        11);
+                }
             }
 
             ConfigureBlockers(screws, screwDefinitions);
@@ -285,6 +340,24 @@ namespace ScrewPuzzle
             return circle.transform;
         }
 
+        private static Transform CreateSpriteObject(
+            string objectName,
+            Transform parent,
+            Vector3 localPosition,
+            Sprite sprite,
+            Color color,
+            int sortingOrder)
+        {
+            GameObject spriteObject = new GameObject(objectName);
+            spriteObject.transform.SetParent(parent, false);
+            spriteObject.transform.localPosition = localPosition;
+            SpriteRenderer renderer = spriteObject.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = color;
+            renderer.sortingOrder = sortingOrder;
+            return spriteObject.transform;
+        }
+
         private static void ConfigureBlockers(
             Screw[] screws,
             ScrewDefinition[] screwDefinitions)
@@ -406,6 +479,44 @@ namespace ScrewPuzzle
             }
 
             return circleSprite;
+        }
+
+        private static Sprite GetNeutralScrewSprite()
+        {
+            if (!neutralScrewSpriteLoaded)
+            {
+                neutralScrewSpriteLoaded = true;
+                neutralScrewSprite = LoadResourceSprite("Art/Hardware/Screw_Head_Neutral");
+            }
+
+            return neutralScrewSprite;
+        }
+
+        private static Sprite GetFiveSlotTraySprite()
+        {
+            if (!fiveSlotTraySpriteLoaded)
+            {
+                fiveSlotTraySpriteLoaded = true;
+                fiveSlotTraySprite = LoadResourceSprite("Art/Hardware/Five_Slot_Tray");
+            }
+
+            return fiveSlotTraySprite;
+        }
+
+        private static Sprite LoadResourceSprite(string resourcePath)
+        {
+            Texture2D texture = Resources.Load<Texture2D>(resourcePath);
+
+            if (texture == null)
+            {
+                return null;
+            }
+
+            return Sprite.Create(
+                texture,
+                new Rect(0f, 0f, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f),
+                texture.width);
         }
 
         private static Color ColorFor(ScrewColorId colorId)
