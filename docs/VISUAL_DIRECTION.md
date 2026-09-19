@@ -90,7 +90,7 @@ The approved image intentionally locks the direction, not every generated detail
 7. Android visual-regression pass
 
 The production background lives at
-`Assets/Resources/Art/Workshop_Background.png`. Both gameplay bootstraps load it through the
+`Assets/Resources/Art/Workshop_Background.jpg`. Both gameplay bootstraps load it through the
 shared `PrototypeLevelBuilder`; a plain-color fallback protects level startup if the resource is
 missing.
 
