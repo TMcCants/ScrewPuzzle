@@ -149,3 +149,17 @@ Run `Level01_Radio` and confirm:
 - the display indicator flickers amber and the radio performs its final scale pop
 - win, loss, Restart, sound, and progression behavior remain unchanged
 - the Unity Console contains no missing-resource, texture, alpha, or rendering errors
+
+## V0.5 Toy Car Artwork
+
+Run `Level02_ToyCar` and confirm:
+
+- the teal body, cream roof and windows, hood, brass details, rubber wheels, and headlights align cleanly
+- all nine gameplay screws remain visible, readable, and comfortably tappable at phone scale
+- clearing the three red screws loosens the complete roof and window assembly
+- clearing the three blue screws loosens only the hood
+- clearing the three yellow screws loosens both wheels together
+- the final restoration returns every layer to its original alignment
+- both headlights flash three times and the car performs its short forward movement
+- win, loss, Restart, sound, and progression behavior remain unchanged
+- the Unity Console contains no missing-resource, texture, alpha, or rendering errors

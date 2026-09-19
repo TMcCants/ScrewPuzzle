@@ -10,7 +10,7 @@ This guide explains who owns each rule and where Tamika can safely change it.
 4. `TrayManager` stores the screw and checks `TrayRules` for three matching colors.
 5. A matching set clears. A full tray without a match loses the level.
 6. `GameManager` counts cleared screws and decides when the level is won or lost.
-7. `RadioRestoration` loosens radio parts during play and runs the final restoration effect after the win.
+7. The level-specific restoration controller loosens object parts during play and runs the final restoration effect after the win.
 
 The important design principle is that no individual screw decides the whole game.
 
@@ -178,8 +178,10 @@ changing `Screw`, `TrayManager`, `GameManager`, or the level definitions.
 
 ### `ToyCarLevelBootstrap.cs` and `ToyCarRestoration.cs`
 
-`ToyCarLevelBootstrap` owns only the toy car's level data, shapes, and part assignments. Its
-restoration controller loosens the roof, hood, and wheel assembly during play. On completion, it
+`ToyCarLevelBootstrap` owns only the toy car's level data, layered visuals, and part assignments.
+The teal body, cream roof and windows, hood, wheel, and tintable headlight textures load from
+`Resources/Art/ToyCar`; generated shapes remain as missing-resource fallbacks. Its restoration
+controller loosens the roof, hood, and complete two-wheel assembly during play. On completion, it
 reassembles the car, flashes the headlights, and plays a short forward movement before displaying
 the result overlay.
 

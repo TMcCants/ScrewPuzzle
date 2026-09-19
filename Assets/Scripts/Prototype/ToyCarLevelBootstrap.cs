@@ -34,75 +34,112 @@ namespace ScrewPuzzle
             Transform carRoot = new GameObject("Toy Car").transform;
             carRoot.position = new Vector3(0f, 0.65f, 0f);
 
-            PrototypeLevelBuilder.CreateRectangle(
+            Transform chassis = PrototypeLevelBuilder.CreateResourceSprite(
                 "Car Chassis",
                 carRoot,
-                new Vector3(0f, -0.15f, 0f),
-                new Vector2(6.6f, 2.05f),
-                carBodyColor,
+                new Vector3(0f, -0.05f, 0f),
+                "Art/ToyCar/ToyCar_Body",
+                new Vector2(7.1f, 3.39f),
+                Color.white,
                 2);
+
+            bool hasProductionChassis = chassis != null;
+
+            if (!hasProductionChassis)
+            {
+                chassis = PrototypeLevelBuilder.CreateRectangle(
+                    "Car Chassis",
+                    carRoot,
+                    new Vector3(0f, -0.15f, 0f),
+                    new Vector2(6.6f, 2.05f),
+                    carBodyColor,
+                    2);
+            }
 
             Transform roof = new GameObject("Car Roof").transform;
             roof.SetParent(carRoot, false);
-            roof.localPosition = new Vector3(-0.65f, 1.25f, 0f);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Roof Body",
+            roof.localPosition = new Vector3(-0.6f, 1.08f, 0f);
+            Transform roofVisual = PrototypeLevelBuilder.CreateResourceSprite(
+                "Roof Assembly",
                 roof,
                 Vector3.zero,
-                new Vector2(3.65f, 1.45f),
-                carAccentColor,
+                "Art/ToyCar/ToyCar_Roof",
+                new Vector2(3.65f, 1.82f),
+                Color.white,
                 3);
 
-            PrototypeLevelBuilder.CreateRectangle(
-                "Rear Window",
-                roof,
-                new Vector3(-0.8f, 0f, 0f),
-                new Vector2(0.95f, 0.75f),
-                windowColor,
-                4);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Front Window",
-                roof,
-                new Vector3(0.58f, 0f, 0f),
-                new Vector2(1.15f, 0.75f),
-                windowColor,
-                4);
+            if (roofVisual == null)
+            {
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Roof Body",
+                    roof,
+                    Vector3.zero,
+                    new Vector2(3.65f, 1.45f),
+                    carAccentColor,
+                    3);
 
-            Transform hood = PrototypeLevelBuilder.CreateRectangle(
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Rear Window",
+                    roof,
+                    new Vector3(-0.8f, 0f, 0f),
+                    new Vector2(0.95f, 0.75f),
+                    windowColor,
+                    4);
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Front Window",
+                    roof,
+                    new Vector3(0.58f, 0f, 0f),
+                    new Vector2(1.15f, 0.75f),
+                    windowColor,
+                    4);
+            }
+
+            Transform hood = PrototypeLevelBuilder.CreateResourceSprite(
                 "Car Hood",
                 carRoot,
-                new Vector3(2.35f, 0.5f, 0f),
-                new Vector2(1.9f, 0.72f),
-                carAccentColor,
+                new Vector3(2.05f, 0.32f, 0f),
+                "Art/ToyCar/ToyCar_Hood",
+                new Vector2(2.35f, 0.76f),
+                Color.white,
                 3);
+
+            if (hood == null)
+            {
+                hood = PrototypeLevelBuilder.CreateRectangle(
+                    "Car Hood",
+                    carRoot,
+                    new Vector3(2.35f, 0.5f, 0f),
+                    new Vector2(1.9f, 0.72f),
+                    carAccentColor,
+                    3);
+            }
 
             Transform wheelAssembly = new GameObject("Wheel Assembly").transform;
             wheelAssembly.SetParent(carRoot, false);
-            CreateWheel(wheelAssembly, "Rear Wheel", new Vector3(-2.25f, -1.2f, 0f));
-            CreateWheel(wheelAssembly, "Front Wheel", new Vector3(2.25f, -1.2f, 0f));
+            CreateWheel(wheelAssembly, "Rear Wheel", new Vector3(-1.95f, -0.7f, 0f));
+            CreateWheel(wheelAssembly, "Front Wheel", new Vector3(2.55f, -0.7f, 0f));
 
-            SpriteRenderer upperHeadlight = PrototypeLevelBuilder.CreateCircle(
+            SpriteRenderer upperHeadlight = CreateHeadlight(
                 "Upper Headlight",
                 carRoot,
-                new Vector3(3.1f, 0.32f, 0f),
-                0.34f,
-                new Color(0.36f, 0.31f, 0.16f),
-                5).GetComponent<SpriteRenderer>();
-            SpriteRenderer lowerHeadlight = PrototypeLevelBuilder.CreateCircle(
+                new Vector3(3.22f, 0.42f, 0f),
+                0.38f);
+            SpriteRenderer lowerHeadlight = CreateHeadlight(
                 "Lower Headlight",
                 carRoot,
-                new Vector3(3.1f, -0.28f, 0f),
-                0.28f,
-                new Color(0.36f, 0.31f, 0.16f),
-                5).GetComponent<SpriteRenderer>();
+                new Vector3(3.22f, -0.12f, 0f),
+                0.31f);
 
-            PrototypeLevelBuilder.CreateRectangle(
-                "Front Bumper",
-                carRoot,
-                new Vector3(3.45f, -0.72f, 0f),
-                new Vector2(0.5f, 0.28f),
-                new Color(0.45f, 0.47f, 0.50f),
-                3);
+            if (!hasProductionChassis)
+            {
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Front Bumper",
+                    carRoot,
+                    new Vector3(3.45f, -0.72f, 0f),
+                    new Vector2(0.5f, 0.28f),
+                    new Color(0.45f, 0.47f, 0.50f),
+                    3);
+            }
 
             Transform[] traySlots = PrototypeLevelBuilder.BuildTray(level.TrayCapacity);
             PrototypeUiReferences ui = PrototypeLevelBuilder.BuildUi(gameManager, level);
@@ -169,20 +206,62 @@ namespace ScrewPuzzle
 
         private void CreateWheel(Transform parent, string wheelName, Vector3 position)
         {
-            Transform wheel = PrototypeLevelBuilder.CreateCircle(
+            Transform wheel = PrototypeLevelBuilder.CreateResourceSprite(
                 wheelName,
                 parent,
                 position,
-                1.35f,
-                tireColor,
+                "Art/ToyCar/ToyCar_Wheel",
+                new Vector2(1.42f, 1.42f),
+                Color.white,
                 3);
-            PrototypeLevelBuilder.CreateCircle(
-                "Wheel Hub",
-                wheel,
-                Vector3.zero,
-                0.48f,
-                new Color(0.48f, 0.50f, 0.53f),
-                4);
+
+            if (wheel == null)
+            {
+                wheel = PrototypeLevelBuilder.CreateCircle(
+                    wheelName,
+                    parent,
+                    position,
+                    1.35f,
+                    tireColor,
+                    3);
+                PrototypeLevelBuilder.CreateCircle(
+                    "Wheel Hub",
+                    wheel,
+                    Vector3.zero,
+                    0.48f,
+                    new Color(0.48f, 0.50f, 0.53f),
+                    4);
+            }
+        }
+
+        private SpriteRenderer CreateHeadlight(
+            string headlightName,
+            Transform parent,
+            Vector3 position,
+            float size)
+        {
+            Color unlitColor = new Color(0.36f, 0.31f, 0.16f);
+            Transform headlight = PrototypeLevelBuilder.CreateResourceSprite(
+                headlightName,
+                parent,
+                position,
+                "Art/ToyCar/ToyCar_Headlight",
+                new Vector2(size, size),
+                unlitColor,
+                5);
+
+            if (headlight == null)
+            {
+                headlight = PrototypeLevelBuilder.CreateCircle(
+                    headlightName,
+                    parent,
+                    position,
+                    size,
+                    unlitColor,
+                    5);
+            }
+
+            return headlight.GetComponent<SpriteRenderer>();
         }
 
         private ToyCarRestoration.CarPart MakeCarPart(

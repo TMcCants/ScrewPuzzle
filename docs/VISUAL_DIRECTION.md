@@ -84,7 +84,7 @@ The approved image intentionally locks the direction, not every generated detail
 1. Reusable workshop background — implemented
 2. Reusable screw, tray, button, and typography system — implemented
 3. Radio artwork and restoration-part integration — implemented
-4. Toy-car artwork in the same material language
+4. Toy-car artwork in the same material language — implemented
 5. Level-select screen
 6. Lunyx app icon and loading screen
 7. Android visual-regression pass
@@ -108,6 +108,12 @@ The production radio is assembled from transparent layers in `Assets/Resources/A
 cabinet case, removable faceplate, speaker grille, tuning display, and reusable knob. The live
 nine-screw grid remains code-driven, and the display's amber indicator remains a runtime effect so
 the established release and final-restoration animations retain their gameplay meaning.
+
+The production toy car is assembled from transparent layers in `Assets/Resources/Art/ToyCar`:
+teal pressed-metal body, removable cream roof and windows, removable hood, reusable wheel, and
+tintable headlight. The existing live screws remain above the artwork. Roof, hood, and wheel
+assembly still loosen independently, while the headlights remain runtime-controlled for the final
+three-flash start effect.
 
 ## Avoid
 
