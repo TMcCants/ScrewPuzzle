@@ -50,7 +50,7 @@ namespace ScrewPuzzle
 
             bool isBlocked = dependency != null && !dependency.AreAllBlockersRemoved();
             Color displayColor = normalColor;
-            displayColor.a = isBlocked ? 0.4f : 1f;
+            displayColor.a = isBlocked ? 0.58f : 1f;
             screwRenderer.color = displayColor;
         }
 
