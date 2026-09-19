@@ -225,10 +225,10 @@ namespace ScrewPuzzle
                 new Vector2(215f, -64f), new Vector2(114f, 114f), tint);
             CreateResourceImage(
                 "Upper Headlight", parent, "Art/ToyCar/ToyCar_Headlight",
-                new Vector2(251f, 4f), new Vector2(31f, 31f), tint);
+                new Vector2(206f, 2f), new Vector2(31f, 31f), tint);
             CreateResourceImage(
                 "Lower Headlight", parent, "Art/ToyCar/ToyCar_Headlight",
-                new Vector2(251f, -18f), new Vector2(25f, 25f), tint);
+                new Vector2(238f, 2f), new Vector2(25f, 25f), tint);
         }
 
         private void AddCardLabels(Transform parent, string levelNumber, string levelName, string status, bool locked)
