@@ -38,7 +38,7 @@ namespace ScrewPuzzle
                 "Car Chassis",
                 carRoot,
                 new Vector3(0f, -0.05f, 0f),
-                "Art/ToyCar/ToyCar_Body",
+                "Art/ToyCar/ToyCar_Body_OpenDoor",
                 new Vector2(7.1f, 3.39f),
                 Color.white,
                 2);
@@ -92,6 +92,26 @@ namespace ScrewPuzzle
                     new Vector2(1.15f, 0.75f),
                     windowColor,
                     4);
+            }
+
+            Transform door = PrototypeLevelBuilder.CreateResourceSprite(
+                "Car Door",
+                carRoot,
+                new Vector3(-0.1f, -0.15f, 0f),
+                "Art/ToyCar/ToyCar_Door",
+                new Vector2(1.85f, 0.9f),
+                Color.white,
+                3);
+
+            if (door == null)
+            {
+                door = PrototypeLevelBuilder.CreateRectangle(
+                    "Car Door",
+                    carRoot,
+                    new Vector3(-0.1f, -0.15f, 0f),
+                    new Vector2(1.85f, 0.9f),
+                    carBodyColor,
+                    3);
             }
 
             Transform hood = PrototypeLevelBuilder.CreateResourceSprite(
@@ -152,7 +172,7 @@ namespace ScrewPuzzle
             ToyCarRestoration.CarPart[] carParts =
             {
                 MakeCarPart("Roof", roof, new Screw[] { screws[0], screws[1], screws[2] }, new Vector3(0f, 0.2f, 0f), -3f),
-                MakeCarPart("Hood", hood, new Screw[] { screws[3], screws[4], screws[5] }, new Vector3(0.2f, 0f, 0f), 3f),
+                MakeCarPart("Door", door, new Screw[] { screws[3], screws[4], screws[5] }, new Vector3(0.08f, -0.55f, 0f), -8f),
                 MakeCarPart("Wheels", wheelAssembly, new Screw[] { screws[6], screws[7], screws[8] }, new Vector3(0f, -0.18f, 0f), 1.5f)
             };
 
@@ -184,9 +204,9 @@ namespace ScrewPuzzle
                 new ScrewDefinition(ScrewColorId.Red, new Vector3(-1.75f, 1.55f, 0f)),
                 new ScrewDefinition(ScrewColorId.Red, new Vector3(-0.6f, 1.65f, 0f)),
                 new ScrewDefinition(ScrewColorId.Red, new Vector3(0.55f, 1.55f, 0f)),
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-2.5f, 0.3f, 0f)),
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0f, 0.15f, 0f), 1),
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(2.3f, 0.35f, 0f), 2),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-0.75f, 0.15f, 0f)),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-0.05f, 0.05f, 0f), 1),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0.65f, -0.05f, 0f), 2),
                 new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-2.45f, -0.9f, 0f)),
                 new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0f, -0.85f, 0f), 4),
                 new ScrewDefinition(ScrewColorId.Yellow, new Vector3(2.45f, -0.9f, 0f), 3)
