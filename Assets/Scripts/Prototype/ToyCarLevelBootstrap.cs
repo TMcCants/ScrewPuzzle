@@ -38,7 +38,7 @@ namespace ScrewPuzzle
                 "Car Chassis",
                 carRoot,
                 new Vector3(0f, -0.05f, 0f),
-                "Art/ToyCar/ToyCar_Body_OpenDoor",
+                "Art/ToyCar/ToyCar_Body_IntegratedHood",
                 new Vector2(7.1f, 3.39f),
                 Color.white,
                 2);
@@ -114,26 +114,6 @@ namespace ScrewPuzzle
                     3);
             }
 
-            Transform hood = PrototypeLevelBuilder.CreateResourceSprite(
-                "Car Hood",
-                carRoot,
-                new Vector3(1.45f, 0.25f, 0f),
-                "Art/ToyCar/ToyCar_Hood",
-                new Vector2(3.15f, 0.76f),
-                Color.white,
-                3);
-
-            if (hood == null)
-            {
-                hood = PrototypeLevelBuilder.CreateRectangle(
-                    "Car Hood",
-                    carRoot,
-                    new Vector3(2.35f, 0.5f, 0f),
-                    new Vector2(1.9f, 0.72f),
-                    carAccentColor,
-                    3);
-            }
-
             Transform wheelAssembly = new GameObject("Wheel Assembly").transform;
             wheelAssembly.SetParent(carRoot, false);
             CreateWheel(wheelAssembly, "Rear Wheel", new Vector3(-1.95f, -0.7f, 0f));
@@ -142,12 +122,12 @@ namespace ScrewPuzzle
             SpriteRenderer upperHeadlight = CreateHeadlight(
                 "Upper Headlight",
                 carRoot,
-                new Vector3(2.2f, 0.33f, 0f),
+                new Vector3(2.75f, 0.35f, 0f),
                 0.38f);
             SpriteRenderer lowerHeadlight = CreateHeadlight(
                 "Lower Headlight",
                 carRoot,
-                new Vector3(2.6f, 0.33f, 0f),
+                new Vector3(3.1f, 0.35f, 0f),
                 0.31f);
 
             if (!hasProductionChassis)
