@@ -117,7 +117,7 @@ namespace ScrewPuzzle
             Transform hood = PrototypeLevelBuilder.CreateResourceSprite(
                 "Car Hood",
                 carRoot,
-                new Vector3(1.7f, 0f, 0f),
+                new Vector3(1.45f, 0.25f, 0f),
                 "Art/ToyCar/ToyCar_Hood",
                 new Vector2(3.15f, 0.76f),
                 Color.white,
@@ -142,12 +142,12 @@ namespace ScrewPuzzle
             SpriteRenderer upperHeadlight = CreateHeadlight(
                 "Upper Headlight",
                 carRoot,
-                new Vector3(2.45f, 0.08f, 0f),
+                new Vector3(2.2f, 0.33f, 0f),
                 0.38f);
             SpriteRenderer lowerHeadlight = CreateHeadlight(
                 "Lower Headlight",
                 carRoot,
-                new Vector3(2.85f, 0.08f, 0f),
+                new Vector3(2.6f, 0.33f, 0f),
                 0.31f);
 
             if (!hasProductionChassis)
