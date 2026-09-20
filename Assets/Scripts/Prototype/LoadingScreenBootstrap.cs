@@ -10,7 +10,7 @@ namespace ScrewPuzzle
     /// </summary>
     public sealed class LoadingScreenBootstrap : MonoBehaviour
     {
-        private const float MinimumDisplaySeconds = 1.6f;
+        private const float MinimumDisplaySeconds = 3f;
 
         private readonly Color warmCream = new Color(0.95f, 0.89f, 0.76f);
         private readonly Color warmAmber = new Color(0.89f, 0.66f, 0.29f);
