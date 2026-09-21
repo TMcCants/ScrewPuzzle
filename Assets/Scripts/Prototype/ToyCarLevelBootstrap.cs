@@ -195,8 +195,8 @@ namespace ScrewPuzzle
             return new LevelDefinition(
                 2,
                 "Toy Car",
-                "LevelSelect",
-                "LEVEL SELECT",
+                "Level03_ToyRobot",
+                "NEXT LEVEL",
                 "Toy car restored!",
                 "RESTORED!\nReady to roll.",
                 5,
