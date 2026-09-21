@@ -211,25 +211,51 @@ namespace ScrewPuzzle
             return button;
         }
 
-        private void AddCardLabels(Transform parent, string levelNumber, string levelName, string status, bool locked)
+        private void AddCardLabels(
+            Transform parent,
+            string levelNumber,
+            string levelName,
+            string status,
+            bool locked)
         {
+            float levelPosition = locked ? 55f : 42f;
+            float namePosition = locked ? 0f : -28f;
+
             Text level = CreateCardText(
-                "Level Number", parent, levelNumber, 27, TextAnchor.MiddleCenter,
-                warmAmber, new Vector2(0f, 86f), new Vector2(520f, 44f));
+                "Level Number",
+                parent,
+                levelNumber,
+                30,
+                TextAnchor.MiddleCenter,
+                warmAmber,
+                new Vector2(0f, levelPosition),
+                new Vector2(620f, 48f));
             level.fontStyle = FontStyle.Bold;
 
-            Text statusText = CreateCardText(
-                "Level Status", parent, status, 23, TextAnchor.MiddleCenter,
-                locked ? mutedCream : warmAmber,
-                new Vector2(0f, -86f), new Vector2(520f, 42f));
-            statusText.fontStyle = FontStyle.Bold;
-
             Text name = CreateCardText(
-                "Level Name", parent, levelName, 54, TextAnchor.MiddleCenter,
+                "Level Name",
+                parent,
+                levelName,
+                52,
+                TextAnchor.MiddleCenter,
                 locked ? mutedCream : warmCream,
-                new Vector2(0f, 0f),
-                new Vector2(720f, 96f));
+                new Vector2(0f, namePosition),
+                new Vector2(720f, 82f));
             PrototypeLevelBuilder.StyleAccentHeading(name);
+
+            if (locked)
+            {
+                Text statusText = CreateCardText(
+                    "Level Status",
+                    parent,
+                    status,
+                    24,
+                    TextAnchor.MiddleCenter,
+                    mutedCream,
+                    new Vector2(0f, -62f),
+                    new Vector2(520f, 40f));
+                statusText.fontStyle = FontStyle.Bold;
+            }
         }
 
         private Text CreateCardText(
