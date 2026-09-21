@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.6 Roadmap — Toy Robot Level
 
-Status: **Planned and approved on September 21, 2026**
+Status: **Generated-shape prototype implemented; Unity and Android validation pending**
 
 ## Goal
 
@@ -123,13 +123,13 @@ that would weaken the premium warm-workshop direction.
 
 ## Implementation Order
 
-1. Inspect the reusable level and progression code for assumptions limited to two levels.
-2. Define the robot's puzzle layout and validate that it has a fair safe solution.
-3. Add the robot level definition, scene, bootstrap, and restoration controller.
-4. Add Level 3 progression and the third level-select card.
-5. Test the complete level with temporary visuals.
+1. Completed — inspect reusable level and progression code for two-level assumptions.
+2. Completed — define the twelve-screw layout and fair safe solution.
+3. Completed — add the robot level definition, scene, bootstrap, and restoration controller.
+4. Completed — add Level 3 progression and the third level-select card.
+5. Next — test the complete level with generated-shape visuals.
 6. Produce and integrate the final robot art layers.
-7. Add the robot completion animation and sound.
+7. Finalize the robot-specific completion sound and animation timing.
 8. Run regression tests on Radio, Toy Car, and Toy Robot.
 9. Build and validate on Android.
 
