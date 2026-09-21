@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.5 Visual Direction
 
-Status: **Locked on September 19, 2026**
+Status: **V0.5 complete — Android validation passed on September 21, 2026**
 
 ![Approved warm-workshop concept](art/ScrewPuzzle_V05_Visual_Direction.png)
 
@@ -87,7 +87,7 @@ The approved image intentionally locks the direction, not every generated detail
 4. Toy-car artwork in the same material language — implemented
 5. Level-select screen — implemented
 6. Lunyx app icon and loading screen — implemented
-7. Android visual-regression pass
+7. Android visual-regression pass — completed; all test scenarios passed
 
 The production background lives at
 `Assets/Resources/Art/Workshop_Background.jpg`. Both gameplay bootstraps load it through the
