@@ -201,13 +201,13 @@ generated shapes after prototype validation.
 ### `LevelSelectBootstrap.cs`
 
 Builds the workshop level-selection screen. It loads a reusable walnut-and-brass card surface from
-`Resources/Art/UI`, assembles the radio and toy-car thumbnails from their production textures,
-and builds a generated robot silhouette for the Level 3 prototype. All labels and state messages
-remain live Unity text.
+`Resources/Art/UI` and uses a text-first layout with the level number, large centered restoration
+name, and availability status. Object thumbnails are deliberately omitted so additional levels do
+not require more preview assets or create a crowded selector.
 
 The radio card is always enabled. The toy-car and toy-robot cards ask `ProgressManager` whether
-Levels 2 and 3 are unlocked, then control their button state, thumbnail tint, status label, and
-scene action. Three compact stacked cards preserve portrait phone readability.
+Levels 2 and 3 are unlocked, then control their button state, typography, status label, and scene
+action. Three compact stacked cards preserve portrait phone readability.
 
 ### `LoadingScreenBootstrap.cs`
 
