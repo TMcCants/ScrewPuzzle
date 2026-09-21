@@ -253,36 +253,6 @@ namespace ScrewPuzzle
             return text;
         }
 
-        private RawImage CreateResourceImage(
-            string objectName,
-            Transform parent,
-            string resourcePath,
-            Vector2 position,
-            Vector2 size,
-            Color tint)
-        {
-            Texture2D texture = Resources.Load<Texture2D>(resourcePath);
-
-            if (texture == null)
-            {
-                return null;
-            }
-
-            GameObject imageObject = new GameObject(objectName);
-            imageObject.transform.SetParent(parent, false);
-            RawImage image = imageObject.AddComponent<RawImage>();
-            image.texture = texture;
-            image.color = tint;
-            image.raycastTarget = false;
-            PrototypeLevelBuilder.SetRect(
-                image.rectTransform,
-                new Vector2(0.5f, 0.5f),
-                new Vector2(0.5f, 0.5f),
-                position,
-                size);
-            return image;
-        }
-
         private Sprite GetLevelCardSprite()
         {
             if (levelCardSprite != null)
