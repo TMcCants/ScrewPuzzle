@@ -3,8 +3,8 @@ using UnityEngine;
 namespace ScrewPuzzle
 {
     /// <summary>
-    /// Builds the V0.6 generated-shape toy-robot prototype and connects it to shared gameplay.
-    /// Final production art can replace these shapes without changing the puzzle definition.
+    /// Builds the V0.6 production toy-robot level and connects it to shared gameplay.
+    /// Generated shapes remain as a safe fallback if an art resource is missing.
     /// </summary>
     public sealed class ToyRobotLevelBootstrap : MonoBehaviour
     {
@@ -37,87 +37,185 @@ namespace ScrewPuzzle
             Transform robotRoot = new GameObject("Toy Robot").transform;
             robotRoot.position = new Vector3(0f, 0.45f, 0f);
 
-            BuildStaticRobotStructure(robotRoot);
+            Transform headRoot;
+            Transform headHousing;
+            Transform chestPlate;
+            Transform lowerTorsoPanel;
+            Transform waveArm;
+            Transform forearmCasing;
+            SpriteRenderer leftEye;
+            SpriteRenderer rightEye;
+            SpriteRenderer chestLight;
 
-            Transform headRoot = new GameObject("Head Assembly").transform;
-            headRoot.SetParent(robotRoot, false);
-            headRoot.localPosition = new Vector3(0f, 2.05f, 0f);
-
-            Transform headHousing = PrototypeLevelBuilder.CreateRectangle(
-                "Head Housing",
-                headRoot,
+            Transform productionBase = PrototypeLevelBuilder.CreateResourceSprite(
+                "Robot Base",
+                robotRoot,
                 Vector3.zero,
-                new Vector2(2.35f, 1.45f),
-                panelColor,
-                4);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Head Inner Panel",
-                headRoot,
-                new Vector3(0f, -0.05f, 0f),
-                new Vector2(1.82f, 0.86f),
-                jointColor,
-                5);
+                "Art/ToyRobot/ToyRobot_Base",
+                new Vector2(4.1f, 6.15f),
+                Color.white,
+                2);
 
-            SpriteRenderer leftEye = PrototypeLevelBuilder.CreateCircle(
-                "Left Eye",
-                headRoot,
-                new Vector3(-0.47f, 0.08f, 0f),
-                0.30f,
-                unlitColor,
-                6).GetComponent<SpriteRenderer>();
-            SpriteRenderer rightEye = PrototypeLevelBuilder.CreateCircle(
-                "Right Eye",
-                headRoot,
-                new Vector3(0.47f, 0.08f, 0f),
-                0.30f,
-                unlitColor,
-                6).GetComponent<SpriteRenderer>();
+            if (productionBase != null)
+            {
+                headRoot = new GameObject("Head Assembly").transform;
+                headRoot.SetParent(robotRoot, false);
+                headRoot.localPosition = new Vector3(0f, 2.21f, 0f);
 
-            Transform chestPlate = PrototypeLevelBuilder.CreateRectangle(
-                "Chest Access Plate",
-                robotRoot,
-                new Vector3(0f, 0.55f, 0f),
-                new Vector2(2.55f, 1.75f),
-                panelColor,
-                4);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Chest Inset",
-                chestPlate,
-                new Vector3(0f, -0.05f, 0f),
-                new Vector2(1.55f, 0.82f),
-                jointColor,
-                5);
-            SpriteRenderer chestLight = PrototypeLevelBuilder.CreateCircle(
-                "Chest Light",
-                chestPlate,
-                new Vector3(0f, 0.05f, 0f),
-                0.34f,
-                unlitColor,
-                6).GetComponent<SpriteRenderer>();
+                headHousing = PrototypeLevelBuilder.CreateResourceSprite(
+                    "Head Housing",
+                    headRoot,
+                    Vector3.zero,
+                    "Art/ToyRobot/Head_Housing",
+                    new Vector2(1.08f, 0.72f),
+                    Color.white,
+                    4);
 
-            Transform lowerTorsoPanel = PrototypeLevelBuilder.CreateRectangle(
-                "Lower Torso Service Panel",
-                robotRoot,
-                new Vector3(0f, -0.85f, 0f),
-                new Vector2(2.18f, 0.95f),
-                panelColor,
-                4);
-            PrototypeLevelBuilder.CreateRectangle(
-                "Lower Torso Seam",
-                lowerTorsoPanel,
-                new Vector3(0f, 0f, 0f),
-                new Vector2(1.48f, 0.14f),
-                brassColor,
-                5);
+                leftEye = PrototypeLevelBuilder.CreateCircle(
+                    "Left Eye Glow",
+                    headRoot,
+                    new Vector3(-0.25f, 0f, 0f),
+                    0.15f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
+                rightEye = PrototypeLevelBuilder.CreateCircle(
+                    "Right Eye Glow",
+                    headRoot,
+                    new Vector3(0.25f, 0f, 0f),
+                    0.15f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
 
-            Transform waveArm = BuildRightArm(robotRoot);
-            Transform forearmCasing = PrototypeLevelBuilder.CreateRectangle(
-                "Right Forearm Casing",
-                waveArm,
-                new Vector3(0f, -0.98f, 0f),
-                new Vector2(0.78f, 1.38f),
-                panelColor,
-                4);
+                chestPlate = PrototypeLevelBuilder.CreateResourceSprite(
+                    "Chest Access Plate",
+                    robotRoot,
+                    new Vector3(0f, 1.07f, 0f),
+                    "Art/ToyRobot/Chest_Access_Plate",
+                    new Vector2(1f, 0.84f),
+                    Color.white,
+                    4);
+                chestLight = PrototypeLevelBuilder.CreateCircle(
+                    "Chest Light Glow",
+                    robotRoot,
+                    new Vector3(0f, 1.07f, 0f),
+                    0.17f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
+
+                lowerTorsoPanel = PrototypeLevelBuilder.CreateResourceSprite(
+                    "Lower Torso Service Panel",
+                    robotRoot,
+                    new Vector3(0f, 0.10f, 0f),
+                    "Art/ToyRobot/Lower_Torso_Panel",
+                    new Vector2(0.76f, 0.52f),
+                    Color.white,
+                    4);
+
+                waveArm = new GameObject("Right Wave Arm").transform;
+                waveArm.SetParent(robotRoot, false);
+                waveArm.localPosition = new Vector3(0.85f, 1.35f, 0f);
+                PrototypeLevelBuilder.CreateResourceSprite(
+                    "Right Arm Structure",
+                    waveArm,
+                    new Vector3(0.16f, -0.92f, 0f),
+                    "Art/ToyRobot/Right_Arm",
+                    new Vector2(0.92f, 2.68f),
+                    Color.white,
+                    3);
+
+                forearmCasing = PrototypeLevelBuilder.CreateResourceSprite(
+                    "Right Forearm Casing",
+                    waveArm,
+                    new Vector3(0.34f, -1.16f, 0f),
+                    "Art/ToyRobot/Right_Forearm_Casing",
+                    new Vector2(0.36f, 0.60f),
+                    Color.white,
+                    4);
+            }
+            else
+            {
+                BuildStaticRobotStructure(robotRoot);
+
+                headRoot = new GameObject("Head Assembly").transform;
+                headRoot.SetParent(robotRoot, false);
+                headRoot.localPosition = new Vector3(0f, 2.05f, 0f);
+
+                headHousing = PrototypeLevelBuilder.CreateRectangle(
+                    "Head Housing",
+                    headRoot,
+                    Vector3.zero,
+                    new Vector2(2.35f, 1.45f),
+                    panelColor,
+                    4);
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Head Inner Panel",
+                    headRoot,
+                    new Vector3(0f, -0.05f, 0f),
+                    new Vector2(1.82f, 0.86f),
+                    jointColor,
+                    5);
+
+                leftEye = PrototypeLevelBuilder.CreateCircle(
+                    "Left Eye",
+                    headRoot,
+                    new Vector3(-0.47f, 0.08f, 0f),
+                    0.30f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
+                rightEye = PrototypeLevelBuilder.CreateCircle(
+                    "Right Eye",
+                    headRoot,
+                    new Vector3(0.47f, 0.08f, 0f),
+                    0.30f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
+
+                chestPlate = PrototypeLevelBuilder.CreateRectangle(
+                    "Chest Access Plate",
+                    robotRoot,
+                    new Vector3(0f, 0.55f, 0f),
+                    new Vector2(2.55f, 1.75f),
+                    panelColor,
+                    4);
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Chest Inset",
+                    chestPlate,
+                    new Vector3(0f, -0.05f, 0f),
+                    new Vector2(1.55f, 0.82f),
+                    jointColor,
+                    5);
+                chestLight = PrototypeLevelBuilder.CreateCircle(
+                    "Chest Light",
+                    chestPlate,
+                    new Vector3(0f, 0.05f, 0f),
+                    0.34f,
+                    unlitColor,
+                    6).GetComponent<SpriteRenderer>();
+
+                lowerTorsoPanel = PrototypeLevelBuilder.CreateRectangle(
+                    "Lower Torso Service Panel",
+                    robotRoot,
+                    new Vector3(0f, -0.85f, 0f),
+                    new Vector2(2.18f, 0.95f),
+                    panelColor,
+                    4);
+                PrototypeLevelBuilder.CreateRectangle(
+                    "Lower Torso Seam",
+                    lowerTorsoPanel,
+                    Vector3.zero,
+                    new Vector2(1.48f, 0.14f),
+                    brassColor,
+                    5);
+
+                waveArm = BuildRightArm(robotRoot);
+                forearmCasing = PrototypeLevelBuilder.CreateRectangle(
+                    "Right Forearm Casing",
+                    waveArm,
+                    new Vector3(0f, -0.98f, 0f),
+                    new Vector2(0.78f, 1.38f),
+                    panelColor,
+                    4);
+            }
 
             Transform[] traySlots = PrototypeLevelBuilder.BuildTray(level.TrayCapacity);
             PrototypeUiReferences ui = PrototypeLevelBuilder.BuildUi(gameManager, level);
@@ -126,6 +224,19 @@ namespace ScrewPuzzle
                 trayManager,
                 gameManager,
                 level.Screws);
+
+            if (productionBase != null)
+            {
+                foreach (Screw screw in screws)
+                {
+                    screw.transform.localScale *= 0.78f;
+                    CircleCollider2D collider = screw.GetComponent<CircleCollider2D>();
+                    if (collider != null)
+                    {
+                        collider.radius = 0.44f;
+                    }
+                }
+            }
 
             ToyRobotRestoration.RobotPart[] robotParts =
             {
@@ -314,21 +425,21 @@ namespace ScrewPuzzle
         {
             ScrewDefinition[] screws =
             {
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(-0.72f, 2.38f, 0f)),
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(0.72f, 2.38f, 0f)),
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(0f, 1.72f, 0f)),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(-0.50f, 2.38f, 0f)),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(0.50f, 2.38f, 0f)),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(0f, 1.95f, 0f)),
 
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-0.82f, 0.88f, 0f)),
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0.82f, 0.88f, 0f), 0),
-                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0f, 0.18f, 0f), 1),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(-0.46f, 1.27f, 0f)),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0.46f, 1.27f, 0f), 0),
+                new ScrewDefinition(ScrewColorId.Blue, new Vector3(0f, 0.78f, 0f), 1),
 
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-0.68f, -0.62f, 0f)),
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0.68f, -0.62f, 0f), 1),
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0f, -1.18f, 0f), 2),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-0.34f, 0.20f, 0f)),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0.34f, 0.20f, 0f), 1),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0f, -0.16f, 0f), 2),
 
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.72f, 0.42f, 0f), 3, 6),
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.72f, -0.18f, 0f), 4, 7),
-                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.72f, -0.78f, 0f), 5, 8)
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.18f, 0.62f, 0f), 3, 6),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.20f, 0.18f, 0f), 4, 7),
+                new ScrewDefinition(ScrewColorId.Red, new Vector3(1.20f, -0.27f, 0f), 5, 8)
             };
 
             return new LevelDefinition(
@@ -361,3 +472,4 @@ namespace ScrewPuzzle
         }
     }
 }
+
