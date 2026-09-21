@@ -41,6 +41,7 @@ namespace ScrewPuzzle
             Transform headHousing;
             Transform chestPlate;
             Transform lowerTorsoPanel;
+            Transform leftArm;
             Transform waveArm;
             Transform forearmCasing;
             SpriteRenderer leftEye;
@@ -119,6 +120,18 @@ namespace ScrewPuzzle
                     new Vector2(0.76f, 0.52f),
                     Color.white,
                     4);
+
+                leftArm = new GameObject("Left Arm Assembly").transform;
+                leftArm.SetParent(robotRoot, false);
+                leftArm.localPosition = new Vector3(-0.85f, 1.35f, 0f);
+                PrototypeLevelBuilder.CreateResourceSprite(
+                    "Left Arm Structure",
+                    leftArm,
+                    new Vector3(-0.16f, -0.92f, 0f),
+                    "Art/ToyRobot/Left_Arm",
+                    new Vector2(0.92f, 2.68f),
+                    Color.white,
+                    3);
 
                 waveArm = new GameObject("Right Wave Arm").transform;
                 waveArm.SetParent(robotRoot, false);
@@ -216,6 +229,7 @@ namespace ScrewPuzzle
                     brassColor,
                     5);
 
+                leftArm = lowerTorsoPanel;
                 waveArm = BuildRightArm(robotRoot);
                 forearmCasing = PrototypeLevelBuilder.CreateRectangle(
                     "Right Forearm Casing",
@@ -262,11 +276,11 @@ namespace ScrewPuzzle
                     new Vector3(0f, -0.34f, 0f),
                     -5f),
                 MakeRobotPart(
-                    "Lower Torso Service Panel",
-                    lowerTorsoPanel,
+                    "Left Arm Assembly",
+                    leftArm,
                     new Screw[] { screws[6], screws[7], screws[8] },
-                    new Vector3(-0.12f, -0.25f, 0f),
-                    4f),
+                    new Vector3(-0.12f, -0.10f, 0f),
+                    -5f),
                 MakeRobotPart(
                     "Right Forearm Casing",
                     forearmCasing,
@@ -442,9 +456,9 @@ namespace ScrewPuzzle
                 new ScrewDefinition(ScrewColorId.Blue, new Vector3(0.46f, 1.27f, 0f), 0),
                 new ScrewDefinition(ScrewColorId.Blue, new Vector3(0f, 0.78f, 0f), 1),
 
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-0.34f, 0.20f, 0f)),
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0.34f, 0.20f, 0f), 1),
-                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(0f, -0.16f, 0f), 2),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-1.18f, 0.62f, 0f)),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-1.20f, 0.18f, 0f), 1),
+                new ScrewDefinition(ScrewColorId.Yellow, new Vector3(-1.20f, -0.27f, 0f), 2),
 
                 new ScrewDefinition(ScrewColorId.Red, new Vector3(1.18f, 0.62f, 0f), 3, 6),
                 new ScrewDefinition(ScrewColorId.Red, new Vector3(1.20f, 0.18f, 0f), 4, 7),
