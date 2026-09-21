@@ -28,6 +28,25 @@ unrelated rule set.
 - Progression that unlocks the toy robot after the toy car is completed.
 - Android validation covering gameplay, visuals, sound, progression, restart, win, and loss.
 
+## Locked Puzzle Structure
+
+Approved on September 21, 2026:
+
+- Twelve screws, producing four match-three clears.
+- Five tray slots and the existing match size of three.
+- The existing red, blue, and yellow screw palette.
+- Color distribution of six red, three blue, and three yellow screws.
+- Two layers of blocker dependencies so the additional screws add planning rather than only length.
+- No fourth screw color in V0.6.
+- Four readable repair stages:
+  1. Head housing
+  2. Chest access plate
+  3. Lower-torso service panel
+  4. Right forearm casing
+- Robot limbs remain structurally attached. Repair panels may shift, tilt, or loosen but must not
+  make the robot appear dismembered.
+- The right forearm casing restores before the robot uses that arm for its awkward completion wave.
+
 ## Protected Existing Behavior
 
 V0.6 must preserve:
@@ -78,10 +97,9 @@ that would weaken the premium warm-workshop direction.
 
 ## Decisions to Lock Before Art Production
 
-1. Which robot parts release during play.
-2. Screw positions, blocker relationships, and intended safe solution.
-3. Completion sound and exact animation timing.
-4. Robot preview composition for the level-select card.
+1. Exact screw positions, blocker relationships, and intended safe solution.
+2. Completion sound and exact animation timing.
+3. Robot preview composition for the level-select card.
 
 ## Implementation Order
 
