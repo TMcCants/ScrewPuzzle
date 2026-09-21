@@ -49,9 +49,11 @@ namespace ScrewPuzzle
                 radioCard.GetComponent<RectTransform>(),
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, 285f),
-                new Vector2(860f, 510f));
-            CreateRadioThumbnail(radioCard.transform, Color.white);
+                new Vector2(0f, 385f),
+                new Vector2(860f, 390f));
+            Transform radioThumbnail = CreateThumbnailContainer(
+                "Radio Thumbnail", radioCard.transform, 0.74f);
+            CreateRadioThumbnail(radioThumbnail, Color.white);
             AddCardLabels(radioCard.transform, "LEVEL 1", "VINTAGE RADIO", "AVAILABLE", false);
             radioCard.onClick.AddListener(() => LoadLevel("Level01_Radio"));
 
@@ -61,13 +63,15 @@ namespace ScrewPuzzle
                 toyCarCard.GetComponent<RectTransform>(),
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -275f),
-                new Vector2(860f, 510f));
+                new Vector2(0f, -55f),
+                new Vector2(860f, 390f));
 
             Color carTint = toyCarUnlocked
                 ? Color.white
                 : new Color(0.43f, 0.43f, 0.43f, 0.62f);
-            CreateToyCarThumbnail(toyCarCard.transform, carTint);
+            Transform carThumbnail = CreateThumbnailContainer(
+                "Toy Car Thumbnail", toyCarCard.transform, 0.74f);
+            CreateToyCarThumbnail(carThumbnail, carTint);
             AddCardLabels(
                 toyCarCard.transform,
                 "LEVEL 2",
@@ -80,9 +84,47 @@ namespace ScrewPuzzle
                 toyCarCard.onClick.AddListener(() => LoadLevel("Level02_ToyCar"));
             }
 
-            string progressMessage = toyCarUnlocked
-                ? "Both restorations are ready"
-                : "Restore the radio to unlock the Toy Car";
+            bool robotUnlocked = ProgressManager.IsLevelUnlocked(3);
+            Button robotCard = CreateCardSurface("Toy Robot Level Card", canvas.transform, robotUnlocked);
+            PrototypeLevelBuilder.SetRect(
+                robotCard.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -495f),
+                new Vector2(860f, 390f));
+
+            Color robotTint = robotUnlocked
+                ? Color.white
+                : new Color(0.43f, 0.43f, 0.43f, 0.62f);
+            Transform robotThumbnail = CreateThumbnailContainer(
+                "Toy Robot Thumbnail", robotCard.transform, 0.68f);
+            CreateToyRobotThumbnail(robotThumbnail, robotTint);
+            AddCardLabels(
+                robotCard.transform,
+                "LEVEL 3",
+                "TOY ROBOT",
+                robotUnlocked ? "AVAILABLE" : "LOCKED",
+                !robotUnlocked);
+
+            if (robotUnlocked)
+            {
+                robotCard.onClick.AddListener(() => LoadLevel("Level03_ToyRobot"));
+            }
+
+            string progressMessage;
+
+            if (robotUnlocked)
+            {
+                progressMessage = "All restorations are ready";
+            }
+            else if (toyCarUnlocked)
+            {
+                progressMessage = "Restore the Toy Car to unlock the Toy Robot";
+            }
+            else
+            {
+                progressMessage = "Restore the radio to unlock the Toy Car";
+            }
             Text progress = PrototypeLevelBuilder.CreateText(
                 "Progress Message",
                 canvas.transform,
@@ -95,8 +137,8 @@ namespace ScrewPuzzle
                 progress.rectTransform,
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -615f),
-                new Vector2(940f, 70f));
+                new Vector2(0f, -735f),
+                new Vector2(940f, 58f));
 
             Text saveNote = PrototypeLevelBuilder.CreateText(
                 "Save Note",
@@ -110,8 +152,8 @@ namespace ScrewPuzzle
                 saveNote.rectTransform,
                 new Vector2(0.5f, 0f),
                 new Vector2(0.5f, 0f),
-                new Vector2(0f, 82f),
-                new Vector2(900f, 60f));
+                new Vector2(0f, 38f),
+                new Vector2(900f, 54f));
         }
 
         private void BuildHeading(Transform canvas)
@@ -231,22 +273,91 @@ namespace ScrewPuzzle
                 new Vector2(259f, 24f), new Vector2(25f, 25f), tint);
         }
 
+        private Transform CreateThumbnailContainer(
+            string objectName,
+            Transform parent,
+            float scale)
+        {
+            GameObject containerObject = new GameObject(objectName);
+            containerObject.transform.SetParent(parent, false);
+            RectTransform rect = containerObject.AddComponent<RectTransform>();
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2(700f, 310f);
+            rect.localScale = Vector3.one * scale;
+            return rect;
+        }
+
+        private void CreateToyRobotThumbnail(Transform parent, Color tint)
+        {
+            Color body = MultiplyTint(new Color(0.30f, 0.38f, 0.36f), tint);
+            Color panel = MultiplyTint(new Color(0.42f, 0.48f, 0.43f), tint);
+            Color brass = MultiplyTint(new Color(0.70f, 0.49f, 0.23f), tint);
+            Color dark = MultiplyTint(new Color(0.14f, 0.13f, 0.12f), tint);
+            Color glow = MultiplyTint(new Color(0.89f, 0.66f, 0.29f), tint);
+
+            CreateSolidImage("Robot Head", parent, new Vector2(0f, 88f), new Vector2(190f, 105f), panel);
+            CreateSolidImage("Robot Face", parent, new Vector2(0f, 84f), new Vector2(132f, 55f), dark);
+            CreateSolidImage("Left Eye", parent, new Vector2(-34f, 88f), new Vector2(18f, 18f), glow);
+            CreateSolidImage("Right Eye", parent, new Vector2(34f, 88f), new Vector2(18f, 18f), glow);
+            CreateSolidImage("Robot Neck", parent, new Vector2(0f, 30f), new Vector2(42f, 34f), brass);
+            CreateSolidImage("Robot Torso", parent, new Vector2(0f, -45f), new Vector2(230f, 145f), body);
+            CreateSolidImage("Robot Chest", parent, new Vector2(0f, -36f), new Vector2(160f, 82f), panel);
+            CreateSolidImage("Chest Light", parent, new Vector2(0f, -35f), new Vector2(22f, 22f), glow);
+            CreateSolidImage("Left Arm", parent, new Vector2(-145f, -48f), new Vector2(48f, 142f), body);
+            CreateSolidImage("Right Arm", parent, new Vector2(145f, -48f), new Vector2(48f, 142f), body);
+            CreateSolidImage("Left Leg", parent, new Vector2(-55f, -155f), new Vector2(58f, 92f), body);
+            CreateSolidImage("Right Leg", parent, new Vector2(55f, -155f), new Vector2(58f, 92f), body);
+        }
+
+        private Image CreateSolidImage(
+            string objectName,
+            Transform parent,
+            Vector2 position,
+            Vector2 size,
+            Color color)
+        {
+            GameObject imageObject = new GameObject(objectName);
+            imageObject.transform.SetParent(parent, false);
+            Image image = imageObject.AddComponent<Image>();
+            image.color = color;
+            image.raycastTarget = false;
+            PrototypeLevelBuilder.SetRect(
+                image.rectTransform,
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                position,
+                size);
+            return image;
+        }
+
+        private Color MultiplyTint(Color color, Color tint)
+        {
+            return new Color(
+                color.r * tint.r,
+                color.g * tint.g,
+                color.b * tint.b,
+                color.a * tint.a);
+        }
+
         private void AddCardLabels(Transform parent, string levelNumber, string levelName, string status, bool locked)
         {
             Text level = CreateCardText(
                 "Level Number", parent, levelNumber, 27, TextAnchor.MiddleLeft,
-                warmAmber, new Vector2(-255f, 170f), new Vector2(260f, 50f));
+                warmAmber, new Vector2(-255f, 142f), new Vector2(260f, 46f));
             level.fontStyle = FontStyle.Bold;
 
             Text statusText = CreateCardText(
                 "Level Status", parent, status, 24, TextAnchor.MiddleRight,
                 locked ? mutedCream : warmAmber,
-                new Vector2(255f, 170f), new Vector2(280f, 50f));
+                new Vector2(255f, 142f), new Vector2(280f, 46f));
             statusText.fontStyle = FontStyle.Bold;
 
             Text name = CreateCardText(
                 "Level Name", parent, levelName, 34, TextAnchor.MiddleCenter,
-                warmCream, new Vector2(0f, -170f), new Vector2(650f, 58f));
+                warmCream, new Vector2(0f, -142f), new Vector2(650f, 52f));
             PrototypeLevelBuilder.StyleAccentHeading(name);
 
             if (locked)
