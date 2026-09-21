@@ -66,13 +66,26 @@ The first playable vertical slice is now implemented for Unity 6. It includes:
 
 The level uses simple generated shapes so gameplay can be tested before permanent art exists.
 
-## V0.2 Multi-Level Foundation — In Progress
+## V0.2 Multi-Level Foundation — Complete
 
 The radio and toy-car levels now share the same prototype builder and gameplay systems. A reusable
 `LevelDefinition` owns tray capacity, match size, screw colors, screw positions, blocker indexes,
 and object-specific completion messages. Each object keeps its own visual construction and final
 restoration effect. A level-selection screen and one-value local save unlock the toy car after the
 radio is completed.
+
+## V0.5 Production Visual Pass — Complete
+
+V0.5 replaced the prototype presentation with the locked warm-workshop art direction. It includes
+production radio and toy-car artwork, reusable hardware and interface styling, level-select cards,
+the Lunyx app icon and loading screen, gameplay visual feedback, audio controls, and Android-safe
+portrait presentation. All Android test scenarios passed on September 21, 2026.
+
+## V0.6 Toy Robot Level — Planned
+
+The next milestone adds the toy robot as Level 3 and uses it to prove that the reusable level,
+progression, restoration, interface, and audio systems scale without changing the completed radio
+or toy-car levels. See [`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the approved scope.
 
 ## Open and Play
 
