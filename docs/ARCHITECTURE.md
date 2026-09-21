@@ -37,8 +37,8 @@ After changing level data, always test both a winning route and a full-tray losi
 ### `ProgressManager.cs`
 
 Stores one integer through Unity `PlayerPrefs`: the highest unlocked level. Level 1 is the default.
-Completing Level 1 stores Level 2 as unlocked, and `PlayerPrefs.Save()` writes the change to the
-local device.
+Completing the radio unlocks Level 2, and completing the toy car unlocks Level 3.
+`PlayerPrefs.Save()` writes the change to the local device.
 
 This is intentionally not a general save-data system. It does not store scores, stars, settings,
 currencies, boosters, or player accounts.
@@ -179,21 +179,35 @@ changing `Screw`, `TrayManager`, `GameManager`, or the level definitions.
 ### `ToyCarLevelBootstrap.cs` and `ToyCarRestoration.cs`
 
 `ToyCarLevelBootstrap` owns only the toy car's level data, layered visuals, and part assignments.
-The teal body, cream roof and windows, hood, wheel, and tintable headlight textures load from
+The teal body, cream roof and windows, door, wheel, and tintable headlight textures load from
 `Resources/Art/ToyCar`; generated shapes remain as missing-resource fallbacks. Its restoration
-controller loosens the roof, hood, and complete two-wheel assembly during play. On completion, it
+controller loosens the roof, door, and complete two-wheel assembly during play. On completion, it
 reassembles the car, flashes the headlights, and plays a short forward movement before displaying
 the result overlay.
+
+### `ToyRobotLevelBootstrap.cs` and `ToyRobotRestoration.cs`
+
+`ToyRobotLevelBootstrap` builds the generated-shape Level 3 prototype. It uses twelve screws:
+six red, three blue, and three yellow. The first red set releases the head housing; the blue and
+yellow sets release the chest and lower-torso service panels in either order; the final red set
+releases the right forearm casing. Two dependency tiers create a fair safe route while exposed
+blue and yellow screws make careless color mixing dangerous in the five-slot tray.
+
+The robot remains structurally assembled throughout play. Panels shift or tilt without removing
+limbs. On completion, all panels reseat, the eyes flicker on, the head turns, the repaired right
+arm gives an awkward wave, and the chest light flashes. Final production art will replace the
+generated shapes after prototype validation.
 
 ### `LevelSelectBootstrap.cs`
 
 Builds the workshop level-selection screen. It loads a reusable walnut-and-brass card surface from
-`Resources/Art/UI`, then assembles each card's thumbnail from the same production radio or toy-car
-textures used by its playable level. All labels and state messages remain live Unity text.
+`Resources/Art/UI`, assembles the radio and toy-car thumbnails from their production textures,
+and builds a generated robot silhouette for the Level 3 prototype. All labels and state messages
+remain live Unity text.
 
-The radio card is always enabled. The toy-car card asks `ProgressManager` whether Level 2 is
-unlocked, then controls its button state, thumbnail tint, status label, and scene action. Scene
-names remain explicit and beginner-readable while the game contains only two levels.
+The radio card is always enabled. The toy-car and toy-robot cards ask `ProgressManager` whether
+Levels 2 and 3 are unlocked, then control their button state, thumbnail tint, status label, and
+scene action. Three compact stacked cards preserve portrait phone readability.
 
 ### `LoadingScreenBootstrap.cs`
 
@@ -221,9 +235,24 @@ The toy car also uses nine screws, a five-slot tray, and match-three clearing. I
 keeps those rules constant so the second-level test isolates whether the reusable architecture,
 new object visuals, blockers, and car-specific restoration work correctly.
 
+## V0.6 Level Data
+
+The toy robot uses twelve screws, a five-slot tray, and match-three clearing:
+
+| Set | Count | Role |
+|---|---:|---|
+| First red | 3 | Head housing |
+| Blue | 3 | Chest access plate |
+| Yellow | 3 | Lower-torso service panel |
+| Final red | 3 | Right forearm casing |
+
+The first red set is the intended opening. Blue and yellow may then be cleared in either order.
+Each final red screw depends on a paired blue and yellow screw. The safe route is first red, both
+middle colors in either order, then final red.
+
 ## Deliberately Absent
 
 There is no score/star system, currency, advertising, purchase system, collection, booster,
-analytics, achievement, account, or cloud-save integration. V0.2 saves only the highest unlocked
+analytics, achievement, account, or cloud-save integration. V0.6 saves only the highest unlocked
 level locally. Adding the larger systems before the multi-level loop is validated would make the
 learning build harder to reason about without improving the current alpha.
