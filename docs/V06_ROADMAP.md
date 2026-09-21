@@ -72,8 +72,8 @@ mechanic.
 Approved on September 21, 2026:
 
 - Level cards use the walnut-and-brass board without object thumbnails.
-- Each card shows its level number, a large centered restoration name, and availability status.
-- Locked names use muted typography.
+- Each card shows its level number above a large centered restoration name.
+- Unlocked cards omit redundant status text; locked cards add a clear `LOCKED` line and use muted typography.
 - The text-first system applies to every level so the selector remains readable and scalable as
   the game grows.
 
