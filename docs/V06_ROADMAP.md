@@ -67,6 +67,16 @@ provide visible risk if the player mixes colors carelessly. The final red screws
 through blue-and-yellow blocker pairs, creating two dependency tiers without introducing a new
 mechanic.
 
+## Locked Level-Select Direction
+
+Approved on September 21, 2026:
+
+- Level cards use the walnut-and-brass board without object thumbnails.
+- Each card shows its level number, a large centered restoration name, and availability status.
+- Locked names use muted typography.
+- The text-first system applies to every level so the selector remains readable and scalable as
+  the game grows.
+
 ## Protected Existing Behavior
 
 V0.6 must preserve:
@@ -119,7 +129,7 @@ that would weaken the premium warm-workshop direction.
 
 1. Exact screw positions on the final artwork.
 2. Completion sound and exact animation timing.
-3. Final robot preview composition for the level-select card.
+3. Completion sound and exact animation timing.
 
 ## Implementation Order
 
