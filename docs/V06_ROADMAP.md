@@ -47,6 +47,26 @@ Approved on September 21, 2026:
   make the robot appear dismembered.
 - The right forearm casing restores before the robot uses that arm for its awkward completion wave.
 
+## Locked Dependency Map
+
+Approved on September 21, 2026:
+
+| Repair stage | Screw group | Access rule |
+|---|---|---|
+| Head housing | First three red screws | Initially exposed |
+| Chest access plate | Three blue screws | One exposed; two blocked by head screws |
+| Lower-torso service panel | Three yellow screws | One exposed; two blocked by head screws |
+| Right forearm casing | Final three red screws | Each blocked by a paired blue and yellow screw |
+
+The intended safe solution is:
+
+> First red set → blue or yellow → remaining middle color → final red set
+
+This creates a real middle choice while retaining a fair solution. Exposed blue and yellow screws
+provide visible risk if the player mixes colors carelessly. The final red screws unlock gradually
+through blue-and-yellow blocker pairs, creating two dependency tiers without introducing a new
+mechanic.
+
 ## Protected Existing Behavior
 
 V0.6 must preserve:
@@ -97,9 +117,9 @@ that would weaken the premium warm-workshop direction.
 
 ## Decisions to Lock Before Art Production
 
-1. Exact screw positions, blocker relationships, and intended safe solution.
+1. Exact screw positions on the final artwork.
 2. Completion sound and exact animation timing.
-3. Robot preview composition for the level-select card.
+3. Final robot preview composition for the level-select card.
 
 ## Implementation Order
 
