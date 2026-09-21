@@ -97,7 +97,8 @@ namespace ScrewPuzzle
                 ? Color.white
                 : new Color(0.43f, 0.43f, 0.43f, 0.62f);
             Transform robotThumbnail = CreateThumbnailContainer(
-                "Toy Robot Thumbnail", robotCard.transform, 0.68f);
+                "Toy Robot Thumbnail", robotCard.transform, 0.56f);
+            robotThumbnail.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 10f);
             CreateToyRobotThumbnail(robotThumbnail, robotTint);
             AddCardLabels(
                 robotCard.transform,
