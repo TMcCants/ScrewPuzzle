@@ -30,7 +30,7 @@ unrelated rule set.
 
 ## Locked Puzzle Structure
 
-Approved on September 21, 2026:
+Approved on September 21, 2026; arm distribution revised with Tamika's approval:
 
 - Twelve screws, producing four match-three clears.
 - Five tray slots and the existing match size of three.
@@ -41,10 +41,11 @@ Approved on September 21, 2026:
 - Four readable repair stages:
   1. Head housing
   2. Chest access plate
-  3. Lower-torso service panel
+  3. Left arm assembly
   4. Right forearm casing
-- Robot limbs remain structurally attached. Repair panels may shift, tilt, or loosen but must not
-  make the robot appear dismembered.
+- The yellow screw group is placed on the left arm and the final red group on the right arm so both
+  sides participate visibly in the repair.
+- Arm assemblies may shift or tilt when released but remain in frame and return during restoration.
 - The right forearm casing restores before the robot uses that arm for its awkward completion wave.
 
 ## Locked Dependency Map
@@ -55,7 +56,7 @@ Approved on September 21, 2026:
 |---|---|---|
 | Head housing | First three red screws | Initially exposed |
 | Chest access plate | Three blue screws | One exposed; two blocked by head screws |
-| Lower-torso service panel | Three yellow screws | One exposed; two blocked by head screws |
+| Left arm assembly | Three yellow screws | One exposed; two blocked by head screws |
 | Right forearm casing | Final three red screws | Each blocked by a paired blue and yellow screw |
 
 The intended safe solution is:
