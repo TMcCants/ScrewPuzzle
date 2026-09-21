@@ -129,7 +129,6 @@ that would weaken the premium warm-workshop direction.
 
 1. Exact screw positions on the final artwork.
 2. Completion sound and exact animation timing.
-3. Completion sound and exact animation timing.
 
 ## Implementation Order
 
