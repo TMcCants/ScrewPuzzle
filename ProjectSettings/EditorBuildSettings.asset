@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level02_ToyCar.unity
     guid: 1c9e46b7d1e89b7a328d989672c07f19
+  - enabled: 1
+    path: Assets/Scenes/Level03_ToyRobot.unity
+    guid: 7cc150467c414d7a9db878207c53cb19
   m_configObjects: {}
