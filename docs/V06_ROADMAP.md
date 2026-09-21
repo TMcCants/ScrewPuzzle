@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.6 Roadmap — Toy Robot Level
 
-Status: **Production robot art integrated; Unity and Android visual validation pending**
+Status: **Production robot art integrated; Toy Robot test scenarios passed; full regression and Android validation pending**
 
 ## Goal
 
@@ -32,7 +32,7 @@ unrelated rule set.
 
 Approved on September 21, 2026; arm distribution revised with Tamika's approval:
 
-- Twelve screws, producing four match-three clears.
+- Twelve screws, producing four match-three clears. The count remains locked for V0.6 even though the final artwork has room for expansion.
 - Five tray slots and the existing match size of three.
 - The existing red, blue, and yellow screw palette.
 - Color distribution of six red, three blue, and three yellow screws.
@@ -139,8 +139,8 @@ that would weaken the premium warm-workshop direction.
 4. Completed — add Level 3 progression and the third level-select card.
 5. Completed — validate both successful and full-tray-loss scenarios with generated-shape visuals.
 6. Completed — produce and integrate the final layered robot artwork.
-7. Next — validate artwork alignment, screw placement, cover releases, and activation timing in Unity.
-8. Run regression tests on Radio, Toy Car, and Toy Robot.
+7. Completed — validate artwork alignment, screw placement, cover releases, activation, successful play, and Game Over behavior.
+8. Next — run regression tests on Radio, Toy Car, and Toy Robot.
 9. Build and validate on Android.
 
 ## Acceptance Criteria
