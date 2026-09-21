@@ -81,11 +81,12 @@ production radio and toy-car artwork, reusable hardware and interface styling, l
 the Lunyx app icon and loading screen, gameplay visual feedback, audio controls, and Android-safe
 portrait presentation. All Android test scenarios passed on September 21, 2026.
 
-## V0.6 Toy Robot Level — Planned
+## V0.6 Toy Robot Level — Prototype In Progress
 
-The next milestone adds the toy robot as Level 3 and uses it to prove that the reusable level,
-progression, restoration, interface, and audio systems scale without changing the completed radio
-or toy-car levels. See [`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the approved scope.
+The toy robot is now available as a generated-shape Level 3 prototype with twelve screws, four
+repair stages, two dependency tiers, local progression, and a three-card level-select flow. Unity
+and Android validation are still required before production robot artwork begins. See
+[`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the approved scope and acceptance criteria.
 
 ## Open and Play
 
