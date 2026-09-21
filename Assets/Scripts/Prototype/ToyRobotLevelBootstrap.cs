@@ -60,12 +60,21 @@ namespace ScrewPuzzle
             {
                 headRoot = new GameObject("Head Assembly").transform;
                 headRoot.SetParent(robotRoot, false);
-                headRoot.localPosition = new Vector3(0f, 2.21f, 0f);
+                headRoot.localPosition = new Vector3(0f, 2.33f, 0f);
+
+                PrototypeLevelBuilder.CreateResourceSprite(
+                    "Head Structure",
+                    headRoot,
+                    Vector3.zero,
+                    "Art/ToyRobot/Head_Structure",
+                    new Vector2(1.46f, 1f),
+                    Color.white,
+                    3);
 
                 headHousing = PrototypeLevelBuilder.CreateResourceSprite(
                     "Head Housing",
                     headRoot,
-                    Vector3.zero,
+                    new Vector3(0f, -0.12f, 0f),
                     "Art/ToyRobot/Head_Housing",
                     new Vector2(1.08f, 0.72f),
                     Color.white,
@@ -74,14 +83,14 @@ namespace ScrewPuzzle
                 leftEye = PrototypeLevelBuilder.CreateCircle(
                     "Left Eye Glow",
                     headRoot,
-                    new Vector3(-0.25f, 0f, 0f),
+                    new Vector3(-0.25f, -0.11f, 0f),
                     0.15f,
                     unlitColor,
                     6).GetComponent<SpriteRenderer>();
                 rightEye = PrototypeLevelBuilder.CreateCircle(
                     "Right Eye Glow",
                     headRoot,
-                    new Vector3(0.25f, 0f, 0f),
+                    new Vector3(0.25f, -0.11f, 0f),
                     0.15f,
                     unlitColor,
                     6).GetComponent<SpriteRenderer>();
@@ -472,4 +481,3 @@ namespace ScrewPuzzle
         }
     }
 }
-
