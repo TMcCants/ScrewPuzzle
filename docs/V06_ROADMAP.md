@@ -53,14 +53,35 @@ V0.6 must preserve:
 
 These ideas may be evaluated later, but they do not belong in the V0.6 implementation.
 
+## Locked Character Direction
+
+Approved on September 21, 2026:
+
+- Balanced humanoid proportions.
+- A vintage workshop-helper identity.
+- Painted metal body, brushed-brass joints, and restrained surface wear.
+- A moderately sized, expressive head without childish proportions.
+- Clear shoulders, torso, forearms, thighs, and sturdy feet.
+- Friendly illuminated eyes without a cartoon face.
+- Playful amusement expressed through movement rather than an exaggerated design.
+
+The final activation beat is:
+
+1. The eyes flicker on unevenly.
+2. The head turns slightly as the robot gets its bearings.
+3. One arm rises with a small mechanical stutter.
+4. The robot gives the player a quick, awkward wave.
+5. The chest light flashes with misplaced mechanical pride.
+
+Avoid oversized eyes, a giant head, exaggerated skinny limbs, a permanent grin, or other choices
+that would weaken the premium warm-workshop direction.
+
 ## Decisions to Lock Before Art Production
 
-1. Robot silhouette and personality.
-2. Which robot parts release during play.
-3. Screw positions, blocker relationships, and intended safe solution.
-4. Final restoration moment.
-5. Completion sound and animation timing.
-6. Robot preview composition for the level-select card.
+1. Which robot parts release during play.
+2. Screw positions, blocker relationships, and intended safe solution.
+3. Completion sound and exact animation timing.
+4. Robot preview composition for the level-select card.
 
 ## Implementation Order
 
