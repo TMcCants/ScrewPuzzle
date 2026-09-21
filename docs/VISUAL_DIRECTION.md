@@ -117,7 +117,7 @@ three-flash start effect.
 
 The level-select screen uses a reusable blank walnut-and-brass card from
 `Assets/Resources/Art/UI/Level_Select_Card.png`. Cards intentionally use a text-first system:
-level number, large centered restoration name, and availability or lock status. Object thumbnails
+level number above a large centered restoration name, with status shown only when locked. Object thumbnails
 are omitted so the selector stays readable and scalable as more levels are added. Locked content
 uses muted typography, while progress guidance remains live Unity text.
 
