@@ -214,14 +214,14 @@ namespace ScrewPuzzle
         private void AddCardLabels(Transform parent, string levelNumber, string levelName, string status, bool locked)
         {
             Text level = CreateCardText(
-                "Level Number", parent, levelNumber, 27, TextAnchor.MiddleLeft,
-                warmAmber, new Vector2(-255f, 142f), new Vector2(260f, 46f));
+                "Level Number", parent, levelNumber, 27, TextAnchor.MiddleCenter,
+                warmAmber, new Vector2(0f, 86f), new Vector2(520f, 44f));
             level.fontStyle = FontStyle.Bold;
 
             Text statusText = CreateCardText(
-                "Level Status", parent, status, 24, TextAnchor.MiddleRight,
+                "Level Status", parent, status, 23, TextAnchor.MiddleCenter,
                 locked ? mutedCream : warmAmber,
-                new Vector2(255f, 142f), new Vector2(280f, 46f));
+                new Vector2(0f, -86f), new Vector2(520f, 42f));
             statusText.fontStyle = FontStyle.Bold;
 
             Text name = CreateCardText(
