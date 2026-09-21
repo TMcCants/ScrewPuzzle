@@ -116,10 +116,10 @@ assembly still loosen independently, while the headlights remain runtime-control
 three-flash start effect.
 
 The level-select screen uses a reusable blank walnut-and-brass card from
-`Assets/Resources/Art/UI/Level_Select_Card.png`. Each card assembles its preview from the same
-production textures used by the playable level, while level names, availability, lock messaging,
-and progress guidance remain live Unity text. Locked content is dimmed without hiding the object
-silhouette or the requirement needed to unlock it.
+`Assets/Resources/Art/UI/Level_Select_Card.png`. Cards intentionally use a text-first system:
+level number, large centered restoration name, and availability or lock status. Object thumbnails
+are omitted so the selector stays readable and scalable as more levels are added. Locked content
+uses muted typography, while progress guidance remains live Unity text.
 
 The Android launcher icon lives at `Assets/Resources/Art/Branding/App_Icon.png` and uses one
 oversized brass screw, the three gameplay colors, aged walnut, and a subtle amber crescent cue.
