@@ -202,7 +202,7 @@ generated shapes after prototype validation.
 
 Builds the workshop level-selection screen. It loads a reusable walnut-and-brass card surface from
 `Resources/Art/UI` and uses a text-first layout with the level number, large centered restoration
-name, and availability status. Object thumbnails are deliberately omitted so additional levels do
+name. Unlocked cards need no redundant status label; locked cards add a clear `LOCKED` line. Object thumbnails are deliberately omitted so additional levels do
 not require more preview assets or create a crowded selector.
 
 The radio card is always enabled. The toy-car and toy-robot cards ask `ProgressManager` whether
