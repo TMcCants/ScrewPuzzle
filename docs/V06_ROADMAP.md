@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.6 Roadmap — Toy Robot Level
 
-Status: **Generated-shape prototype implemented; Unity and Android validation pending**
+Status: **Generated-shape prototype passed successful and unsuccessful gameplay scenarios; final art pending**
 
 ## Goal
 
@@ -136,8 +136,8 @@ that would weaken the premium warm-workshop direction.
 2. Completed — define the twelve-screw layout and fair safe solution.
 3. Completed — add the robot level definition, scene, bootstrap, and restoration controller.
 4. Completed — add Level 3 progression and the third level-select card.
-5. Next — test the complete level with generated-shape visuals.
-6. Produce and integrate the final robot art layers.
+5. Completed — validate both successful and full-tray-loss scenarios with generated-shape visuals.
+6. Next — produce and integrate the final robot art layers.
 7. Finalize the robot-specific completion sound and animation timing.
 8. Run regression tests on Radio, Toy Car, and Toy Robot.
 9. Build and validate on Android.
