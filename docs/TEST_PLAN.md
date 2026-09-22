@@ -72,33 +72,57 @@ Open `Assets/Scenes/Level02_ToyCar.unity` and run these checks:
 
 The toy-car level passes only when both outcome paths work and the Console contains no red errors.
 
-## V0.2 Level Selection and Local Unlock
+## V0.6 Toy-Robot Level
 
-Start from `Assets/Scenes/LevelSelect.unity`.
+Open `Assets/Scenes/Level03_ToyRobot.unity` and run these checks:
 
 | Test | Expected result |
 |---|---|
-| First run | Radio is available and Toy Car is locked |
-| Lose the radio level | Play Again reloads the radio; Toy Car remains locked |
-| Win the radio level | Next Level opens the toy-car scene and saves the unlock |
-| Lose the toy-car level | Play Again reloads the toy car |
-| Win the toy-car level | Level Select returns to the selection screen |
-| Return to level selection | Both Radio and Toy Car are available |
-| Stop and restart Play Mode | Toy Car remains unlocked |
+| Start the scene | `TOY ROBOT` appears and all twelve screws are visible |
+| Tap a dim screw | It shakes, stays attached, and shows the blocked message |
+| Mix exposed colors until all five slots are unusable | Game Over appears and input stops |
+| Follow the safe route | First red clears, blue and yellow clear in either order, then final red clears |
+| Clear each group | The corresponding head, chest, left-arm, or right-arm repair stage responds |
+| Finish the winning route | The robot restores, its eyes and chest light activate, and it gives the awkward wave |
+| Press Play Again after Game Over | The toy-robot scene reloads cleanly |
+| Complete the level | The result button reads `LEVEL SELECT` and returns to the selector |
 
-The flow passes only when scene navigation, button wording, and the persisted unlock all behave
+The toy-robot level passes only when both outcome paths, activation, sound, restart, and final
+navigation work and the Console contains no red errors.
+
+## V0.6 Level Selection and Local Unlock
+
+Start from `Assets/Scenes/LevelSelect.unity` with saved progress cleared.
+
+| Test | Expected result |
+|---|---|
+| First run | Vintage Radio is available; Toy Car and Toy Robot are locked |
+| Lose the radio level | Play Again reloads the radio; later levels remain locked |
+| Win the radio level | Next Level opens Toy Car and saves the Level 2 unlock |
+| Lose the toy-car level | Play Again reloads Toy Car; Toy Robot remains locked |
+| Win the toy-car level | Next Level opens Toy Robot and saves the Level 3 unlock |
+| Lose the toy-robot level | Play Again reloads Toy Robot |
+| Win the toy-robot level | Level Select returns to the selection screen |
+| Return to level selection | All three restoration cards are available |
+| Stop and restart Play Mode | Toy Car and Toy Robot remain unlocked |
+
+The flow passes only when all scene transitions, button labels, and persisted unlocks behave
 correctly with no Console errors.
 
-## V0.4 Android Device Validation
+## V0.6 Android Device Validation
 
-Build and install version `0.4.0` with Android version code `2`, then verify on a physical phone:
+Build and install version `0.6.0` with Android version code `3`, then verify on a physical phone:
 
-- both levels accept comfortable touch input
+- Loading opens Level Select without a flash, pause, or missing asset
+- all three levels accept comfortable touch input
 - all five feedback sounds remain pleasant through the phone speaker
 - SOUND ON/OFF persists after fully closing and reopening the app
 - tray-arrival, match-clear, and full-tray visual effects remain readable at phone scale
-- radio-to-toy-car unlocking remains saved
+- Radio → Toy Car → Toy Robot progression works in one continuous session
+- Level 2 and Level 3 unlocks remain saved after fully closing and reopening the app
+- completing Toy Robot returns to Level Select with all three cards available
 - no content is clipped by the camera cutout or bottom navigation area
+- the Unity Console and Android device log contain no red gameplay errors
 
 ## V0.5 Workshop Background
 
