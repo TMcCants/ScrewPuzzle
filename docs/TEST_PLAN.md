@@ -218,3 +218,26 @@ Open `Loading` and confirm:
 - Android Player settings show the approved art for adaptive, round, and legacy icon sizes
 - an installed Android build uses the approved icon in the launcher and recent-apps view
 - the Unity Console contains no missing-scene, missing-resource, font, texture, or loading errors
+
+## V0.7 Gameplay Navigation
+
+Run these checks in Radio, Toy Car, and Toy Robot:
+
+| Test | Expected result |
+|---|---|
+| Tap MENU during active play | The menu opens and screws cannot be selected behind it |
+| Tap RESUME | The menu closes and the unfinished puzzle continues unchanged |
+| Tap RESTART | The current level reloads cleanly |
+| Tap LEVEL SELECT | A warning states that current puzzle progress will be lost |
+| Tap CANCEL on the warning | The warning closes and the navigation menu remains open |
+| Tap LEAVE on the warning | Level Select opens without changing saved unlocks |
+| Press Android Back during play | The navigation menu opens |
+| Press Android Back in the menu | The menu closes |
+| Press Android Back on the leave warning | The warning closes and the menu remains open |
+| Lose any level | Game Over offers both PLAY AGAIN and LEVEL SELECT |
+| Win Radio or Toy Car | The result offers both NEXT LEVEL and LEVEL SELECT |
+| Win Toy Robot | Only one LEVEL SELECT action appears |
+| Return to a level after navigation | Puzzle input, sound, restoration, and progression still work |
+
+V0.7 Phase 1 passes only when every path works on a physical Android phone, all labels remain
+readable and unclipped, and the Unity Console contains no red errors.
