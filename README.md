@@ -89,6 +89,14 @@ Radio → Toy Car → Toy Robot journey and both win/loss paths have passed Unit
 Android version `0.6.0` (version code `3`) passed all functional and visual scenarios on a physical device on September 22, 2026. See
 [`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the locked scope and acceptance criteria.
 
+## V0.7 Navigation and First-Time Experience
+
+Phase 1 adds shared in-level navigation across all three restorations: Resume, Restart, confirmed
+return to Level Select, result-screen escape routes, and Android Back-button handling. Version
+`0.7.0` (Android version code `4`) is ready for Unity and physical-device validation. First-play
+guidance remains deferred until navigation passes. See
+[`docs/V07_ROADMAP.md`](docs/V07_ROADMAP.md) for the locked behavior map and acceptance criteria.
+
 ## Open and Play
 
 1. Add this repository folder as a project in Unity Hub.
