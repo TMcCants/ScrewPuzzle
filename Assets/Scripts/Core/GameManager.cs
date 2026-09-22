@@ -11,6 +11,10 @@ namespace ScrewPuzzle
     /// </summary>
     public sealed class GameManager : MonoBehaviour
     {
+        private const string TutorialCompletedKey = "ScrewPuzzle.TutorialCompleted";
+        private const string OpeningTutorialMessage = "Tap a bright screw to remove it.";
+        private const string MatchTutorialMessage = "Match 3 of one color before the tray fills.";
+
         public enum LevelState
         {
             Playing,
@@ -28,6 +32,9 @@ namespace ScrewPuzzle
         [SerializeField] private Button resultLevelSelectButton;
         [SerializeField] private GameObject navigationOverlay;
         [SerializeField] private GameObject leaveConfirmationOverlay;
+        [SerializeField] private GameObject tutorialPanel;
+        [SerializeField] private Text tutorialText;
+        [SerializeField] private Button tutorialSkipButton;
         [SerializeField] private int requiredScrewCount;
         [SerializeField] private int levelNumber;
         [SerializeField] private string nextSceneName;
@@ -38,7 +45,11 @@ namespace ScrewPuzzle
         private int removedScrewCount;
         private int clearedScrewCount;
         private Coroutine messageRoutine;
+        private Coroutine tutorialMessageRoutine;
         private bool navigationMenuOpen;
+        private bool tutorialActive;
+        private bool tutorialHasSelectedScrew;
+        private string tutorialDefaultMessage = OpeningTutorialMessage;
 
         public LevelState State { get; private set; }
         public bool CanAcceptInput
@@ -105,13 +116,42 @@ namespace ScrewPuzzle
         {
             removedScrewCount++;
             restorationController.HandleScrewRemoved(screw);
+
+            if (tutorialActive && !tutorialHasSelectedScrew)
+            {
+                tutorialHasSelectedScrew = true;
+                tutorialDefaultMessage = MatchTutorialMessage;
+                SetTutorialMessage(tutorialDefaultMessage);
+            }
+
             UpdateStatusText();
         }
 
         public void NotifyScrewsCleared(int amount)
         {
             clearedScrewCount += amount;
+
+            if (tutorialActive && amount > 0)
+            {
+                CompleteTutorial();
+            }
+
             UpdateStatusText();
+        }
+
+        public void NotifyBlockedScrew()
+        {
+            if (!tutorialActive || tutorialText == null)
+            {
+                return;
+            }
+
+            if (tutorialMessageRoutine != null)
+            {
+                StopCoroutine(tutorialMessageRoutine);
+            }
+
+            tutorialMessageRoutine = StartCoroutine(BlockedTutorialMessageRoutine());
         }
 
         public void NotifyTrayBecameUnusable()
@@ -267,6 +307,41 @@ namespace ScrewPuzzle
             resultLevelSelectButton = newResultLevelSelectButton;
         }
 
+        public void ConfigureTutorial(
+            GameObject newTutorialPanel,
+            Text newTutorialText,
+            Button newTutorialSkipButton,
+            int tutorialLevelNumber)
+        {
+            tutorialPanel = newTutorialPanel;
+            tutorialText = newTutorialText;
+            tutorialSkipButton = newTutorialSkipButton;
+
+            if (tutorialSkipButton != null)
+            {
+                tutorialSkipButton.onClick.AddListener(SkipTutorial);
+            }
+
+            bool shouldShowTutorial =
+                tutorialLevelNumber == 1
+                && ProgressManager.HighestUnlockedLevel == 1
+                && PlayerPrefs.GetInt(TutorialCompletedKey, 0) == 0;
+
+            tutorialActive = shouldShowTutorial;
+            tutorialDefaultMessage = OpeningTutorialMessage;
+            SetTutorialMessage(tutorialDefaultMessage);
+
+            if (tutorialPanel != null)
+            {
+                tutorialPanel.SetActive(shouldShowTutorial);
+            }
+        }
+
+        public void SkipTutorial()
+        {
+            CompleteTutorial();
+        }
+
         private void OnRestorationFinished()
         {
             SetResultButtonLabel(winButtonLabel);
@@ -328,6 +403,51 @@ namespace ScrewPuzzle
             {
                 statusText.text = "Cleared " + clearedScrewCount + " / " + requiredScrewCount;
             }
+        }
+
+        private void SetTutorialMessage(string message)
+        {
+            if (tutorialText != null)
+            {
+                tutorialText.text = message;
+            }
+        }
+
+        private void CompleteTutorial()
+        {
+            if (!tutorialActive)
+            {
+                return;
+            }
+
+            tutorialActive = false;
+
+            if (tutorialMessageRoutine != null)
+            {
+                StopCoroutine(tutorialMessageRoutine);
+                tutorialMessageRoutine = null;
+            }
+
+            if (tutorialPanel != null)
+            {
+                tutorialPanel.SetActive(false);
+            }
+
+            PlayerPrefs.SetInt(TutorialCompletedKey, 1);
+            PlayerPrefs.Save();
+        }
+
+        private IEnumerator BlockedTutorialMessageRoutine()
+        {
+            SetTutorialMessage("Dim screws are blocked. Remove the screws holding them first.");
+            yield return new WaitForSeconds(2.2f);
+
+            if (tutorialActive)
+            {
+                SetTutorialMessage(tutorialDefaultMessage);
+            }
+
+            tutorialMessageRoutine = null;
         }
 
         private IEnumerator TemporaryMessageRoutine(string message)
