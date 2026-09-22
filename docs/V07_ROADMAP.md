@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.7 Roadmap — Navigation and First-Time Experience
 
-Status: **Phase 1 navigation complete and validated in Unity and on Android; Phase 2 first-play guidance next**
+Status: **Phase 1 validated; Phase 2 first-play guidance implemented and awaiting Unity and Android validation**
 
 ## Goal
 
@@ -37,12 +37,14 @@ art, sound, restoration, or progression systems.
 
 ## Phase 2 — First-Play Guidance
 
-Approved to begin after Phase 1 passed Unity and physical-device testing on September 22, 2026:
+Implemented after Phase 1 passed Unity and physical-device testing on September 22, 2026:
 
 - First radio interaction explains that bright screws are available.
-- First blocked tap explains that dim screws must be unlocked.
-- First tray entry explains match-three and the five-slot limit.
-- Guidance completion saves locally and does not repeat unnecessarily.
+- The first successful selection advances the prompt to match-three and the five-slot limit.
+- A blocked tap temporarily explains that dim screws must be unlocked.
+- The first cleared match completes and locally saves the tutorial.
+- A SKIP action immediately completes and locally saves the tutorial.
+- Returning players and Levels 2–3 do not receive tutorial prompts.
 
 ## Protected V0.6 Behavior
 
