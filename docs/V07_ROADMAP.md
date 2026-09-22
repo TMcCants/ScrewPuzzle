@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.7 Roadmap — Navigation and First-Time Experience
 
-Status: **Phase 1 navigation implemented; Unity and Android validation pending**
+Status: **Phase 1 navigation complete and validated in Unity and on Android; Phase 2 first-play guidance next**
 
 ## Goal
 
@@ -37,7 +37,7 @@ art, sound, restoration, or progression systems.
 
 ## Phase 2 — First-Play Guidance
 
-Deferred until Phase 1 passes Unity and physical-device testing:
+Approved to begin after Phase 1 passed Unity and physical-device testing on September 22, 2026:
 
 - First radio interaction explains that bright screws are available.
 - First blocked tap explains that dim screws must be unlocked.
