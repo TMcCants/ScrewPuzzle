@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.6 Roadmap — Toy Robot Level
 
-Status: **Production robot art integrated; Toy Robot test scenarios passed; full regression and Android validation pending**
+Status: **Release candidate prepared; Unity regression passed; Android build and device validation next**
 
 ## Goal
 
@@ -126,10 +126,10 @@ The final activation beat is:
 Avoid oversized eyes, a giant head, exaggerated skinny limbs, a permanent grin, or other choices
 that would weaken the premium warm-workshop direction.
 
-## Decisions to Lock Before Art Production
+## Production Decisions Locked
 
-1. Exact screw positions on the final artwork.
-2. Completion sound and exact animation timing.
+- Final screw positions are integrated across the head, chest, left arm, and right arm.
+- Completion sound and activation timing are integrated and passed Unity testing.
 
 ## Implementation Order
 
@@ -140,8 +140,8 @@ that would weaken the premium warm-workshop direction.
 5. Completed — validate both successful and full-tray-loss scenarios with generated-shape visuals.
 6. Completed — produce and integrate the final layered robot artwork.
 7. Completed — validate artwork alignment, screw placement, cover releases, activation, successful play, and Game Over behavior.
-8. Next — run regression tests on Radio, Toy Car, and Toy Robot.
-9. Build and validate on Android.
+8. Completed — run regression tests on Radio, Toy Car, and Toy Robot, including continuous progression.
+9. Next — build version `0.6.0` (Android version code `3`) and validate on a physical Android device.
 
 ## Acceptance Criteria
 
