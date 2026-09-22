@@ -75,6 +75,7 @@ namespace ScrewPuzzle
             {
                 PlayBlockedFeedback();
                 FeedbackAudio.PlayBlocked();
+                gameManager.NotifyBlockedScrew();
                 gameManager.ShowTemporaryMessage("That screw is still blocked.");
                 return;
             }
