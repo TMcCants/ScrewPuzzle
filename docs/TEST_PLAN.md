@@ -241,3 +241,7 @@ Run these checks in Radio, Toy Car, and Toy Robot:
 
 V0.7 Phase 1 passes only when every path works on a physical Android phone, all labels remain
 readable and unclipped, and the Unity Console contains no red errors.
+
+**Validation record:** V0.7 Phase 1 passed all listed navigation scenarios in Unity and on Tamika's
+physical Android phone on September 22, 2026. The layout was confirmed in portrait presentation
+and the Console remained clean.
