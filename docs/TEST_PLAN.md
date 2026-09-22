@@ -124,6 +124,8 @@ Build and install version `0.6.0` with Android version code `3`, then verify on 
 - no content is clipped by the camera cutout or bottom navigation area
 - the Unity Console and Android device log contain no red gameplay errors
 
+**Validation record:** Version `0.6.0` (Android version code `3`) passed all listed functional and visual scenarios on Tamika's physical Android phone on September 22, 2026.
+
 ## V0.5 Workshop Background
 
 Run both gameplay scenes and confirm:
