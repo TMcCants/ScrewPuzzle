@@ -189,18 +189,19 @@ Run `Level02_ToyCar` and confirm:
 - win, loss, Restart, sound, and progression behavior remain unchanged
 - the Unity Console contains no missing-resource, texture, alpha, or rendering errors
 
-## V0.5 Level Select Artwork
+## V0.6 Level Select Artwork
 
 Run `LevelSelect` and confirm:
 
-- the title, subtitle, two walnut-and-brass cards, progress message, and save note fit the portrait screen
-- the radio card uses the production radio artwork and opens `Level01_Radio`
-- an unlocked toy-car card uses the production car artwork and opens `Level02_ToyCar`
-- both cards give visible pressed/highlighted feedback without washing out their labels
-- when Level 2 is locked, its card, thumbnail, status, and `LOCKED` label are visibly disabled
-- the locked toy-car card cannot be opened and the progress message explains how to unlock it
-- completing the radio unlocks the toy-car card and the unlocked state persists after restarting Play Mode
-- no card, label, or thumbnail is clipped by a device cutout or bottom navigation area
+- the title, subtitle, three walnut-and-brass cards, progress message, and save note fit the portrait screen
+- cards use the approved text-first layout: level number above the centered restoration name
+- the available Radio, Toy Car, and Toy Robot cards open their correct scenes
+- every available card gives visible pressed/highlighted feedback without washing out its labels
+- locked Level 2 and Level 3 cards use muted text, show `LOCKED`, and cannot be opened
+- the progress message correctly names the next restoration required for an unlock
+- completing Radio unlocks Toy Car; completing Toy Car unlocks Toy Robot
+- both unlocks persist after restarting Play Mode and after relaunching the Android app
+- no card or label is clipped by a device cutout or bottom navigation area
 - the Unity Console contains no missing-resource, texture, font, or rendering errors
 
 ## V0.5 App Icon and Loading Screen
