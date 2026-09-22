@@ -81,12 +81,13 @@ production radio and toy-car artwork, reusable hardware and interface styling, l
 the Lunyx app icon and loading screen, gameplay visual feedback, audio controls, and Android-safe
 portrait presentation. All Android test scenarios passed on September 21, 2026.
 
-## V0.6 Toy Robot Level — Prototype In Progress
+## V0.6 Toy Robot Level — Android Release Candidate
 
-The toy robot is now available as a generated-shape Level 3 prototype with twelve screws, four
-repair stages, two dependency tiers, local progression, and a three-card level-select flow. Unity
-and Android validation are still required before production robot artwork begins. See
-[`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the approved scope and acceptance criteria.
+The production toy robot is integrated as Level 3 with twelve screws, four repair stages, two
+dependency tiers, persistent local progression, and a three-card level-select flow. The complete
+Radio → Toy Car → Toy Robot journey and both win/loss paths have passed Unity regression testing.
+Android version `0.6.0` (version code `3`) is prepared for physical-device validation. See
+[`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the locked scope and acceptance criteria.
 
 ## Open and Play
 
@@ -97,9 +98,12 @@ and Android validation are still required before production robot artwork begins
 4. Set the Game view to a portrait ratio such as `9:16`.
 5. Press Play.
 
-Level 1 begins unlocked. Completing the radio unlocks the toy car and saves that unlock on the
-local device.
+Level 1 begins unlocked. Completing the radio unlocks Toy Car; completing Toy Car unlocks Toy
+Robot. Both unlocks save on the local device. Completing Radio opens Toy Car directly, completing
+Toy Car opens Toy Robot directly, and completing Toy Robot returns to Level Select.
 
-For the intended safe solution, clear the three red screws, then the three blue screws, then the three yellow screws. Some mixed-color choices will fill the tray and demonstrate the loss state.
+Radio and Toy Car use the safe red → blue → yellow route. Toy Robot uses first red → blue or yellow
+→ the remaining middle color → final red. Mixed-color choices can fill the tray and demonstrate the
+loss state.
 
 Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) before changing gameplay rules and [`docs/UNITY_SETUP.md`](docs/UNITY_SETUP.md) before replacing the generated prototype visuals.
