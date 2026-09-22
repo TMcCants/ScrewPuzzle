@@ -94,7 +94,7 @@ Android version `0.6.0` (version code `3`) passed all functional and visual scen
 Phase 1 adds shared in-level navigation across all three restorations: Resume, Restart, confirmed
 return to Level Select, result-screen escape routes, and Android Back-button handling. Version
 `0.7.0` (Android version code `4`) is ready for Unity and physical-device validation. First-play
-guidance remains deferred until navigation passes. See
+guidance is now implemented for genuinely new Level 1 players and awaits Unity and Android validation. See
 [`docs/V07_ROADMAP.md`](docs/V07_ROADMAP.md) for the locked behavior map and acceptance criteria.
 
 ## Open and Play
