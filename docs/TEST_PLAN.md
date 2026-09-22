@@ -245,3 +245,23 @@ readable and unclipped, and the Unity Console contains no red errors.
 **Validation record:** V0.7 Phase 1 passed all listed navigation scenarios in Unity and on Tamika's
 physical Android phone on September 22, 2026. The layout was confirmed in portrait presentation
 and the Console remained clean.
+
+## V0.7 First-Play Guidance
+
+Clear ScrewPuzzle app storage before each clean-first-run route.
+
+| Test | Expected result |
+|---|---|
+| Start Level 1 with clean storage | A compact prompt says to tap a bright screw |
+| Tap a bright screw | The prompt changes to match three of one color before the tray fills |
+| Tap a dim screw before the first match | A blocked explanation appears, then the current tutorial prompt returns |
+| Clear the first match | The tutorial hides and saves completion |
+| Restart or relaunch after completion | The tutorial does not return |
+| Clear storage, start Level 1, and tap SKIP | The tutorial hides immediately and remains completed after relaunch |
+| Open Level 2 or Level 3 | No tutorial prompt appears |
+| Launch with previously unlocked progress | No Level 1 tutorial interrupts a returning player |
+| Open MENU while the tutorial is visible | The navigation overlay remains readable and blocks puzzle input |
+| Complete the normal Radio route | Gameplay, restoration, sound, and progression remain unchanged |
+
+Phase 2 passes only when both completion routes persist correctly, prompts remain readable and
+unclipped on a physical Android phone, and the Unity Console contains no red errors.
