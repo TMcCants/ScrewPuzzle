@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.6 Roadmap — Toy Robot Level
 
-Status: **Release candidate prepared; Unity regression passed; Android build and device validation next**
+Status: **Complete — Unity regression and physical Android-device validation passed on September 22, 2026**
 
 ## Goal
 
@@ -141,7 +141,7 @@ that would weaken the premium warm-workshop direction.
 6. Completed — produce and integrate the final layered robot artwork.
 7. Completed — validate artwork alignment, screw placement, cover releases, activation, successful play, and Game Over behavior.
 8. Completed — run regression tests on Radio, Toy Car, and Toy Robot, including continuous progression.
-9. Next — build version `0.6.0` (Android version code `3`) and validate on a physical Android device.
+9. Completed — built version `0.6.0` (Android version code `3`) and passed all functional and visual scenarios on a physical Android device.
 
 ## Acceptance Criteria
 
