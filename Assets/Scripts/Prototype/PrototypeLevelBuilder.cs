@@ -269,6 +269,16 @@ namespace ScrewPuzzle
                 UpdateSoundButtonLabel(soundLabel);
             });
 
+            Button menuButton = CreateButton("Menu Button", canvas.transform, "MENU");
+            SetRect(
+                menuButton.GetComponent<RectTransform>(),
+                new Vector2(0f, 1f),
+                new Vector2(0f, 1f),
+                new Vector2(125f, -290f),
+                new Vector2(220f, 64f));
+            StyleSecondaryButton(menuButton);
+            menuButton.onClick.AddListener(gameManager.OpenNavigationMenu);
+
             Text status = CreateText(
                 "Status",
                 canvas.transform,
@@ -304,8 +314,122 @@ namespace ScrewPuzzle
             SetRect(resultTitle.rectTransform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 100f), new Vector2(900f, 260f));
 
             Button resultActionButton = CreateButton("Result Action Button", overlay.transform, "PLAY AGAIN");
-            SetRect(resultActionButton.GetComponent<RectTransform>(), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -120f), new Vector2(420f, 112f));
+            SetRect(
+                resultActionButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -80f),
+                new Vector2(420f, 112f));
             Text resultActionLabel = resultActionButton.GetComponentInChildren<Text>();
+
+            Button resultLevelSelectButton = CreateButton(
+                "Result Level Select Button",
+                overlay.transform,
+                "LEVEL SELECT");
+            SetRect(
+                resultLevelSelectButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -225f),
+                new Vector2(360f, 88f));
+            StyleSecondaryButton(resultLevelSelectButton);
+            resultLevelSelectButton.onClick.AddListener(gameManager.ReturnToLevelSelect);
+
+            GameObject navigationOverlay = CreateFullScreenOverlay(
+                "Navigation Overlay",
+                canvas.transform,
+                new Color(0.055f, 0.04f, 0.03f, 0.97f));
+
+            Text navigationTitle = CreateText(
+                "Navigation Title",
+                navigationOverlay.transform,
+                "MENU",
+                62,
+                TextAnchor.MiddleCenter,
+                WarmAmber);
+            StyleAccentHeading(navigationTitle);
+            SetRect(
+                navigationTitle.rectTransform,
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 280f),
+                new Vector2(800f, 120f));
+
+            Button resumeButton = CreateButton("Resume Button", navigationOverlay.transform, "RESUME");
+            SetRect(
+                resumeButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 105f),
+                new Vector2(440f, 104f));
+            resumeButton.onClick.AddListener(gameManager.CloseNavigationMenu);
+
+            Button menuRestartButton = CreateButton("Menu Restart Button", navigationOverlay.transform, "RESTART");
+            SetRect(
+                menuRestartButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -35f),
+                new Vector2(440f, 104f));
+            menuRestartButton.onClick.AddListener(gameManager.RestartLevel);
+
+            Button menuLevelSelectButton = CreateButton(
+                "Menu Level Select Button",
+                navigationOverlay.transform,
+                "LEVEL SELECT");
+            SetRect(
+                menuLevelSelectButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -175f),
+                new Vector2(440f, 104f));
+            menuLevelSelectButton.onClick.AddListener(gameManager.RequestLevelSelect);
+
+            GameObject leaveConfirmationOverlay = CreateFullScreenOverlay(
+                "Leave Confirmation Overlay",
+                canvas.transform,
+                new Color(0.055f, 0.04f, 0.03f, 0.985f));
+
+            Text leaveTitle = CreateText(
+                "Leave Confirmation Title",
+                leaveConfirmationOverlay.transform,
+                "RETURN TO LEVEL SELECT?\nCurrent puzzle progress will be lost.",
+                44,
+                TextAnchor.MiddleCenter,
+                WarmCream);
+            StyleAccentHeading(leaveTitle);
+            SetRect(
+                leaveTitle.rectTransform,
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, 150f),
+                new Vector2(900f, 260f));
+
+            Button leaveButton = CreateButton("Confirm Leave Button", leaveConfirmationOverlay.transform, "LEAVE");
+            SetRect(
+                leaveButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -70f),
+                new Vector2(400f, 104f));
+            leaveButton.onClick.AddListener(gameManager.ReturnToLevelSelect);
+
+            Button cancelLeaveButton = CreateButton("Cancel Leave Button", leaveConfirmationOverlay.transform, "CANCEL");
+            SetRect(
+                cancelLeaveButton.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -210f),
+                new Vector2(400f, 104f));
+            StyleSecondaryButton(cancelLeaveButton);
+            cancelLeaveButton.onClick.AddListener(gameManager.CancelLevelSelect);
+
+            navigationOverlay.SetActive(false);
+            leaveConfirmationOverlay.SetActive(false);
+            gameManager.ConfigureNavigation(
+                navigationOverlay,
+                leaveConfirmationOverlay,
+                resultLevelSelectButton);
 
             return new PrototypeUiReferences(
                 status,
@@ -313,6 +437,23 @@ namespace ScrewPuzzle
                 resultTitle,
                 resultActionButton,
                 resultActionLabel);
+        }
+
+        private static GameObject CreateFullScreenOverlay(
+            string objectName,
+            Transform parent,
+            Color color)
+        {
+            GameObject overlay = new GameObject(objectName);
+            overlay.transform.SetParent(parent, false);
+            Image image = overlay.AddComponent<Image>();
+            image.color = color;
+            RectTransform rect = overlay.GetComponent<RectTransform>();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = Vector2.zero;
+            rect.offsetMax = Vector2.zero;
+            return overlay;
         }
 
         public static Transform CreateRectangle(
