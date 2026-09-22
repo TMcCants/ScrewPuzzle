@@ -279,6 +279,66 @@ namespace ScrewPuzzle
             StyleSecondaryButton(menuButton);
             menuButton.onClick.AddListener(gameManager.OpenNavigationMenu);
 
+            if (level.LevelNumber == 1)
+            {
+                GameObject tutorialPanel = new GameObject("First Play Tutorial");
+                tutorialPanel.transform.SetParent(canvas.transform, false);
+                Image tutorialBackground = tutorialPanel.AddComponent<Image>();
+                Sprite tutorialPlate = GetButtonPlateSprite();
+
+                if (tutorialPlate != null)
+                {
+                    tutorialBackground.sprite = tutorialPlate;
+                    tutorialBackground.type = Image.Type.Sliced;
+                    tutorialBackground.color = Color.white;
+                }
+                else
+                {
+                    tutorialBackground.color = new Color(0.12f, 0.08f, 0.055f, 0.96f);
+                }
+
+                tutorialBackground.raycastTarget = false;
+                SetRect(
+                    tutorialPanel.GetComponent<RectTransform>(),
+                    new Vector2(0.5f, 1f),
+                    new Vector2(0.5f, 1f),
+                    new Vector2(0f, -405f),
+                    new Vector2(820f, 145f));
+
+                Text tutorialText = CreateText(
+                    "Tutorial Message",
+                    tutorialPanel.transform,
+                    "Tap a bright screw to remove it.",
+                    25,
+                    TextAnchor.MiddleCenter,
+                    WarmCream);
+                tutorialText.raycastTarget = false;
+                SetRect(
+                    tutorialText.rectTransform,
+                    new Vector2(0.5f, 0.5f),
+                    new Vector2(0.5f, 0.5f),
+                    new Vector2(-65f, 0f),
+                    new Vector2(610f, 110f));
+
+                Button skipTutorialButton = CreateButton(
+                    "Skip Tutorial Button",
+                    tutorialPanel.transform,
+                    "SKIP");
+                SetRect(
+                    skipTutorialButton.GetComponent<RectTransform>(),
+                    new Vector2(0.5f, 0.5f),
+                    new Vector2(0.5f, 0.5f),
+                    new Vector2(315f, 0f),
+                    new Vector2(150f, 62f));
+                StyleSecondaryButton(skipTutorialButton);
+
+                gameManager.ConfigureTutorial(
+                    tutorialPanel,
+                    tutorialText,
+                    skipTutorialButton,
+                    level.LevelNumber);
+            }
+
             Text status = CreateText(
                 "Status",
                 canvas.transform,
