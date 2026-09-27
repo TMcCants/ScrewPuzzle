@@ -1,6 +1,6 @@
 # ScrewPuzzle V0.7 Roadmap — Navigation and First-Time Experience
 
-Status: **Phase 1 validated; Phase 2 first-play guidance implemented and awaiting Unity and Android validation**
+Status: **Complete — both phases validated on computer and physical Android phone**
 
 ## Goal
 
@@ -60,3 +60,18 @@ Implemented after Phase 1 passed Unity and physical-device testing on September 
 Phase 1 passes only when every behavior in the locked behavior map works in all three levels, no
 button or message clips on the phone, saved unlocks remain correct, and the Unity Console contains
 no red errors.
+
+## Phase 2 Acceptance Criteria
+
+Phase 2 passes when all first-play guidance scenarios in `TEST_PLAN.md` pass: opening and
+match prompts, temporary blocked guidance, first-match and SKIP completion, persistence after
+relaunch, suppression for returning players and later levels, menu interaction, and the normal
+Radio completion route. Prompts must remain readable on the phone with no red Console errors.
+
+## Validation Record
+
+- Phase 1 navigation passed Unity and physical Android testing on September 22, 2026.
+- On September 27, 2026, Tamika confirmed all test scenarios passed successfully on her computer
+  and physical Android phone, completing Phase 2 and V0.7 validation.
+- All three automated Edit Mode tray-rule tests passed on September 27, 2026. These tests cover
+  matching rules; the computer and phone checks provide tutorial and navigation validation.

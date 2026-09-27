@@ -1,5 +1,18 @@
 # V0.1 Test Plan
 
+## Current V0.8 checks
+
+See [V0.8 Old Camera acceptance checks](V08_ROADMAP.md) for the new level, four-card selector,
+and save compatibility. V0.6/V0.7 tables below record the earlier three-level behavior:
+in V0.8 Toy Robot continues to Camera, and Camera is the final level.
+
+**Prototype validation record:** On September 27, 2026, Tamika reported all test scenarios
+passed successfully on both her PC and physical Android phone.
+
+**Final production validation record:** On September 27, 2026, Tamika confirmed all test
+scenarios passed successfully on both PC and physical Android phone with the production camera
+artwork integrated. V0.8 is complete; see the V0.8 roadmap for the validated artwork checks.
+
 ## Automated Edit Mode Tests
 
 Open **Window → General → Test Runner**, select **EditMode**, and run all tests.
@@ -265,3 +278,8 @@ Clear ScrewPuzzle app storage before each clean-first-run route.
 
 Phase 2 passes only when both completion routes persist correctly, prompts remain readable and
 unclipped on a physical Android phone, and the Unity Console contains no red errors.
+
+**Validation record:** On September 27, 2026, Tamika confirmed all test scenarios passed
+successfully on her computer and physical Android phone. V0.7 Phase 2 is validated, completing
+the navigation and first-time experience milestone. All three automated Edit Mode tray-rule
+tests also passed on September 27, 2026.

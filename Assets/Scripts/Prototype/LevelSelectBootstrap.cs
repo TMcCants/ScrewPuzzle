@@ -49,8 +49,8 @@ namespace ScrewPuzzle
                 radioCard.GetComponent<RectTransform>(),
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, 385f),
-                new Vector2(860f, 390f));
+                new Vector2(0f, 450f),
+                new Vector2(860f, 300f));
             AddCardLabels(radioCard.transform, "LEVEL 1", "VINTAGE RADIO", "AVAILABLE", false);
             radioCard.onClick.AddListener(() => LoadLevel("Level01_Radio"));
 
@@ -60,8 +60,8 @@ namespace ScrewPuzzle
                 toyCarCard.GetComponent<RectTransform>(),
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -55f),
-                new Vector2(860f, 390f));
+                new Vector2(0f, 100f),
+                new Vector2(860f, 300f));
 
             AddCardLabels(
                 toyCarCard.transform,
@@ -81,8 +81,8 @@ namespace ScrewPuzzle
                 robotCard.GetComponent<RectTransform>(),
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -495f),
-                new Vector2(860f, 390f));
+                new Vector2(0f, -250f),
+                new Vector2(860f, 300f));
 
             AddCardLabels(
                 robotCard.transform,
@@ -96,11 +96,25 @@ namespace ScrewPuzzle
                 robotCard.onClick.AddListener(() => LoadLevel("Level03_ToyRobot"));
             }
 
+            bool cameraUnlocked = ProgressManager.IsLevelUnlocked(4);
+            Button cameraCard = CreateCardSurface("Old Camera Level Card", canvas.transform, cameraUnlocked);
+            PrototypeLevelBuilder.SetRect(cameraCard.GetComponent<RectTransform>(),
+                new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+                new Vector2(0f, -600f), new Vector2(860f, 300f));
+            AddCardLabels(cameraCard.transform, "LEVEL 4", "OLD CAMERA",
+                cameraUnlocked ? "AVAILABLE" : "LOCKED", !cameraUnlocked);
+            if (cameraUnlocked)
+                cameraCard.onClick.AddListener(() => LoadLevel("Level04_OldCamera"));
+
             string progressMessage;
 
-            if (robotUnlocked)
+            if (cameraUnlocked)
             {
                 progressMessage = "All restorations are ready";
+            }
+            else if (robotUnlocked)
+            {
+                progressMessage = "Restore the Toy Robot to unlock the Old Camera";
             }
             else if (toyCarUnlocked)
             {
@@ -122,7 +136,7 @@ namespace ScrewPuzzle
                 progress.rectTransform,
                 new Vector2(0.5f, 0.5f),
                 new Vector2(0.5f, 0.5f),
-                new Vector2(0f, -735f),
+                new Vector2(0f, -800f),
                 new Vector2(940f, 58f));
 
             Text saveNote = PrototypeLevelBuilder.CreateText(

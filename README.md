@@ -89,13 +89,24 @@ Radio → Toy Car → Toy Robot journey and both win/loss paths have passed Unit
 Android version `0.6.0` (version code `3`) passed all functional and visual scenarios on a physical device on September 22, 2026. See
 [`docs/V06_ROADMAP.md`](docs/V06_ROADMAP.md) for the locked scope and acceptance criteria.
 
-## V0.7 Navigation and First-Time Experience
+## V0.7 Navigation and First-Time Experience — Complete
 
 Phase 1 adds shared in-level navigation across all three restorations: Resume, Restart, confirmed
 return to Level Select, result-screen escape routes, and Android Back-button handling. Version
-`0.7.0` (Android version code `4`) is ready for Unity and physical-device validation. First-play
-guidance is now implemented for genuinely new Level 1 players and awaits Unity and Android validation. See
+`0.7.0` (Android version code `4`) includes first-play guidance for genuinely new Level 1 players.
+Tamika confirmed all test scenarios passed on her computer and physical Android phone on
+September 27, 2026. All three automated Edit Mode tray-rule tests also passed that day. See
 [`docs/V07_ROADMAP.md`](docs/V07_ROADMAP.md) for the locked behavior map and acceptance criteria.
+
+## V0.8 Old Camera — Complete
+
+Level 4 adds twelve screws and four repair stages. Toy Robot unlocks
+Old Camera, whose restoration ends with lens focus and a local flash. Level Select shows four
+cards. Tamika confirmed all prototype test scenarios passed on both her PC and physical
+Android phone on September 27, 2026. Layered leather-and-brass production camera artwork is now
+integrated. Tamika also confirmed all final production-art test scenarios passed on both PC
+and physical Android phone on September 27, 2026, completing V0.8. See
+[`docs/V08_ROADMAP.md`](docs/V08_ROADMAP.md) for scope, save compatibility, and acceptance checks.
 
 ## Open and Play
 
@@ -107,8 +118,9 @@ guidance is now implemented for genuinely new Level 1 players and awaits Unity a
 5. Press Play.
 
 Level 1 begins unlocked. Completing the radio unlocks Toy Car; completing Toy Car unlocks Toy
-Robot. Both unlocks save on the local device. Completing Radio opens Toy Car directly, completing
-Toy Car opens Toy Robot directly, and completing Toy Robot returns to Level Select.
+Robot. Unlocks save on the local device. Completing Radio opens Toy Car directly, completing
+Toy Car opens Toy Robot directly, completing Toy Robot unlocks and opens Old Camera, and
+completing Old Camera returns to Level Select.
 
 Radio and Toy Car use the safe red → blue → yellow route. Toy Robot uses first red → blue or yellow
 → the remaining middle color → final red. Mixed-color choices can fill the tray and demonstrate the

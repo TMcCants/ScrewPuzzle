@@ -468,8 +468,8 @@ namespace ScrewPuzzle
             return new LevelDefinition(
                 3,
                 "Toy Robot",
-                "LevelSelect",
-                "LEVEL SELECT",
+                "Level04_OldCamera",
+                "NEXT LEVEL",
                 "Toy robot restored!",
                 "RESTORED!\nSystems online.",
                 5,

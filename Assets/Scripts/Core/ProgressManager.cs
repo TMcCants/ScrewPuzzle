@@ -10,7 +10,7 @@ namespace ScrewPuzzle
     {
         private const string HighestUnlockedLevelKey = "ScrewPuzzle.HighestUnlockedLevel";
         private const int FirstLevelNumber = 1;
-        private const int TotalLevelCount = 3;
+        private const int TotalLevelCount = 4;
 
         public static int HighestUnlockedLevel
         {

@@ -16,6 +16,18 @@ The important design principle is that no individual screw decides the whole gam
 
 ## Script Ownership
 
+### V0.8 Old Camera
+
+`OldCameraLevelBootstrap.CreateLevelDefinition()` supplies the testable twelve-screw layout.
+The bootstrap builds four unscaled assemblies so repair offsets do not distort their children.
+`OldCameraRestoration` owns release, reseating, lens focus, and the single local flash.
+Shared screw, tray, and game-state systems remain the gameplay owners. `ProgressManager` now
+caps unlocks at four; Toy Robot continues to `Level04_OldCamera`. The selector uses four
+300-unit-high cards. Camera art is sliced from Resources/Art/OldCamera/Camera_Atlas.png at
+runtime. Each slice is placed below the screw renderers on its existing repair assembly.
+The bootstrap destroys its runtime sprites when unloaded and retains generated geometry as a
+missing-resource fallback. Atlas source and prompt are recorded in docs/art/OldCamera_ART_SOURCE.md.
+
 ### `LevelDefinition.cs`
 
 Contains the changeable data for one puzzle level:
