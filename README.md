@@ -114,7 +114,8 @@ and physical Android phone on September 27, 2026, completing V0.8. See
 
 Use **Tools → ScrewPuzzle → Open 3D Radio Test** to try a separate rotating-radio scene.
 It combines exposed-screw taps and drag rotation with four color-assigned three-hole trays, two free and two test-unlock trays,
-and Restart. It has no saved progression or moving panels yet. The existing
+and Restart. Each plate releases after its three screws are collected, revealing the inner chassis.
+It has no saved progression yet. The existing
 2D levels remain intact. See [the experiment guide](docs/RADIO_3D_EXPERIMENT.md) for PC checks
 and the dedicated Android test-build command.
 

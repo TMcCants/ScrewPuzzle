@@ -40,18 +40,34 @@ namespace ScrewPuzzle
             Material wood = Material(new Color(0.38f, 0.19f, 0.08f));
             Material brass = Material(new Color(0.7f, 0.49f, 0.22f));
             Material dark = Material(new Color(0.11f, 0.13f, 0.12f));
-            Shape("Solid Cabinet", PrimitiveType.Cube, radio, Vector3.zero, new Vector3(3.4f, 2.4f, 1.8f), wood);
-            Shape("Front Plate", PrimitiveType.Cube, radio, new Vector3(0f, 0f, -0.92f),
+            Shape("Inner Chassis", PrimitiveType.Cube, radio, Vector3.zero, new Vector3(2.95f, 1.9f, 1.35f), dark);
+            Shape("Top Frame", PrimitiveType.Cube, radio, new Vector3(0f, 1.14f, 0f), new Vector3(3.4f, 0.12f, 1.8f), wood);
+            Shape("Bottom Frame", PrimitiveType.Cube, radio, new Vector3(0f, -1.14f, 0f), new Vector3(3.4f, 0.12f, 1.8f), wood);
+            Material circuit = Material(new Color(0.12f, 0.34f, 0.23f));
+            Shape("Circuit Board", PrimitiveType.Cube, radio, new Vector3(0f, 0f, -0.71f), new Vector3(2.7f, 1.7f, 0.06f), circuit);
+            Shape("Receiver Module", PrimitiveType.Cube, radio, new Vector3(-0.65f, 0f, -0.78f), new Vector3(0.7f, 1.1f, 0.08f), brass);
+            for (int index = 0; index < 3; index++)
+                Shape("Circuit Trace " + index, PrimitiveType.Cube, radio, new Vector3(0.55f, (index - 1) * 0.42f, -0.76f),
+                    new Vector3(0.95f, 0.06f, 0.04f), brass);
+
+            Radio3DPlate[] plates = new Radio3DPlate[4];
+            string[] plateNames = { "Front Plate Assembly", "Rear Plate Assembly", "Left Plate Assembly", "Right Plate Assembly" };
+            for (int index = 0; index < plates.Length; index++)
+            {
+                plates[index] = new GameObject(plateNames[index]).AddComponent<Radio3DPlate>();
+                plates[index].transform.SetParent(radio, false);
+            }
+            Shape("Front Plate", PrimitiveType.Cube, plates[0].transform, new Vector3(0f, 0f, -0.92f),
                 new Vector3(3.15f, 2.15f, 0.08f), brass);
-            Shape("Rear Plate", PrimitiveType.Cube, radio, new Vector3(0f, 0f, 0.92f),
+            Shape("Rear Plate", PrimitiveType.Cube, plates[1].transform, new Vector3(0f, 0f, 0.92f),
                 new Vector3(3.15f, 2.15f, 0.08f), dark);
-            Shape("Speaker", PrimitiveType.Cube, radio, new Vector3(-0.7f, -0.25f, -0.99f),
+            Shape("Speaker", PrimitiveType.Cube, plates[0].transform, new Vector3(-0.7f, -0.25f, -0.99f),
                 new Vector3(1.1f, 1f, 0.05f), dark);
-            Shape("Tuning Display", PrimitiveType.Cube, radio, new Vector3(0.65f, -0.15f, -0.99f),
+            Shape("Tuning Display", PrimitiveType.Cube, plates[0].transform, new Vector3(0.65f, -0.15f, -0.99f),
                 new Vector3(1.1f, 0.5f, 0.05f), dark);
-            Shape("Left Panel", PrimitiveType.Cube, radio, new Vector3(-1.72f, 0f, 0f),
+            Shape("Left Panel", PrimitiveType.Cube, plates[2].transform, new Vector3(-1.72f, 0f, 0f),
                 new Vector3(0.08f, 2.1f, 1.6f), brass);
-            Shape("Right Panel", PrimitiveType.Cube, radio, new Vector3(1.72f, 0f, 0f),
+            Shape("Right Panel", PrimitiveType.Cube, plates[3].transform, new Vector3(1.72f, 0f, 0f),
                 new Vector3(0.08f, 2.1f, 1.6f), brass);
 
             Material[] colors = { Material(new Color(0.9f, 0.12f, 0.08f)),
@@ -68,8 +84,11 @@ namespace ScrewPuzzle
             }
             for (int index = 0; index < screws.Count; index++)
                 screws[index].Initialize(index % 4 == 3 ? ScrewColorId.Red : (ScrewColorId)(index / 4));
+            Vector3[] normals = { Vector3.back, Vector3.forward, Vector3.left, Vector3.right };
+            for (int index = 0; index < plates.Length; index++)
+                plates[index].Configure(new[] { screws[index], screws[index + 4], screws[index + 8] }, normals[index]);
             puzzle = gameObject.AddComponent<Radio3DPuzzle>();
-            puzzle.Configure(camera, screws.ToArray());
+            puzzle.Configure(camera, screws.ToArray(), plates);
             interaction = gameObject.AddComponent<Radio3DInteraction>();
             interaction.Configure(camera, radio, screws.ToArray());
             BuildUi();
@@ -145,7 +164,7 @@ namespace ScrewPuzzle
             circleTexture.Apply();
             circle = Sprite.Create(circleTexture, new Rect(0, 0, 64, 64), Vector2.one * 0.5f);
             Label(layout, "THE RADIO WORKSHOP", 48, 0.94f);
-            Label(layout, "Drag to rotate • Tap a screw\nFill each tray with 3 screws of its color", 32, 0.87f);
+            Label(layout, "Drag to rotate • Match screws to their trays\nRemove all 3 screws to release a plate", 32, 0.87f);
             status = Label(layout, "", 30, 0.115f);
             for (int i = 0; i < 4; i++)
             {
@@ -201,8 +220,8 @@ namespace ScrewPuzzle
             layout.localScale = Vector3.one * scale;
             view.fieldOfView = Mathf.Max(65f, 2f * Mathf.Atan(2.6f / (9f * view.aspect)) * Mathf.Rad2Deg);
             interaction.Radio.position = view.ScreenToWorldPoint(new Vector3(safe.center.x, safe.center.y + 250f * scale, 9f));
-            status.text = puzzle.State == Radio3DPuzzle.PuzzleState.Won ? "RADIO CLEARED!  •  12 / 12" :
-                string.IsNullOrEmpty(puzzle.Message) ? "Cleared " + puzzle.ClearedCount + " / 12  •  Two free trays" : puzzle.Message;
+            status.text = puzzle.State == Radio3DPuzzle.PuzzleState.Won ? "RADIO CLEARED!  •  All 4 plates removed" :
+                string.IsNullOrEmpty(puzzle.Message) ? "Cleared " + puzzle.ClearedCount + " / 12  •  Plates " + puzzle.ReleasedPlateCount + " / 4" : puzzle.Message;
             for (int i = 0; i < 4; i++)
             {
                 var tray = puzzle.Trays[i];

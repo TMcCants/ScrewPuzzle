@@ -27,11 +27,22 @@ namespace ScrewPuzzle
         private readonly Queue<ScrewColorId> jobs = new Queue<ScrewColorId>();
         private Camera view;
         private Radio3DScrew[] screws;
+        private Radio3DPlate[] plates;
+        public int ReleasedPlateCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (Radio3DPlate plate in plates) if (plate.IsReleased) count++;
+                return count;
+            }
+        }
 
-        public void Configure(Camera camera, Radio3DScrew[] targets)
+        public void Configure(Camera camera, Radio3DScrew[] targets, Radio3DPlate[] panels)
         {
             view = camera;
             screws = targets;
+            plates = panels;
             Restart();
         }
 
@@ -94,7 +105,8 @@ namespace ScrewPuzzle
                 ClearedCount += Capacity;
                 AssignNext(tray);
             }
-            if (ClearedCount == screws.Length) State = PuzzleState.Won;
+            foreach (Radio3DPlate plate in plates) yield return plate.ReleaseIfReady();
+            if (ClearedCount == screws.Length && ReleasedPlateCount == plates.Length) State = PuzzleState.Won;
             IsBusy = false;
         }
 
@@ -115,6 +127,7 @@ namespace ScrewPuzzle
                 if (Trays[i].IsOpen) AssignNext(Trays[i]);
             }
             foreach (Radio3DScrew screw in screws) screw.Restore();
+            foreach (Radio3DPlate plate in plates) plate.Restore();
             RemovedCount = ClearedCount = 0;
             Message = "";
             State = PuzzleState.Playing;
