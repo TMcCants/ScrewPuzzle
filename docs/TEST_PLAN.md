@@ -1,5 +1,13 @@
 # V0.1 Test Plan
 
+## Current V0.9 checks
+
+See [V0.9 CRT Television acceptance checks](V09_ROADMAP.md) for the fifteen-screw puzzle,
+five-card selector, Camera-to-Television unlock, and screen activation. Tamika reported all
+prototype scenarios passed following the PC/phone checklist. Production-art regression remains
+pending. The tables below preserve earlier milestones; Camera now continues to
+Television, which is the final level.
+
 ## Current V0.8 checks
 
 See [V0.8 Old Camera acceptance checks](V08_ROADMAP.md) for the new level, four-card selector,

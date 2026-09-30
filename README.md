@@ -110,6 +110,22 @@ and physical Android phone on September 27, 2026, completing V0.8. See
 
 ## Open and Play
 
+### Separate 3D Radio experiment
+
+Use **Tools → ScrewPuzzle → Open 3D Radio Test** to try a separate rotating-radio scene.
+It combines exposed-screw taps and drag rotation with four color-assigned three-hole trays, two free and two test-unlock trays,
+and Restart. It has no saved progression or moving panels yet. The existing
+2D levels remain intact. See [the experiment guide](docs/RADIO_3D_EXPERIMENT.md) for PC checks
+and the dedicated Android test-build command.
+
+### Main game
+
+V0.9 is in progress: a playable CRT Television prototype is now Level 5. It has fifteen screws,
+five repair stages, and a screen-flicker completion effect. Old Camera unlocks Television and
+the selector now has five cards. All prototype test scenarios were reported passed. Production
+CRT artwork is integrated and needs its final PC/phone regression pass.
+See [the V0.9 roadmap](docs/V09_ROADMAP.md) for test routes and acceptance checks.
+
 1. Add this repository folder as a project in Unity Hub.
 2. Open it with Unity `6000.3.23f1` or a compatible Unity 6 editor.
 3. Open `Assets/Scenes/Loading.unity` to test the complete startup flow, or open
@@ -120,7 +136,7 @@ and physical Android phone on September 27, 2026, completing V0.8. See
 Level 1 begins unlocked. Completing the radio unlocks Toy Car; completing Toy Car unlocks Toy
 Robot. Unlocks save on the local device. Completing Radio opens Toy Car directly, completing
 Toy Car opens Toy Robot directly, completing Toy Robot unlocks and opens Old Camera, and
-completing Old Camera returns to Level Select.
+completing Old Camera unlocks and opens CRT Television. Completing Television returns to Level Select.
 
 Radio and Toy Car use the safe red → blue → yellow route. Toy Robot uses first red → blue or yellow
 → the remaining middle color → final red. Mixed-color choices can fill the tray and demonstrate the

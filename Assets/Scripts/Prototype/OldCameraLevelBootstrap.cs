@@ -7,7 +7,7 @@ namespace ScrewPuzzle
     {
         public static LevelDefinition CreateLevelDefinition()
         {
-            return new LevelDefinition(4, "Old Camera", "LevelSelect", "LEVEL SELECT",
+            return new LevelDefinition(4, "Old Camera", "Level05_CrtTelevision", "NEXT LEVEL",
                 "Old camera restored!", "RESTORED!\nReady for another memory.", 5, 3,
                 new[]
                 {

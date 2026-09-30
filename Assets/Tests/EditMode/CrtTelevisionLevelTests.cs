@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class OldCameraLevelTests
+    public sealed class CrtTelevisionLevelTests
     {
         [TestCase(false)]
         [TestCase(true)]
         public void SafeRoutes_ClearAllScrews(bool yellowFirst)
         {
             int[] middle = yellowFirst ? new[] { 6, 7, 8, 3, 4, 5 } : new[] { 3, 4, 5, 6, 7, 8 };
-            int[] route = new[] { 0, 1, 2 }.Concat(middle).Concat(new[] { 9, 10, 11 }).ToArray();
+            int[] route = new[] { 0, 1, 2 }.Concat(middle).Concat(new[] { 9, 10, 11, 12, 13, 14 }).ToArray();
             Assert.That(PlayRoute(route), Is.Empty);
         }
 
@@ -24,20 +24,20 @@ namespace ScrewPuzzle.Tests
         }
 
         [UnityEngine.TestTools.UnityTest]
-        public System.Collections.IEnumerator CameraRuntime_LosesThenRestartsAndWins()
+        public System.Collections.IEnumerator TelevisionRuntime_LosesThenRestartsAndWins()
         {
             yield return new UnityEngine.TestTools.EnterPlayMode();
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Level04_OldCamera");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("Level05_CrtTelevision");
             yield return null;
             yield return null;
-            foreach (string artName in new[] { "Camera Body Art", "Flash Housing Art",
-                "Film Door Art", "Grip Art", "Lens Art" })
+            foreach (string name in new[] { "Television Cabinet Art", "Antenna Rail Art",
+                "CRT Screen", "Control Panel Art", "Speaker Grille Art", "Power Module Art" })
             {
-                GameObject art = GameObject.Find(artName);
-                Assert.That(art, Is.Not.Null, artName + " must load production artwork.");
+                GameObject art = GameObject.Find(name);
+                Assert.That(art, Is.Not.Null, name);
                 SpriteRenderer renderer = art.GetComponent<SpriteRenderer>();
-                Assert.That(renderer.sprite, Is.Not.Null);
-                Assert.That(renderer.sortingOrder, Is.LessThan(10), "Screws must remain above art.");
+                Assert.That(renderer.enabled && renderer.sprite != null, Is.True);
+                Assert.That(renderer.sortingOrder, Is.LessThan(10));
             }
             GameManager game = Object.FindFirstObjectByType<GameManager>();
             foreach (int index in new[] { 0, 3, 6, 1, 4 })
@@ -56,7 +56,7 @@ namespace ScrewPuzzle.Tests
             int saved = PlayerPrefs.GetInt(key);
             try
             {
-                foreach (int index in new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 })
+                foreach (int index in new[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 })
                 {
                     SelectRuntimeScrew(index);
                     float readyAt = Time.time + 0.9f;
@@ -66,10 +66,10 @@ namespace ScrewPuzzle.Tests
                 while (Time.time < restoredAt) yield return null;
                 Assert.That(game.State, Is.EqualTo(GameManager.LevelState.Won));
                 Assert.That(Object.FindFirstObjectByType<TrayManager>().HeldCount, Is.Zero);
-                Assert.That(GameObject.Find("Flash Glass").GetComponent<SpriteRenderer>().color.r,
-                    Is.LessThan(0.5f), "Flash should return to idle before the result.");
+                Assert.That(GameObject.Find("CRT Screen").GetComponent<SpriteRenderer>().color.g,
+                    Is.EqualTo(0.72f).Within(0.01f), "Screen should settle into a steady glow.");
                 Assert.That(Object.FindObjectsByType<UnityEngine.UI.Text>(FindObjectsSortMode.None)
-                    .Any(text => text.text == "RESTORED!\nReady for another memory."), Is.True);
+                    .Any(text => text.text == "RESTORED!\nBack on the air."), Is.True);
             }
             finally
             {
@@ -87,7 +87,7 @@ namespace ScrewPuzzle.Tests
 
         private static void SelectRuntimeScrew(int index)
         {
-            LevelDefinition level = OldCameraLevelBootstrap.CreateLevelDefinition();
+            LevelDefinition level = CrtTelevisionLevelBootstrap.CreateLevelDefinition();
             string name = level.Screws[index].ColorId + " Screw " + (index + 1);
             Screw screw = GameObject.Find(name).GetComponent<Screw>();
             screw.TrySelect();
@@ -96,7 +96,7 @@ namespace ScrewPuzzle.Tests
 
         private static List<ScrewColorId> PlayRoute(int[] route)
         {
-            LevelDefinition level = OldCameraLevelBootstrap.CreateLevelDefinition();
+            LevelDefinition level = CrtTelevisionLevelBootstrap.CreateLevelDefinition();
             var removed = new HashSet<int>();
             var tray = new List<ScrewColorId>();
             foreach (int index in route)
@@ -113,16 +113,16 @@ namespace ScrewPuzzle.Tests
         }
 
         [Test]
-        public void CameraScene_IsEnabledAndHasBootstrap()
+        public void TelevisionScene_IsEnabledAndHasBootstrap()
         {
-            const string path = "Assets/Scenes/Level04_OldCamera.unity";
+            const string path = "Assets/Scenes/Level05_CrtTelevision.unity";
             Assert.That(EditorBuildSettings.scenes.Any(scene => scene.enabled && scene.path == path), Is.True);
             var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,
                 UnityEditor.SceneManagement.OpenSceneMode.Additive);
             try
             {
                 Assert.That(scene.GetRootGameObjects().Any(root =>
-                    root.GetComponent<OldCameraLevelBootstrap>() != null), Is.True);
+                    root.GetComponent<CrtTelevisionLevelBootstrap>() != null), Is.True);
             }
             finally
             {
@@ -131,18 +131,18 @@ namespace ScrewPuzzle.Tests
         }
 
         [Test]
-        public void CompletingRobotAndCamera_UnlocksTelevisionWithoutRelockingEarlierLevels()
+        public void CompletingCamera_UnlocksTelevision_AndTelevisionCapsProgress()
         {
             const string key = "ScrewPuzzle.HighestUnlockedLevel";
             bool existed = PlayerPrefs.HasKey(key);
             int saved = PlayerPrefs.GetInt(key);
             try
             {
-                PlayerPrefs.SetInt(key, 3);
-                Assert.That(ProgressManager.IsLevelUnlocked(4), Is.False);
-                ProgressManager.RecordLevelCompleted(3);
-                Assert.That(ProgressManager.IsLevelUnlocked(4), Is.True);
+                PlayerPrefs.SetInt(key, 4);
+                Assert.That(ProgressManager.IsLevelUnlocked(5), Is.False);
                 ProgressManager.RecordLevelCompleted(4);
+                Assert.That(ProgressManager.IsLevelUnlocked(5), Is.True);
+                ProgressManager.RecordLevelCompleted(5);
                 Assert.That(ProgressManager.HighestUnlockedLevel, Is.EqualTo(5));
                 ProgressManager.RecordLevelCompleted(1);
                 Assert.That(ProgressManager.HighestUnlockedLevel, Is.EqualTo(5));

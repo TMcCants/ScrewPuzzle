@@ -16,6 +16,16 @@ The important design principle is that no individual screw decides the whole gam
 
 ## Script Ownership
 
+### V0.9 CRT Television
+
+`CrtTelevisionLevelBootstrap.CreateLevelDefinition()` supplies the fifteen-screw Level 5 layout.
+Five unscaled repair assemblies hold generated prototype visuals. `CrtTelevisionRestoration`
+owns release, reseating, the power lamp, and a brief local screen flicker that settles into a
+steady glow. Camera now continues to `Level05_CrtTelevision`; progression caps at five.
+The selector fits five 240-unit-high cards. CRT artwork is sliced from the transparent
+Resources/Art/CrtTelevision/Television_Atlas.png onto the existing repair assemblies. The screen
+sprite is tinted during activation. Generated geometry remains as a missing-resource fallback.
+
 ### V0.8 Old Camera
 
 `OldCameraLevelBootstrap.CreateLevelDefinition()` supplies the testable twelve-screw layout.
