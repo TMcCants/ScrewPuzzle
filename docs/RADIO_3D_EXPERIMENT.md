@@ -130,3 +130,34 @@ Inner-layer validation: all 17 automated Unity tests passed, including hidden-sc
 ![Inner front plate revealed](art/Radio3D_Inner_Layer_Preview.png)
 
 User acceptance: all inner-layer scenarios passed; user approved saving the milestone and adding animation and sound polish.
+
+## Interaction polish — current local pass
+
+The tested stacked-layer milestone was pushed as d3e5857 before this pass.
+Accepted screws now turn one and a half rotations around their own shaft while lifting
+outward for 0.36 seconds, then fly to their tray. Each plate gives a small 0.14-second
+wobble before its existing release motion. The camera remains steady.
+
+Scene-owned procedural audio adds a short ratchet, tray click and plate-release cue.
+SOUND: ON/OFF uses the same saved preference as the main game. Restart stops the
+experiment's current sound and cancels animation. The scene supplies an AudioListener
+only when one is not already present. Clips are disposed when the scene closes.
+
+Manual checks for this pass:
+- Tap screws on the front, rear, sides and inner plate: each turns and lifts outward
+  before traveling to the correct tray; dragging never starts an unscrew animation.
+- Listen for a quiet ratchet, tray arrival click and plate release cue.
+- Toggle sound off during play: subsequent effects stay silent. Toggle it on and
+  verify sound returns. Reopen the scene to verify the preference persists.
+- Restart during unscrewing, tray flight and plate wobble: all pieces reset and no
+  delayed motion or sound continues into the restarted board.
+- Complete the 15-screw board with two free trays, then repeat on a fresh Android APK.
+
+The animation and sound changes require fresh PC/phone acceptance; earlier testing
+applies to the stacked-layer milestone.
+
+Polish validation: the 17 gameplay tests passed, followed by the new audio-preference/restart test (18 project tests total). A separate preview capture passed; portrait and wide sound-control layouts were inspected. Audio feel and volume still require device listening.
+
+![Sound control and inner layer](art/Radio3D_Polish_Preview.png)
+
+User acceptance: all polish test scenarios passed and the user approved saving the milestone and starting a separate 3D toy car.

@@ -28,6 +28,7 @@ namespace ScrewPuzzle
         private Camera view;
         private Radio3DScrew[] screws;
         private Radio3DPlate[] plates;
+        private Radio3DFeedback feedback;
         public int TotalPlateCount { get { return plates.Length; } }
         public int ReleasedPlateCount
         {
@@ -44,6 +45,7 @@ namespace ScrewPuzzle
             view = camera;
             screws = targets;
             plates = panels;
+            feedback = gameObject.AddComponent<Radio3DFeedback>();
             Restart();
         }
 
@@ -91,6 +93,20 @@ namespace ScrewPuzzle
             Tray tray = Trays[index];
             Vector3 start = screw.transform.position;
             Quaternion rotation = screw.transform.rotation;
+            Vector3 normal = rotation * Vector3.up;
+            feedback.PlayUnscrew();
+            // Rotate around the screw's own shaft, including screws on the side and rear faces.
+            for (float elapsed = 0; elapsed < 0.36f; elapsed += Time.deltaTime)
+            {
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / 0.36f);
+                screw.transform.position = start + normal * (0.25f * t);
+                screw.transform.rotation = rotation * Quaternion.AngleAxis(-540f * t, Vector3.up);
+                yield return null;
+            }
+            screw.transform.position = start + normal * 0.25f;
+            screw.transform.rotation = rotation * Quaternion.AngleAxis(-540f, Vector3.up);
+            start = screw.transform.position;
+            rotation = screw.transform.rotation;
             Quaternion facing = Quaternion.FromToRotation(Vector3.up, -view.transform.forward);
             for (float elapsed = 0; elapsed < 0.28f; elapsed += Time.deltaTime)
             {
@@ -103,6 +119,7 @@ namespace ScrewPuzzle
                 yield return null;
             }
             screw.gameObject.SetActive(false);
+            feedback.PlayArrival();
             tray.Count++;
             if (tray.Count == Capacity)
             {
@@ -111,7 +128,7 @@ namespace ScrewPuzzle
                 ClearedCount += Capacity;
                 AssignNext(tray);
             }
-            foreach (Radio3DPlate plate in plates) yield return plate.ReleaseIfReady();
+            foreach (Radio3DPlate plate in plates) yield return plate.ReleaseIfReady(feedback.PlayRelease);
             if (ClearedCount == screws.Length && ReleasedPlateCount == plates.Length) State = PuzzleState.Won;
             IsBusy = false;
         }
@@ -119,6 +136,7 @@ namespace ScrewPuzzle
         public void Restart()
         {
             StopAllCoroutines();
+            if (feedback != null) feedback.Stop();
             jobs.Clear();
             // Outer colors first, followed by the inner blue set; bonus trays remain optional.
             jobs.Enqueue(ScrewColorId.Red);

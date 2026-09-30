@@ -11,6 +11,7 @@ namespace ScrewPuzzle
         private readonly List<Material> materials = new List<Material>();
         private Radio3DInteraction interaction;
         private Text status;
+        private Text soundLabel;
         private Radio3DPuzzle puzzle;
         private Camera view;
         private RectTransform layout;
@@ -25,6 +26,7 @@ namespace ScrewPuzzle
         {
             Camera camera = new GameObject("3D Camera").AddComponent<Camera>();
             view = camera;
+            if (FindFirstObjectByType<AudioListener>() == null) camera.gameObject.AddComponent<AudioListener>();
             camera.tag = "MainCamera";
             camera.transform.position = new Vector3(0f, 0.6f, -9f);
             camera.transform.LookAt(Vector3.zero);
@@ -175,6 +177,10 @@ namespace ScrewPuzzle
             circle = Sprite.Create(circleTexture, new Rect(0, 0, 64, 64), Vector2.one * 0.5f);
             Label(layout, "THE RADIO WORKSHOP", 48, 0.94f);
             Label(layout, "Drag to rotate • Match screws to their trays\nRemove all 3 screws to release a plate", 32, 0.87f);
+            var sound = Panel("Sound", layout, new Vector2(0, 593), new Vector2(320, 64), new Color(0.22f, 0.23f, 0.25f));
+            sound.gameObject.AddComponent<Button>().onClick.AddListener(() => FeedbackAudio.ToggleSound());
+            soundLabel = Label(sound.transform, "", 28, 0.5f);
+            soundLabel.rectTransform.sizeDelta = new Vector2(310, 60);
             status = Label(layout, "", 30, 0.115f);
             for (int i = 0; i < 4; i++)
             {
@@ -225,6 +231,7 @@ namespace ScrewPuzzle
         private void Update()
         {
             Rect safe = Screen.safeArea;
+            soundLabel.text = FeedbackAudio.IsSoundEnabled ? "SOUND: ON" : "SOUND: OFF";
             float scale = Mathf.Min(safe.width / 1080f, safe.height / 1920f);
             layout.position = safe.center;
             layout.localScale = Vector3.one * scale;

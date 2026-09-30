@@ -9,6 +9,35 @@ namespace ScrewPuzzle.Tests
     public sealed class Radio3DInteractionTests
     {
         [UnityTest]
+        public IEnumerator Feedback_RespectsSoundPreference_AndStopsOnRestart()
+        {
+            EditorSceneManager.OpenScene("Assets/Scenes/Experiment_Radio3D.unity");
+            yield return new EnterPlayMode();
+            yield return null;
+            bool hadPreference = PlayerPrefs.HasKey("SoundEnabled");
+            int preference = PlayerPrefs.GetInt("SoundEnabled", 1);
+            try
+            {
+                var feedback = Object.FindFirstObjectByType<Radio3DFeedback>();
+                var source = feedback.GetComponent<AudioSource>();
+                PlayerPrefs.SetInt("SoundEnabled", 0);
+                feedback.PlayUnscrew();
+                Assert.That(source.mute, Is.True);
+                PlayerPrefs.SetInt("SoundEnabled", 1);
+                feedback.PlayRelease();
+                Assert.That(source.mute, Is.False);
+                Object.FindFirstObjectByType<Radio3DInteraction>().ResetExperiment();
+                Assert.That(source.isPlaying, Is.False);
+                Assert.That(Object.FindObjectsByType<AudioListener>(FindObjectsSortMode.None).Length, Is.EqualTo(1));
+            }
+            finally
+            {
+                if (hadPreference) PlayerPrefs.SetInt("SoundEnabled", preference);
+                else PlayerPrefs.DeleteKey("SoundEnabled");
+            }
+        }
+
+        [UnityTest]
         public IEnumerator RotationAndSelection_RespectVisibilityAndGestureIntent()
         {
             EditorSceneManager.OpenScene("Assets/Scenes/Experiment_Radio3D.unity");
@@ -35,12 +64,19 @@ namespace ScrewPuzzle.Tests
             input.CancelPointer();
             input.EndPointer(point);
             Assert.That(input.RemovedCount, Is.Zero);
+            Vector3 screwStart = front.transform.position;
+            Quaternion screwRotation = front.transform.rotation;
             input.BeginPointer(point);
             input.EndPointer(point);
             Assert.That(input.RemovedCount, Is.EqualTo(1));
             Assert.That(front.IsRemoved, Is.True);
             float midFlight = Time.time + 0.1f;
             while (Time.time < midFlight) yield return null;
+            Vector3 lift = front.transform.position - screwStart;
+            Vector3 shaft = screwRotation * Vector3.up;
+            Assert.That(Vector3.Dot(lift, shaft), Is.GreaterThan(0f), "Unscrewing lifts along the shaft before tray flight.");
+            Assert.That(Vector3.Cross(lift, shaft).magnitude, Is.LessThan(0.001f));
+            Assert.That(Quaternion.Angle(screwRotation, front.transform.rotation), Is.GreaterThan(1f));
             input.ResetExperiment();
             Assert.That(front.gameObject.activeSelf, Is.True);
             Assert.That(front.IsRemoved, Is.False);
@@ -49,6 +85,17 @@ namespace ScrewPuzzle.Tests
             while (Time.time < afterOldAnimation) yield return null;
             Assert.That(input.RemovedCount, Is.Zero);
             Assert.That(input.GetComponent<Radio3DPuzzle>().HeldCount, Is.Zero);
+
+            // Restart after the unscrew phase, while the screw is traveling to the tray.
+            Select(input, "Front 0");
+            float duringFlight = Time.time + 0.46f;
+            while (Time.time < duringFlight) yield return null;
+            input.ResetExperiment();
+            float settleReset = Time.time + 0.8f;
+            while (Time.time < settleReset) yield return null;
+            Assert.That(front.IsRemoved, Is.False);
+            Assert.That(front.transform.parent, Is.EqualTo(input.Radio));
+            Assert.That(input.RemovedCount, Is.Zero);
 
             Radio3DPuzzle puzzle = input.GetComponent<Radio3DPuzzle>();
             Assert.That(puzzle.Trays[0].Color, Is.EqualTo(ScrewColorId.Red));

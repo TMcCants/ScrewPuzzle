@@ -26,7 +26,7 @@ namespace ScrewPuzzle
         }
 
         // The puzzle owns this coroutine so Restart cancels tray and plate motion together.
-        public IEnumerator ReleaseIfReady()
+        public IEnumerator ReleaseIfReady(System.Action onRelease = null)
         {
             if (IsReleased || fasteners == null || fasteners.Length == 0) yield break;
             foreach (Radio3DScrew screw in fasteners)
@@ -34,6 +34,15 @@ namespace ScrewPuzzle
 
             IsReleased = IsAnimating = true;
             foreach (Collider collider in colliders) collider.enabled = false;
+            onRelease?.Invoke();
+            // A brief local wobble makes the moment the plate comes loose visible without camera shake.
+            for (float elapsed = 0f; elapsed < 0.14f; elapsed += Time.deltaTime)
+            {
+                float pulse = Mathf.Sin(Mathf.PI * elapsed / 0.14f);
+                transform.localRotation = orientation * Quaternion.Euler(0f, 0f, 3f * pulse);
+                transform.localPosition = origin + outward * (0.04f * pulse);
+                yield return null;
+            }
             const float duration = 0.65f;
             for (float elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
             {
