@@ -28,6 +28,7 @@ namespace ScrewPuzzle
         private Camera view;
         private Radio3DScrew[] screws;
         private Radio3DPlate[] plates;
+        public int TotalPlateCount { get { return plates.Length; } }
         public int ReleasedPlateCount
         {
             get
@@ -66,6 +67,11 @@ namespace ScrewPuzzle
         public bool TryAdd(Radio3DScrew screw)
         {
             if (!CanInteract || screw == null || screw.IsRemoved) return false;
+            if (!screw.IsAccessible)
+            {
+                Message = "Remove the outer front plate first.";
+                return false;
+            }
             int index = System.Array.FindIndex(Trays, t => t.IsOpen && t.HasColor && t.Color == screw.ColorId && t.Count < Capacity);
             if (index < 0)
             {
@@ -114,11 +120,12 @@ namespace ScrewPuzzle
         {
             StopAllCoroutines();
             jobs.Clear();
-            // Four three-screw orders: every screw has a destination, including without unlocks.
+            // Outer colors first, followed by the inner blue set; bonus trays remain optional.
             jobs.Enqueue(ScrewColorId.Red);
             jobs.Enqueue(ScrewColorId.Blue);
             jobs.Enqueue(ScrewColorId.Yellow);
             jobs.Enqueue(ScrewColorId.Red);
+            jobs.Enqueue(ScrewColorId.Blue);
             for (int i = 0; i < Trays.Length; i++)
             {
                 Trays[i].IsOpen = i < 2;

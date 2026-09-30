@@ -16,7 +16,7 @@ namespace ScrewPuzzle.Tests
             yield return null;
             yield return null;
             Radio3DInteraction input = Object.FindFirstObjectByType<Radio3DInteraction>();
-            Assert.That(input.TotalCount, Is.EqualTo(12));
+            Assert.That(input.TotalCount, Is.EqualTo(15));
             Radio3DScrew front = GameObject.Find("Front 0").GetComponent<Radio3DScrew>();
             Radio3DScrew rear = GameObject.Find("Back 0").GetComponent<Radio3DScrew>();
             Physics.SyncTransforms();
@@ -60,7 +60,7 @@ namespace ScrewPuzzle.Tests
             Assert.That(puzzle.RemovedCount, Is.Zero);
             // Both free trays alone must be sufficient to win.
             foreach (string name in new[] { "Front 0", "Back 0", "Left 0", "Front 2", "Back 2", "Left 2",
-                "Front 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2" })
+                "Front 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1", "Inner 2" })
             {
                 Select(input, name);
                 yield return Settle(puzzle);
@@ -71,11 +71,12 @@ namespace ScrewPuzzle.Tests
                     Assert.That(puzzle.ClearedCount, Is.EqualTo(3));
                 }
                 Assert.That(puzzle.Trays[2].IsOpen, Is.False);
+                if (name == "Right 2") Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Playing), "The inner layer is still unfinished.");
             }
             Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
             Assert.That(puzzle.HeldCount, Is.Zero);
-            Assert.That(puzzle.ClearedCount, Is.EqualTo(12));
-            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(4));
+            Assert.That(puzzle.ClearedCount, Is.EqualTo(15));
+            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(5));
             input.ResetExperiment();
             Assert.That(puzzle.UnlockTestTray(2), Is.True);
             Assert.That(puzzle.Trays[2].Color, Is.EqualTo(ScrewColorId.Yellow));
@@ -83,7 +84,7 @@ namespace ScrewPuzzle.Tests
             Assert.That(puzzle.Trays[3].Color, Is.EqualTo(ScrewColorId.Red));
             Assert.That(puzzle.UnlockTestTray(2), Is.False);
             foreach (string name in new[] { "Front 2", "Back 2", "Left 2", "Front 0", "Back 0", "Left 0",
-                "Right 0", "Right 1", "Right 2", "Front 1", "Back 1", "Left 1" })
+                "Right 0", "Right 1", "Right 2", "Front 1", "Inner 0", "Inner 1", "Inner 2", "Back 1", "Left 1" })
             {
                 Select(input, name);
                 yield return Settle(puzzle);
@@ -109,6 +110,15 @@ namespace ScrewPuzzle.Tests
             var puzzle = input.GetComponent<Radio3DPuzzle>();
             var front = GameObject.Find("Front Plate Assembly").GetComponent<Radio3DPlate>();
             var rear = GameObject.Find("Rear Plate Assembly").GetComponent<Radio3DPlate>();
+            var inner = GameObject.Find("Inner 0").GetComponent<Radio3DScrew>();
+            Assert.That(inner.IsAccessible, Is.False);
+            Assert.That(puzzle.TryAdd(inner), Is.False);
+            for (int angle = 0; angle < 360; angle += 45)
+            {
+                input.Radio.rotation = Quaternion.Euler(0, angle, 0);
+                Physics.SyncTransforms();
+                Assert.That(input.PickScrew(input.View.WorldToScreenPoint(inner.transform.position)), Is.Not.EqualTo(inner));
+            }
             Transform speaker = GameObject.Find("Speaker").transform;
             Vector3 origin = front.transform.localPosition;
             Quaternion orientation = front.transform.localRotation;
@@ -124,6 +134,7 @@ namespace ScrewPuzzle.Tests
             float deadline = Time.realtimeSinceStartup + 5f;
             while (!front.IsAnimating && Time.realtimeSinceStartup < deadline) yield return null;
             Assert.That(front.IsAnimating, Is.True);
+            Assert.That(inner.IsAccessible, Is.False, "The inner screws stay locked throughout the outer plate animation.");
             Assert.That(puzzle.CanInteract, Is.False);
             Assert.That(rear.IsReleased, Is.False, "Removing front screws must not release another face.");
             foreach (Collider collider in front.GetComponentsInChildren<Collider>()) Assert.That(collider.enabled, Is.False);
@@ -138,6 +149,7 @@ namespace ScrewPuzzle.Tests
             Assert.That(speaker.gameObject.activeInHierarchy, Is.True);
             foreach (Collider collider in front.GetComponentsInChildren<Collider>()) Assert.That(collider.enabled, Is.True);
             Assert.That(puzzle.RemovedCount, Is.Zero);
+            Assert.That(inner.IsAccessible, Is.False);
             puzzle.UnlockTestTray(2);
             foreach (string name in new[] { "Front 0", "Front 1", "Front 2" })
             {
@@ -145,6 +157,7 @@ namespace ScrewPuzzle.Tests
                 yield return Settle(puzzle);
             }
             Assert.That(front.IsReleased, Is.True);
+            Assert.That(inner.IsAccessible, Is.True);
             Assert.That(front.gameObject.activeSelf, Is.False);
             Assert.That(speaker.gameObject.activeInHierarchy, Is.False);
             Assert.That(rear.gameObject.activeSelf, Is.True);
@@ -153,10 +166,30 @@ namespace ScrewPuzzle.Tests
             Physics.SyncTransforms();
             Assert.That(input.PickScrew(input.View.WorldToScreenPoint(rearScrew.transform.position)),
                 Is.Not.EqualTo(rearScrew), "The inner chassis still blocks selection through the radio.");
+            var innerPlate = GameObject.Find("Inner Front Plate Assembly").GetComponent<Radio3DPlate>();
+            puzzle.UnlockTestTray(3);
+            Select(input, "Inner 0");
+            yield return Settle(puzzle);
+            Select(input, "Inner 1");
+            yield return Settle(puzzle);
+            Assert.That(innerPlate.IsReleased, Is.False);
+            Select(input, "Inner 2");
+            deadline = Time.realtimeSinceStartup + 5f;
+            while (!innerPlate.IsAnimating && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(innerPlate.IsAnimating, Is.True);
+            input.ResetExperiment();
+            until = Time.time + 1f;
+            while (Time.time < until) yield return null;
+            Assert.That(innerPlate.gameObject.activeSelf, Is.True);
+            Assert.That(innerPlate.IsReleased, Is.False);
+            Assert.That(front.gameObject.activeSelf, Is.True);
+            Assert.That(inner.IsAccessible, Is.False);
+            Assert.That(inner.IsRemoved, Is.False);
+            Assert.That(puzzle.ReleasedPlateCount, Is.Zero);
         }
         private static void Select(Radio3DInteraction input, string name)
         {
-            Vector3 normal = name.StartsWith("Front") ? Vector3.back :
+            Vector3 normal = name.StartsWith("Front") || name.StartsWith("Inner") ? Vector3.back :
                 name.StartsWith("Back") ? Vector3.forward :
                 name.StartsWith("Left") ? Vector3.left : Vector3.right;
             input.Radio.rotation = Quaternion.FromToRotation(normal, Vector3.back);

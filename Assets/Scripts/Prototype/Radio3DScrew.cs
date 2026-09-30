@@ -7,15 +7,18 @@ namespace ScrewPuzzle
     {
         public ScrewColorId ColorId { get; private set; }
         public bool IsRemoved { get; private set; }
+        public bool IsAccessible { get { return coveringPlate == null || (coveringPlate.IsReleased && !coveringPlate.IsAnimating); } }
+        private Radio3DPlate coveringPlate;
         private Transform mount;
         private Vector3 position;
         private Quaternion rotation;
         private Vector3 scale;
         private Collider[] colliders;
 
-        public void Initialize(ScrewColorId color)
+        public void Initialize(ScrewColorId color, Radio3DPlate cover = null)
         {
             ColorId = color;
+            coveringPlate = cover;
             mount = transform.parent;
             position = transform.localPosition;
             rotation = transform.localRotation;

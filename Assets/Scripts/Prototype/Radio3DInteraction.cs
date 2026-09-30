@@ -75,7 +75,8 @@ namespace ScrewPuzzle
             // The nearest solid surface wins: the cabinet blocks screws on its far side.
             if (!Physics.Raycast(View.ScreenPointToRay(point), out RaycastHit hit, 100f,
                 ~0, QueryTriggerInteraction.Ignore)) return null;
-            return hit.collider.GetComponentInParent<Radio3DScrew>();
+            Radio3DScrew screw = hit.collider.GetComponentInParent<Radio3DScrew>();
+            return screw != null && screw.IsAccessible ? screw : null;
         }
 
         private bool IsOverUi(Vector2 point)

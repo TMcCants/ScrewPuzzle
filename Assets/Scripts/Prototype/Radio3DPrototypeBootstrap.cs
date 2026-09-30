@@ -45,13 +45,13 @@ namespace ScrewPuzzle
             Shape("Bottom Frame", PrimitiveType.Cube, radio, new Vector3(0f, -1.14f, 0f), new Vector3(3.4f, 0.12f, 1.8f), wood);
             Material circuit = Material(new Color(0.12f, 0.34f, 0.23f));
             Shape("Circuit Board", PrimitiveType.Cube, radio, new Vector3(0f, 0f, -0.71f), new Vector3(2.7f, 1.7f, 0.06f), circuit);
-            Shape("Receiver Module", PrimitiveType.Cube, radio, new Vector3(-0.65f, 0f, -0.78f), new Vector3(0.7f, 1.1f, 0.08f), brass);
+            Shape("Receiver Module", PrimitiveType.Cube, radio, new Vector3(-0.65f, 0f, -0.75f), new Vector3(0.7f, 1.1f, 0.04f), brass);
             for (int index = 0; index < 3; index++)
                 Shape("Circuit Trace " + index, PrimitiveType.Cube, radio, new Vector3(0.55f, (index - 1) * 0.42f, -0.76f),
                     new Vector3(0.95f, 0.06f, 0.04f), brass);
 
-            Radio3DPlate[] plates = new Radio3DPlate[4];
-            string[] plateNames = { "Front Plate Assembly", "Rear Plate Assembly", "Left Plate Assembly", "Right Plate Assembly" };
+            Radio3DPlate[] plates = new Radio3DPlate[5];
+            string[] plateNames = { "Front Plate Assembly", "Rear Plate Assembly", "Left Plate Assembly", "Right Plate Assembly", "Inner Front Plate Assembly" };
             for (int index = 0; index < plates.Length; index++)
             {
                 plates[index] = new GameObject(plateNames[index]).AddComponent<Radio3DPlate>();
@@ -69,6 +69,8 @@ namespace ScrewPuzzle
                 new Vector3(0.08f, 2.1f, 1.6f), brass);
             Shape("Right Panel", PrimitiveType.Cube, plates[3].transform, new Vector3(1.72f, 0f, 0f),
                 new Vector3(0.08f, 2.1f, 1.6f), brass);
+            Shape("Inner Front Plate", PrimitiveType.Cube, plates[4].transform, new Vector3(0f, 0f, -0.79f),
+                new Vector3(2.7f, 1.7f, 0.04f), Material(new Color(0.45f, 0.57f, 0.61f)));
 
             Material[] colors = { Material(new Color(0.9f, 0.12f, 0.08f)),
                 Material(new Color(0.05f, 0.4f, 0.95f)), Material(new Color(1f, 0.7f, 0.04f)) };
@@ -85,8 +87,16 @@ namespace ScrewPuzzle
             for (int index = 0; index < screws.Count; index++)
                 screws[index].Initialize(index % 4 == 3 ? ScrewColorId.Red : (ScrewColorId)(index / 4));
             Vector3[] normals = { Vector3.back, Vector3.forward, Vector3.left, Vector3.right };
-            for (int index = 0; index < plates.Length; index++)
+            for (int index = 0; index < normals.Length; index++)
                 plates[index].Configure(new[] { screws[index], screws[index + 4], screws[index + 8] }, normals[index]);
+            var innerScrews = new Radio3DScrew[3];
+            for (int index = 0; index < innerScrews.Length; index++)
+            {
+                innerScrews[index] = Screw("Inner " + index, radio, new Vector3((index - 1) * 0.85f, 0.45f, -0.84f), Vector3.back, colors[1], dark);
+                innerScrews[index].Initialize(ScrewColorId.Blue, plates[0]);
+                screws.Add(innerScrews[index]);
+            }
+            plates[4].Configure(innerScrews, Vector3.back);
             puzzle = gameObject.AddComponent<Radio3DPuzzle>();
             puzzle.Configure(camera, screws.ToArray(), plates);
             interaction = gameObject.AddComponent<Radio3DInteraction>();
@@ -220,8 +230,8 @@ namespace ScrewPuzzle
             layout.localScale = Vector3.one * scale;
             view.fieldOfView = Mathf.Max(65f, 2f * Mathf.Atan(2.6f / (9f * view.aspect)) * Mathf.Rad2Deg);
             interaction.Radio.position = view.ScreenToWorldPoint(new Vector3(safe.center.x, safe.center.y + 250f * scale, 9f));
-            status.text = puzzle.State == Radio3DPuzzle.PuzzleState.Won ? "RADIO CLEARED!  •  All 4 plates removed" :
-                string.IsNullOrEmpty(puzzle.Message) ? "Cleared " + puzzle.ClearedCount + " / 12  •  Plates " + puzzle.ReleasedPlateCount + " / 4" : puzzle.Message;
+            status.text = puzzle.State == Radio3DPuzzle.PuzzleState.Won ? "RADIO CLEARED!  •  All " + puzzle.TotalPlateCount + " plates removed" :
+                string.IsNullOrEmpty(puzzle.Message) ? "Cleared " + puzzle.ClearedCount + " / " + interaction.TotalCount + "  •  Plates " + puzzle.ReleasedPlateCount + " / " + puzzle.TotalPlateCount : puzzle.Message;
             for (int i = 0; i < 4; i++)
             {
                 var tray = puzzle.Trays[i];
