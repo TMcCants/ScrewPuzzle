@@ -161,3 +161,29 @@ Polish validation: the 17 gameplay tests passed, followed by the new audio-prefe
 ![Sound control and inner layer](art/Radio3D_Polish_Preview.png)
 
 User acceptance: all polish test scenarios passed and the user approved saving the milestone and starting a separate 3D toy car.
+
+## Teal-and-cream toy radio art pass
+
+The radio now has teal plastic panels and softly rounded frame pieces, cream speaker
+trim with individual grille slats, a recessed tuning window with ticks and an orange
+needle, two projecting cream knobs with pointers, a carry handle and rubber feet.
+The front decorations are all owned by the front plate. The handle and feet belong to
+the remaining frame. Colored screws, their positions, five plate assignments, and the
+hidden blue inner layer retain the tested puzzle rules. Rounded pieces use generated
+meshes with simple box colliders; meshes are disposed with the scene's materials.
+
+Check the new model from every side, confirm each colored screw is selectable, and
+verify the entire decorated front moves together when released. Restart should restore
+the grille, display, knobs and all screws. Check handle clearance below Sound and the
+appearance in the Toy Shop tile. Build a new combined APK for phone review.
+
+Validation: all 21 project EditMode tests passed with the remodeled radio. After
+lowering the radio presentation to leave clearance below Sound, the three radio
+interaction tests and the portrait/wide preview capture passed again. Both layouts
+were visually reviewed, and the Toy Shop radio thumbnail was refreshed. The toy car
+retains its previous presentation height.
+
+User acceptance (2026-10-01): the user reported that all test scenarios passed
+successfully after reviewing the new radio and being asked to check PC and phone.
+
+![Toy radio art pass](art/Radio3D_Toy_Radio_Preview.png)

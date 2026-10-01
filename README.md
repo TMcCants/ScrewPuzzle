@@ -149,3 +149,7 @@ Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) before changing gameplay rul
 ### Separate 3D Toy Car experiment
 
 Use **Tools → ScrewPuzzle → Open 3D Toy Car Test** for the second rotating 3D board. It has 15 screws, five removable panels, an inner side layer and the shared color trays, animation and sound. Use **Build 3D Toy Car Android Test** for its separate phone APK. See [the toy-car test guide](docs/TOY_CAR_3D_EXPERIMENT.md).
+
+### Combined 3D Workshop
+
+Use **Tools → ScrewPuzzle → Open 3D Workshop** to choose Radio or Toy Car. Both boards have a **BOARDS** button; each visit starts fresh. **Build 3D Workshop Android Test** creates one test app containing the selector and both boards. See [the navigation test guide](docs/3D_WORKSHOP_NAVIGATION.md).

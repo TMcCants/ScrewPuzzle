@@ -7,6 +7,7 @@ namespace ScrewPuzzle
     public sealed class ToyCar3DPrototypeBootstrap : Radio3DPrototypeBootstrap
     {
         protected override string BoardTitle => "THE TOY CAR WORKSHOP";
+        protected override float ModelVerticalOffset => 250f;
         protected override string WinTitle => "TOY CAR CLEARED!";
 
         protected override void BuildModel(out Transform radio, out List<Radio3DScrew> screws, out Radio3DPlate[] plates)

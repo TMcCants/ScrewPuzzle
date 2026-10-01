@@ -9,6 +9,7 @@ namespace ScrewPuzzle
     public class Radio3DPrototypeBootstrap : MonoBehaviour
     {
         private readonly List<Material> materials = new List<Material>();
+        private readonly List<Mesh> modelMeshes = new List<Mesh>();
         private Radio3DInteraction interaction;
         private Text status;
         private Text soundLabel;
@@ -47,17 +48,18 @@ namespace ScrewPuzzle
         }
 
         protected virtual string BoardTitle => "THE RADIO WORKSHOP";
+        protected virtual float ModelVerticalOffset => 180f;
         protected virtual string WinTitle => "RADIO CLEARED!";
 
         protected virtual void BuildModel(out Transform radio, out List<Radio3DScrew> screws, out Radio3DPlate[] plates)
         {
             radio = new GameObject("Rotating Radio").transform;
-            Material wood = Material(new Color(0.38f, 0.19f, 0.08f));
-            Material brass = Material(new Color(0.7f, 0.49f, 0.22f));
+            Material wood = Material(new Color(0.035f, 0.48f, 0.48f));
+            Material brass = Material(new Color(0.95f, 0.87f, 0.68f));
             Material dark = Material(new Color(0.11f, 0.13f, 0.12f));
             Shape("Inner Chassis", PrimitiveType.Cube, radio, Vector3.zero, new Vector3(2.95f, 1.9f, 1.35f), dark);
-            Shape("Top Frame", PrimitiveType.Cube, radio, new Vector3(0f, 1.14f, 0f), new Vector3(3.4f, 0.12f, 1.8f), wood);
-            Shape("Bottom Frame", PrimitiveType.Cube, radio, new Vector3(0f, -1.14f, 0f), new Vector3(3.4f, 0.12f, 1.8f), wood);
+            RoundedBody("Top Frame", radio, new Vector3(0f, 1.14f, 0f), new Vector3(3.5f, 0.24f, 1.85f), 0.1f, wood);
+            RoundedBody("Bottom Frame", radio, new Vector3(0f, -1.14f, 0f), new Vector3(3.5f, 0.24f, 1.85f), 0.1f, wood);
             Material circuit = Material(new Color(0.12f, 0.34f, 0.23f));
             Shape("Circuit Board", PrimitiveType.Cube, radio, new Vector3(0f, 0f, -0.71f), new Vector3(2.7f, 1.7f, 0.06f), circuit);
             Shape("Receiver Module", PrimitiveType.Cube, radio, new Vector3(-0.65f, 0f, -0.75f), new Vector3(0.7f, 1.1f, 0.04f), brass);
@@ -72,18 +74,43 @@ namespace ScrewPuzzle
                 plates[index] = new GameObject(plateNames[index]).AddComponent<Radio3DPlate>();
                 plates[index].transform.SetParent(radio, false);
             }
-            Shape("Front Plate", PrimitiveType.Cube, plates[0].transform, new Vector3(0f, 0f, -0.92f),
-                new Vector3(3.15f, 2.15f, 0.08f), brass);
-            Shape("Rear Plate", PrimitiveType.Cube, plates[1].transform, new Vector3(0f, 0f, 0.92f),
-                new Vector3(3.15f, 2.15f, 0.08f), dark);
-            Shape("Speaker", PrimitiveType.Cube, plates[0].transform, new Vector3(-0.7f, -0.25f, -0.99f),
-                new Vector3(1.1f, 1f, 0.05f), dark);
-            Shape("Tuning Display", PrimitiveType.Cube, plates[0].transform, new Vector3(0.65f, -0.15f, -0.99f),
-                new Vector3(1.1f, 0.5f, 0.05f), dark);
-            Shape("Left Panel", PrimitiveType.Cube, plates[2].transform, new Vector3(-1.72f, 0f, 0f),
-                new Vector3(0.08f, 2.1f, 1.6f), brass);
+            RoundedBody("Front Plate", plates[0].transform, new Vector3(0f, 0f, -0.92f),
+                new Vector3(3.15f, 2.15f, 0.08f), 0.035f, wood);
+            RoundedBody("Rear Plate", plates[1].transform, new Vector3(0f, 0f, 0.92f),
+                new Vector3(3.15f, 2.15f, 0.08f), 0.035f, wood);
+            // Front decorations belong to the removable face, not the permanent chassis.
+            Transform speaker = new GameObject("Speaker").transform;
+            speaker.SetParent(plates[0].transform, false);
+            Disc("Speaker Rim", speaker, new Vector3(-0.7f, -0.26f, -1.005f), 1.28f, 0.035f, brass);
+            Disc("Speaker Fabric", speaker, new Vector3(-0.7f, -0.26f, -1.045f), 1.10f, 0.018f, dark);
+            for (int i = -4; i <= 4; i++)
+            {
+                float y = i * 0.115f;
+                float width = 2f * Mathf.Sqrt(0.52f * 0.52f - y * y);
+                RoundedBody("Grille Slat", speaker, new Vector3(-0.7f, -0.26f + y, -1.075f), new Vector3(width, 0.045f, 0.035f), 0.017f, brass);
+            }
+            RoundedBody("Tuning Display", plates[0].transform, new Vector3(0.67f, 0.23f, -1.01f), new Vector3(1.18f, 0.40f, 0.09f), 0.044f, brass);
+            RoundedBody("Tuning Glass", plates[0].transform, new Vector3(0.67f, 0.23f, -1.068f), new Vector3(1.02f, 0.26f, 0.025f), 0.012f, Material(new Color(0.06f, 0.18f, 0.23f)));
+            for (int i = 0; i < 9; i++)
+                Shape("Tuning Tick", PrimitiveType.Cube, plates[0].transform, new Vector3(0.26f + i * 0.1f, 0.25f, -1.087f), new Vector3(0.014f, i % 2 == 0 ? 0.12f : 0.065f, 0.008f), brass);
+            Shape("Tuning Needle", PrimitiveType.Cube, plates[0].transform, new Vector3(0.81f, 0.23f, -1.10f), new Vector3(0.025f, 0.2f, 0.01f), Material(new Color(0.95f, 0.39f, 0.16f)));
+            for (int i = 0; i < 2; i++)
+            {
+                float x = 0.33f + i * 0.7f;
+                Disc("Knob Bezel", plates[0].transform, new Vector3(x, -0.49f, -1.01f), 0.55f, 0.035f, dark);
+                Disc("Cream Knob", plates[0].transform, new Vector3(x, -0.49f, -1.10f), 0.46f, 0.09f, brass);
+                RoundedBody("Knob Pointer", plates[0].transform, new Vector3(x, -0.38f, -1.198f), new Vector3(0.035f, 0.12f, 0.025f), 0.012f, wood);
+            }
+            foreach (float x in new[] { -1.03f, 1.03f })
+            {
+                RoundedBody("Handle Mount", radio, new Vector3(x, 1.31f, 0), new Vector3(0.27f, 0.28f, 0.42f), 0.1f, brass);
+                RoundedBody("Handle Upright", radio, new Vector3(x, 1.58f, 0), new Vector3(0.20f, 0.56f, 0.28f), 0.09f, wood);
+                RoundedBody("Rubber Foot", radio, new Vector3(x, -1.31f, 0), new Vector3(0.52f, 0.18f, 0.85f), 0.08f, dark);
+            }
+            RoundedBody("Carry Handle", radio, new Vector3(0, 1.82f, 0), new Vector3(2.25f, 0.23f, 0.30f), 0.11f, wood);            Shape("Left Panel", PrimitiveType.Cube, plates[2].transform, new Vector3(-1.72f, 0f, 0f),
+                new Vector3(0.08f, 2.1f, 1.6f), wood);
             Shape("Right Panel", PrimitiveType.Cube, plates[3].transform, new Vector3(1.72f, 0f, 0f),
-                new Vector3(0.08f, 2.1f, 1.6f), brass);
+                new Vector3(0.08f, 2.1f, 1.6f), wood);
             Shape("Inner Front Plate", PrimitiveType.Cube, plates[4].transform, new Vector3(0f, 0f, -0.79f),
                 new Vector3(2.7f, 1.7f, 0.04f), Material(new Color(0.45f, 0.57f, 0.61f)));
 
@@ -112,6 +139,55 @@ namespace ScrewPuzzle
                 screws.Add(innerScrews[index]);
             }
             plates[4].Configure(innerScrews, Vector3.back);
+        }
+
+        private void Disc(string name, Transform parent, Vector3 position, float diameter, float depth, Material material)
+        {
+            Transform disc = Shape(name, PrimitiveType.Cylinder, parent, position, new Vector3(diameter, depth, diameter), material);
+            disc.localRotation = Quaternion.Euler(90f, 0f, 0f);
+        }
+
+        private Transform RoundedBody(string name, Transform parent, Vector3 position, Vector3 size, float radius, Material material)
+        {
+            var obj = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
+            obj.transform.SetParent(parent, false);
+            obj.transform.localPosition = position;
+            var vertices = new List<Vector3>();
+            var normals = new List<Vector3>();
+            var triangles = new List<int>();
+            Vector3 half = size * 0.5f;
+            Vector3 inner = half - Vector3.one * radius;
+            const int steps = 12;
+            foreach (Vector3 n in new[] { Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back })
+            {
+                Vector3 u = Vector3.Cross(n, Mathf.Abs(n.y) > 0.5f ? Vector3.forward : Vector3.up);
+                Vector3 v = Vector3.Cross(n, u);
+                int start = vertices.Count;
+                for (int y = 0; y <= steps; y++)
+                    for (int x = 0; x <= steps; x++)
+                    {
+                        Vector3 p = Vector3.Scale(n + u * (2f * x / steps - 1f) + v * (2f * y / steps - 1f), half);
+                        Vector3 core = new Vector3(Mathf.Clamp(p.x, -inner.x, inner.x), Mathf.Clamp(p.y, -inner.y, inner.y), Mathf.Clamp(p.z, -inner.z, inner.z));
+                        Vector3 normal = (p - core).normalized;
+                        vertices.Add(core + normal * radius);
+                        normals.Add(normal);
+                        if (x < steps && y < steps)
+                        {
+                            int a = start + y * (steps + 1) + x;
+                            triangles.AddRange(new[] { a, a + 1, a + steps + 1, a + 1, a + steps + 2, a + steps + 1 });
+                        }
+                    }
+            }
+            var mesh = new Mesh { name = name + " Rounded Mesh" };
+            mesh.SetVertices(vertices);
+            mesh.SetNormals(normals);
+            mesh.SetTriangles(triangles, 0);
+            mesh.RecalculateBounds();
+            modelMeshes.Add(mesh);
+            obj.GetComponent<MeshFilter>().sharedMesh = mesh;
+            obj.GetComponent<MeshRenderer>().sharedMaterial = material;
+            obj.GetComponent<BoxCollider>().size = size;
+            return obj.transform;
         }
 
         protected Material Material(Color color)
@@ -214,9 +290,12 @@ namespace ScrewPuzzle
                     text.rectTransform.sizeDelta = new Vector2(380, 42);
                 }
             }
-            var reset = Panel("Restart", layout, new Vector2(0, -861), new Vector2(420, 92), new Color(0.42f, 0.27f, 0.12f));
+            var reset = Panel("Restart", layout, new Vector2(225, -861), new Vector2(400, 92), new Color(0.42f, 0.27f, 0.12f));
             reset.gameObject.AddComponent<Button>().onClick.AddListener(interaction.ResetExperiment);
             Label(reset.transform, "RESTART", 32, 0.5f).rectTransform.sizeDelta = new Vector2(400, 80);
+            var boards = Panel("Boards", layout, new Vector2(-225, -861), new Vector2(400, 92), new Color(0.22f, 0.23f, 0.25f));
+            boards.gameObject.AddComponent<Button>().onClick.AddListener(ThreeDBoardNavigation.OpenSelector);
+            Label(boards.transform, "BOARDS", 32, 0.5f).rectTransform.sizeDelta = new Vector2(400, 80);
             puzzle.HoleScreenPosition = (tray, hole) => RectTransformUtility.WorldToScreenPoint(null, holes[tray, hole].transform.position);
             Update();
         }
@@ -238,13 +317,18 @@ namespace ScrewPuzzle
 
         protected void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                ThreeDBoardNavigation.OpenSelector();
+                return;
+            }
             Rect safe = Screen.safeArea;
             soundLabel.text = FeedbackAudio.IsSoundEnabled ? "SOUND: ON" : "SOUND: OFF";
             float scale = Mathf.Min(safe.width / 1080f, safe.height / 1920f);
             layout.position = safe.center;
             layout.localScale = Vector3.one * scale;
             view.fieldOfView = Mathf.Max(65f, 2f * Mathf.Atan(2.6f / (9f * view.aspect)) * Mathf.Rad2Deg);
-            interaction.Radio.position = view.ScreenToWorldPoint(new Vector3(safe.center.x, safe.center.y + 250f * scale, 9f));
+            interaction.Radio.position = view.ScreenToWorldPoint(new Vector3(safe.center.x, safe.center.y + ModelVerticalOffset * scale, 9f));
             status.text = puzzle.State == Radio3DPuzzle.PuzzleState.Won ? WinTitle + "  •  All " + puzzle.TotalPlateCount + " plates removed" :
                 string.IsNullOrEmpty(puzzle.Message) ? "Cleared " + puzzle.ClearedCount + " / " + interaction.TotalCount + "  •  Plates " + puzzle.ReleasedPlateCount + " / " + puzzle.TotalPlateCount : puzzle.Message;
             for (int i = 0; i < 4; i++)
@@ -266,6 +350,7 @@ namespace ScrewPuzzle
             if (circle != null) Destroy(circle);
             if (circleTexture != null) Destroy(circleTexture);
             foreach (Material material in materials) if (material != null) Destroy(material);
+            foreach (Mesh mesh in modelMeshes) if (mesh != null) Destroy(mesh);
         }
     }
 }

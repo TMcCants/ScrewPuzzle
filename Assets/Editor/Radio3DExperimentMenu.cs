@@ -9,6 +9,19 @@ namespace ScrewPuzzle.Editor
     {
         private const string ScenePath = "Assets/Scenes/Experiment_Radio3D.unity";
 
+        [MenuItem("Tools/ScrewPuzzle/Open 3D Workshop")]
+        public static void OpenWorkshop()
+        {
+            if (EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                EditorSceneManager.OpenScene(ThreeDBoardNavigation.Selector);
+        }
+
+        [MenuItem("Tools/ScrewPuzzle/Build 3D Workshop Android Test")]
+        public static void BuildWorkshopAndroid()
+        {
+            BuildAndroidScene(ThreeDBoardNavigation.Selector, "3D Workshop", "workshop3dtest");
+        }
+
         [MenuItem("Tools/ScrewPuzzle/Open 3D Radio Test")]
         public static void Open()
         {
@@ -58,7 +71,7 @@ namespace ScrewPuzzle.Editor
                 EditorUserBuildSettings.buildAppBundle = false;
                 BuildReport report = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
-                    scenes = new[] { scenePath },
+                    scenes = ThreeDBoardNavigation.BuildScenes(scenePath),
                     locationPathName = path,
                     target = BuildTarget.Android,
                     options = BuildOptions.Development
