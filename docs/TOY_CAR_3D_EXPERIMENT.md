@@ -58,3 +58,22 @@ The existing 18 tests passed after sharing the board setup. The first toy-car ru
 ![Toy car prototype](art/ToyCar3D_Prototype_Preview.png)
 
 User acceptance: all test scenarios passed on both boards; user approved saving this milestone and adding a shared 3D board selector.
+
+## Toy car visual polish (2026-10-01)
+
+The car now has rounded teal body panels, hood, trunk and cabin, a cream roof,
+cream wheel rims with hub bolts, side trim and door handles, rounded cream bumpers,
+front headlights, red rear lights and small end grilles. Side trim belongs to its
+side plate; lights, grilles and bumpers belong to their end plates, so decorations
+move with the correct assembly during removal and return on Restart. The roof and
+wheels stay on the chassis. The Toy Shop thumbnail uses the updated model.
+
+Screw positions, colors, five plate assignments and tray rules are unchanged.
+The car completion/restart regression and both navigation regressions passed.
+Two render helpers also passed; portrait and wide gameplay views and the transparent
+menu thumbnail were visually inspected.
+
+User acceptance (2026-10-01): the user reported that all test scenarios passed
+successfully after the toy car visual polish and the requested PC/phone checks.
+
+![Polished toy car](art/ToyCar3D_Polished_Preview.png)

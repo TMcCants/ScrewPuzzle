@@ -147,7 +147,7 @@ namespace ScrewPuzzle
             disc.localRotation = Quaternion.Euler(90f, 0f, 0f);
         }
 
-        private Transform RoundedBody(string name, Transform parent, Vector3 position, Vector3 size, float radius, Material material)
+        protected Transform RoundedBody(string name, Transform parent, Vector3 position, Vector3 size, float radius, Material material)
         {
             var obj = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer), typeof(BoxCollider));
             obj.transform.SetParent(parent, false);
