@@ -145,3 +145,7 @@ Radio and Toy Car use the safe red → blue → yellow route. Toy Robot uses fir
 loss state.
 
 Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) before changing gameplay rules and [`docs/UNITY_SETUP.md`](docs/UNITY_SETUP.md) before replacing the generated prototype visuals.
+
+### Separate 3D Toy Car experiment
+
+Use **Tools → ScrewPuzzle → Open 3D Toy Car Test** for the second rotating 3D board. It has 15 screws, five removable panels, an inner side layer and the shared color trays, animation and sound. Use **Build 3D Toy Car Android Test** for its separate phone APK. See [the toy-car test guide](docs/TOY_CAR_3D_EXPERIMENT.md).

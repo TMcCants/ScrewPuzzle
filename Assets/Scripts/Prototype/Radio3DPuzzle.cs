@@ -71,7 +71,7 @@ namespace ScrewPuzzle
             if (!CanInteract || screw == null || screw.IsRemoved) return false;
             if (!screw.IsAccessible)
             {
-                Message = "Remove the outer front plate first.";
+                Message = "Remove the covering plate first.";
                 return false;
             }
             int index = System.Array.FindIndex(Trays, t => t.IsOpen && t.HasColor && t.Color == screw.ColorId && t.Count < Capacity);
@@ -108,6 +108,7 @@ namespace ScrewPuzzle
             start = screw.transform.position;
             rotation = screw.transform.rotation;
             Quaternion facing = Quaternion.FromToRotation(Vector3.up, -view.transform.forward);
+            Vector3 flightScale = screw.transform.localScale;
             for (float elapsed = 0; elapsed < 0.28f; elapsed += Time.deltaTime)
             {
                 float t = Mathf.SmoothStep(0, 1, elapsed / 0.28f);
@@ -115,7 +116,7 @@ namespace ScrewPuzzle
                 screen.z = 5f;
                 screw.transform.position = Vector3.Lerp(start, view.ScreenToWorldPoint(screen), t);
                 screw.transform.rotation = Quaternion.Slerp(rotation, facing, t);
-                screw.transform.localScale = Vector3.one * Mathf.Lerp(1, 0.4f, t);
+                screw.transform.localScale = Vector3.Lerp(flightScale, Vector3.one * 0.4f, t);
                 yield return null;
             }
             screw.gameObject.SetActive(false);
