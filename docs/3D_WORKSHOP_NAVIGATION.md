@@ -85,3 +85,24 @@ Card-size refinement: reduced card area by roughly 35–39% in portrait and wide
 Compact collection layout: replaced large cards with 340 x 330 tiles containing only the title, model preview, shelf and Play button. The responsive grid supports two columns in portrait and three in wide views, with vertical touch/mouse scrolling when added boards exceed the viewport. Header and footer stay fixed. No placeholder boards were added.
 
 Compact-grid validation: both navigation regression tests and preview capture passed. The two-board portrait and wide layouts were visually inspected. Manual scrolling with a larger future catalog has not yet been device-tested.
+
+## Saved completion (2026-10-01)
+
+Each board saves a device-local completion flag after the final plate finishes
+releasing. Completed cards show COMPLETED and REPLAY. Replay starts a fresh puzzle;
+Restart and leaving a replay do not erase completion. Unfinished runs are not saved.
+Records use stable radio/toy-car IDs under a separate Workshop3D PlayerPrefs namespace,
+and are flushed at completion. They do not sync between PC and phone. Wins from older
+versions cannot be recovered because those versions did not store completion.
+
+Validation: seven selected tests passed (radio interaction, car completion/restart,
+navigation and independent preference records), plus a portrait/wide render helper.
+The car test verifies no early completion, saved completion after winning, preservation
+through Restart, and the completed/replay card after returning to selection. Test-suite
+setup preserves and restores existing completion preferences. Both layouts were inspected.
+
+Device acceptance: the user reported all test scenarios successfully passed after
+being asked to verify completion, closing/reopening the app, Replay and Restart on
+PC and a fresh phone build. Each device tracks its own wins.
+
+![Saved board completion](art/Toy_Shop_Progress_Preview.png)

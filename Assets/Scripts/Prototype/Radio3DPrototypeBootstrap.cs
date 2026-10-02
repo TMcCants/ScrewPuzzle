@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ScrewPuzzle
 {
-    /// <summary>Isolated interaction experiment; does not read or write puzzle progression.</summary>
+    /// <summary>3D workshop board with completion separate from production puzzle progression.</summary>
     public class Radio3DPrototypeBootstrap : MonoBehaviour
     {
         private readonly List<Material> materials = new List<Material>();
@@ -42,12 +42,14 @@ namespace ScrewPuzzle
             BuildModel(out Transform radio, out List<Radio3DScrew> screws, out Radio3DPlate[] plates);
             puzzle = gameObject.AddComponent<Radio3DPuzzle>();
             puzzle.Configure(camera, screws.ToArray(), plates);
+            puzzle.Completed += () => ThreeDBoardProgress.MarkCompleted(BoardId);
             interaction = gameObject.AddComponent<Radio3DInteraction>();
             interaction.Configure(camera, radio, screws.ToArray());
             BuildUi();
         }
 
         protected virtual string BoardTitle => "THE RADIO WORKSHOP";
+        protected virtual string BoardId => ThreeDBoardProgress.Radio;
         protected virtual float ModelVerticalOffset => 180f;
         protected virtual string WinTitle => "RADIO CLEARED!";
 

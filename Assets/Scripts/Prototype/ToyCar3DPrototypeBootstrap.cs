@@ -7,6 +7,7 @@ namespace ScrewPuzzle
     public sealed class ToyCar3DPrototypeBootstrap : Radio3DPrototypeBootstrap
     {
         protected override string BoardTitle => "THE TOY CAR WORKSHOP";
+        protected override string BoardId => ThreeDBoardProgress.ToyCar;
         protected override float ModelVerticalOffset => 250f;
         protected override string WinTitle => "TOY CAR CLEARED!";
 

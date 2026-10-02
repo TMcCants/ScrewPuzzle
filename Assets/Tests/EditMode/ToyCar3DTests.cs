@@ -15,6 +15,7 @@ namespace ScrewPuzzle.Tests
             yield return new EnterPlayMode();
             yield return null;
             yield return null;
+            PlayerPrefs.DeleteKey(ThreeDBoardProgress.Key(ThreeDBoardProgress.ToyCar));
             var input = Object.FindFirstObjectByType<Radio3DInteraction>();
             var puzzle = input.GetComponent<Radio3DPuzzle>();
             Assert.That(Object.FindFirstObjectByType<ToyCar3DPrototypeBootstrap>(), Is.Not.Null);
@@ -25,6 +26,7 @@ namespace ScrewPuzzle.Tests
             Vector3 noseScale = nose.transform.localScale;
             var targets = Object.FindObjectsByType<Radio3DScrew>(FindObjectsSortMode.None);
             Assert.That(puzzle.TryAdd(inner), Is.False);
+            Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyCar), Is.False);
             for (int angle = 0; angle < 360; angle += 45)
             {
                 input.Radio.rotation = Quaternion.Euler(0, angle, 0);
@@ -47,6 +49,7 @@ namespace ScrewPuzzle.Tests
                 float deadline = Time.realtimeSinceStartup + 5f;
                 while (puzzle.IsBusy && Time.realtimeSinceStartup < deadline) yield return null;
                 Assert.That(puzzle.IsBusy, Is.False);
+                Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyCar), Is.EqualTo(name == "Inner 2"));
                 Assert.That(puzzle.Trays[2].IsOpen, Is.False);
                 if (name == "Near 1") Assert.That(inner.IsAccessible, Is.True);
                 if (name == "Nose 2") Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Playing));
@@ -59,12 +62,18 @@ namespace ScrewPuzzle.Tests
             Assert.That(puzzle.RemovedCount, Is.Zero);
             Assert.That(puzzle.ReleasedPlateCount, Is.Zero);
             Assert.That(inner.IsAccessible, Is.False);
+            Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyCar), Is.True, "Restart must preserve completion.");
             Assert.That(nose.transform.localScale, Is.EqualTo(noseScale));
             foreach (var screw in targets)
             {
                 Assert.That(screw.gameObject.activeSelf, Is.True);
                 Assert.That(screw.IsRemoved, Is.False);
             }
+            ThreeDBoardNavigation.OpenSelector();
+            yield return null;
+            yield return null;
+            Assert.That(GameObject.Find("Toy Car Completed"), Is.Not.Null);
+            Assert.That(GameObject.Find("Start Toy Car").GetComponentInChildren<UnityEngine.UI.Text>().text, Does.StartWith("REPLAY"));
         }
 
         [UnityTearDown]

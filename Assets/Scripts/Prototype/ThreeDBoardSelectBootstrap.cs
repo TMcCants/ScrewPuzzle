@@ -69,8 +69,8 @@ namespace ScrewPuzzle
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
             scroll.scrollSensitivity = 35;
-            MakeCard(0, "Radio", "A little cabinet. A hidden layer.", "Art/Workshop/Shelf-Radio", new Color(0.57f, 0.32f, 0.15f), ThreeDBoardNavigation.OpenRadio);
-            MakeCard(1, "Toy Car", "Four wheels. More to discover.", "Art/Workshop/Shelf-Car", new Color(0.10f, 0.39f, 0.39f), ThreeDBoardNavigation.OpenToyCar);
+            MakeCard(ThreeDBoardProgress.Radio, "Radio", "Art/Workshop/Shelf-Radio", new Color(0.57f, 0.32f, 0.15f), ThreeDBoardNavigation.OpenRadio);
+            MakeCard(ThreeDBoardProgress.ToyCar, "Toy Car", "Art/Workshop/Shelf-Car", new Color(0.10f, 0.39f, 0.39f), ThreeDBoardNavigation.OpenToyCar);
             footerBacking = Panel("Footer Backing", layout, Vector2.zero, new Vector2(800, 65), new Color(0.98f, 0.95f, 0.88f, 0.92f)).rectTransform;
             footer = Label(layout, "Choose a board to start a fresh puzzle", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
             RefreshLayout(Screen.safeArea);
@@ -91,14 +91,21 @@ namespace ScrewPuzzle
             rounded = Sprite.Create(roundedTexture, new Rect(0, 0, 64, 64), Vector2.one * 0.5f, 100, 0, SpriteMeshType.FullRect, new Vector4(20, 20, 20, 20));
         }
 
-        private void MakeCard(int index, string name, string description, string resource, Color accent, UnityEngine.Events.UnityAction action)
+        private void MakeCard(string boardId, string name, string resource, Color accent, UnityEngine.Events.UnityAction action)
         {
             shadows.Add(Panel(name + " Shadow", content, Vector2.zero, Vector2.one, new Color(0.25f, 0.16f, 0.09f, 0.18f)).rectTransform);
             var card = Panel("Play " + name, content, Vector2.zero, Vector2.one, new Color(0.98f, 0.95f, 0.88f));
             cards.Add(card.rectTransform);
             card.raycastTarget = true;
             card.gameObject.AddComponent<Button>().onClick.AddListener(action);
-            Label(card.transform, name.ToUpperInvariant(), new Vector2(0, 121), new Vector2(320, 54), 32);
+            Label(card.transform, name.ToUpperInvariant(), new Vector2(0, 130), new Vector2(320, 44), 32);
+            bool completed = ThreeDBoardProgress.IsCompleted(boardId);
+            if (completed)
+            {
+                var badge = Label(card.transform, "COMPLETED", new Vector2(0, 98), new Vector2(300, 24), 18);
+                badge.gameObject.name = name + " Completed";
+                badge.color = new Color(0.12f, 0.38f, 0.28f);
+            }
 
             // The soft grounding shadow and shelf sit behind the actual rendered game model.
             Panel("Object Shadow", card.transform, new Vector2(0, -53), new Vector2(200, 14), new Color(0.25f, 0.17f, 0.10f, 0.13f)).raycastTarget = false;
@@ -113,7 +120,7 @@ namespace ScrewPuzzle
             var play = Panel("Start " + name, card.transform, new Vector2(0, -116), new Vector2(240, 72), accent);
             play.raycastTarget = true;
             play.gameObject.AddComponent<Button>().onClick.AddListener(action);
-            var label = Label(play.transform, "PLAY  →", Vector2.zero, new Vector2(230, 68), 27);
+            var label = Label(play.transform, completed ? "REPLAY  →" : "PLAY  →", Vector2.zero, new Vector2(230, 68), 27);
             label.color = new Color(1f, 0.97f, 0.88f);
         }
 

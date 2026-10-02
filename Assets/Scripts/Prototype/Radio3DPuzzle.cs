@@ -24,6 +24,7 @@ namespace ScrewPuzzle
         public string Message { get; private set; }
         public bool CanInteract { get { return State == PuzzleState.Playing && !IsBusy; } }
         public System.Func<int, int, Vector3> HoleScreenPosition;
+        public event System.Action Completed;
         private readonly Queue<ScrewColorId> jobs = new Queue<ScrewColorId>();
         private Camera view;
         private Radio3DScrew[] screws;
@@ -130,7 +131,11 @@ namespace ScrewPuzzle
                 AssignNext(tray);
             }
             foreach (Radio3DPlate plate in plates) yield return plate.ReleaseIfReady(feedback.PlayRelease);
-            if (ClearedCount == screws.Length && ReleasedPlateCount == plates.Length) State = PuzzleState.Won;
+            if (ClearedCount == screws.Length && ReleasedPlateCount == plates.Length)
+            {
+                State = PuzzleState.Won;
+                Completed?.Invoke();
+            }
             IsBusy = false;
         }
 
