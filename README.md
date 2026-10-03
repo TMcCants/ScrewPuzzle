@@ -152,4 +152,7 @@ Use **Tools → ScrewPuzzle → Open 3D Toy Car Test** for the second rotating 3
 
 ### Combined 3D Workshop
 
-Use **Tools → ScrewPuzzle → Open 3D Workshop** to choose Radio or Toy Car. Both boards have a **BOARDS** button; each visit starts fresh. **Build 3D Workshop Android Test** creates one test app containing the selector and both boards. See [the navigation test guide](docs/3D_WORKSHOP_NAVIGATION.md).
+The Workshop now includes Radio, Toy Car and Toy Robot, each with saved completion
+and replay. See [the toy robot test guide](docs/TOY_ROBOT_3D_EXPERIMENT.md).
+
+Use **Tools → ScrewPuzzle → Open 3D Workshop** to choose Radio, Toy Car or Toy Robot. All boards have a **BOARDS** button; each visit starts fresh. **Build 3D Workshop Android Test** creates one test app containing the selector and all three boards. See [the navigation test guide](docs/3D_WORKSHOP_NAVIGATION.md).

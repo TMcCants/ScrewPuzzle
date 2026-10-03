@@ -7,8 +7,8 @@ namespace ScrewPuzzle.Tests
     [SetUpFixture]
     public sealed class WorkshopProgressTestPreferences
     {
-        private readonly string[] boards = { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar };
-        private readonly int[] values = new int[2];
+        private readonly string[] boards = { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar, ThreeDBoardProgress.ToyRobot };
+        private readonly int[] values = new int[3];
         [OneTimeSetUp]
         public void Save()
         {

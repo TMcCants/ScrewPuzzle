@@ -71,6 +71,7 @@ namespace ScrewPuzzle
             scroll.scrollSensitivity = 35;
             MakeCard(ThreeDBoardProgress.Radio, "Radio", "Art/Workshop/Shelf-Radio", new Color(0.57f, 0.32f, 0.15f), ThreeDBoardNavigation.OpenRadio);
             MakeCard(ThreeDBoardProgress.ToyCar, "Toy Car", "Art/Workshop/Shelf-Car", new Color(0.10f, 0.39f, 0.39f), ThreeDBoardNavigation.OpenToyCar);
+            MakeCard(ThreeDBoardProgress.ToyRobot, "Toy Robot", "Art/Workshop/Shelf-Robot", new Color(0.65f, 0.25f, 0.14f), ThreeDBoardNavigation.OpenToyRobot);
             footerBacking = Panel("Footer Backing", layout, Vector2.zero, new Vector2(800, 65), new Color(0.98f, 0.95f, 0.88f, 0.92f)).rectTransform;
             footer = Label(layout, "Choose a board to start a fresh puzzle", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
             RefreshLayout(Screen.safeArea);
@@ -202,4 +203,3 @@ namespace ScrewPuzzle
         }
     }
 }
-

@@ -13,13 +13,13 @@ namespace ScrewPuzzle.Tests
     public sealed class ThreeDBoardNavigationTests
     {
         [Test]
-        public void TestBuilds_IncludeSelectorAndBothBoards_WithRequestedStartScene()
+        public void TestBuilds_IncludeSelectorAndAllBoards_WithRequestedStartScene()
         {
-            foreach (string first in new[] { ThreeDBoardNavigation.Selector, ThreeDBoardNavigation.Radio, ThreeDBoardNavigation.ToyCar })
+            foreach (string first in new[] { ThreeDBoardNavigation.Selector, ThreeDBoardNavigation.Radio, ThreeDBoardNavigation.ToyCar, ThreeDBoardNavigation.ToyRobot })
             {
                 var scenes = ThreeDBoardNavigation.BuildScenes(first);
                 Assert.That(scenes[0], Is.EqualTo(first));
-                CollectionAssert.AreEquivalent(new[] { ThreeDBoardNavigation.Selector, ThreeDBoardNavigation.Radio, ThreeDBoardNavigation.ToyCar }, scenes);
+                CollectionAssert.AreEquivalent(new[] { ThreeDBoardNavigation.Selector, ThreeDBoardNavigation.Radio, ThreeDBoardNavigation.ToyCar, ThreeDBoardNavigation.ToyRobot }, scenes);
                 foreach (string path in scenes) Assert.That(AssetDatabase.LoadAssetAtPath<SceneAsset>(path), Is.Not.Null);
             }
         }

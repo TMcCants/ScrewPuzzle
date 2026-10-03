@@ -106,3 +106,7 @@ being asked to verify completion, closing/reopening the app, Replay and Restart 
 PC and a fresh phone build. Each device tracks its own wins.
 
 ![Saved board completion](art/Toy_Shop_Progress_Preview.png)
+
+## Third board: Toy Robot
+
+The selector and every experiment build now include Toy Robot alongside Radio and Toy Car. The robot has its own completion key and rendered thumbnail. The full 23-test project suite passed, plus two preview captures. See [the robot guide](TOY_ROBOT_3D_EXPERIMENT.md) for device checks.
