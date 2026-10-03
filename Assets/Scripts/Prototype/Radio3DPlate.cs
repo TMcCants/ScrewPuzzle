@@ -14,6 +14,16 @@ namespace ScrewPuzzle
         private Quaternion orientation;
         private Vector3 scale;
         private Vector3 outward;
+        internal string SaveSignature => string.Join(",", System.Array.ConvertAll(fasteners, screw => screw.name));
+
+        internal void RestoreReleasedState()
+        {
+            foreach (var screw in fasteners) if (!screw.IsRemoved) return;
+            IsReleased = true;
+            IsAnimating = false;
+            foreach (var collider in colliders) collider.enabled = false;
+            gameObject.SetActive(false);
+        }
 
         public void Configure(Radio3DScrew[] screws, Vector3 normal)
         {

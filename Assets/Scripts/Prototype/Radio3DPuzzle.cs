@@ -32,6 +32,57 @@ namespace ScrewPuzzle
         private Radio3DPlate[] plates;
         private Radio3DFeedback feedback;
         private ScrewColorId[] traySequence;
+        private string resumeBoard;
+        private readonly List<int> savedActions = new List<int>();
+        private string SaveSignature => string.Join("|", System.Array.ConvertAll(screws, s => s.SaveSignature)) + "/" +
+            string.Join("|", System.Array.ConvertAll(plates, p => p.SaveSignature)) + "/" + string.Join(",", traySequence);
+
+        public void EnableResume(string boardId)
+        {
+            resumeBoard = boardId;
+            var run = WorkshopRunSave.Read(boardId);
+            if (run == null) return;
+            if (run.signature != SaveSignature || run.actions == null || run.actions.Length > screws.Length + 2)
+            { Restart(); return; }
+            foreach (int action in run.actions)
+            {
+                if (!RestoreAction(action)) { Restart(); return; }
+                savedActions.Add(action);
+            }
+            if (RemovedCount == screws.Length && ReleasedPlateCount == plates.Length)
+            {
+                State = PuzzleState.Won;
+                Completed?.Invoke();
+                WorkshopRunSave.Clear(resumeBoard);
+            }
+        }
+
+        private bool RestoreAction(int action)
+        {
+            if (action < 0)
+            {
+                int tray = -action - 1;
+                if (tray < 2 || tray >= Trays.Length || Trays[tray].IsOpen || jobs.Count == 0) return false;
+                Trays[tray].IsOpen = true; AssignNext(Trays[tray]); return true;
+            }
+            if (action >= screws.Length) return false;
+            var screw = screws[action];
+            if (screw.IsRemoved || !screw.IsAccessible) return false;
+            var target = System.Array.Find(Trays, t => t.IsOpen && t.HasColor && t.Color == screw.ColorId && t.Count < Capacity);
+            if (target == null) return false;
+            screw.Detach(); screw.gameObject.SetActive(false); RemovedCount++;
+            target.Count++;
+            if (target.Count == Capacity) { ClearedCount += Capacity; AssignNext(target); }
+            foreach (var plate in plates) plate.RestoreReleasedState();
+            return true;
+        }
+
+        private void SaveAction(int action)
+        {
+            if (resumeBoard == null) return;
+            savedActions.Add(action);
+            WorkshopRunSave.Write(resumeBoard, SaveSignature, savedActions.ToArray());
+        }
         public int TotalPlateCount { get { return plates.Length; } }
         public int ReleasedPlateCount
         {
@@ -66,6 +117,7 @@ namespace ScrewPuzzle
             if (jobs.Count == 0) { Message = "No more trays needed for this board."; return false; }
             Trays[index].IsOpen = true;
             AssignNext(Trays[index]);
+            SaveAction(-index - 1);
             Message = "Test tray opened. No ad or payment was used.";
             return true;
         }
@@ -88,6 +140,7 @@ namespace ScrewPuzzle
             Message = "";
             screw.Detach();
             RemovedCount++;
+            SaveAction(System.Array.IndexOf(screws, screw));
             StartCoroutine(Resolve(screw, index));
             return true;
         }
@@ -138,12 +191,15 @@ namespace ScrewPuzzle
             {
                 State = PuzzleState.Won;
                 Completed?.Invoke();
+                if (resumeBoard != null) WorkshopRunSave.Clear(resumeBoard);
             }
             IsBusy = false;
         }
 
         public void Restart()
         {
+            savedActions.Clear();
+            if (resumeBoard != null) WorkshopRunSave.Clear(resumeBoard);
             StopAllCoroutines();
             if (feedback != null) feedback.Stop();
             jobs.Clear();

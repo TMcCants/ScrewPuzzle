@@ -10,12 +10,16 @@ namespace ScrewPuzzle.Tests
         private readonly string[] boards = { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar, ThreeDBoardProgress.ToyRobot };
         private readonly int[] values = new int[3];
         private int tutorial;
+        private readonly string[] runs = new string[3];
         [OneTimeSetUp]
         public void Save()
         {
             tutorial = PlayerPrefs.GetInt(WorkshopTutorial.PreferenceKey, -1);
             for (int i = 0; i < boards.Length; i++)
+            {
+                runs[i] = PlayerPrefs.HasKey(WorkshopRunSave.Key(boards[i])) ? PlayerPrefs.GetString(WorkshopRunSave.Key(boards[i])) : null;
                 values[i] = PlayerPrefs.GetInt(ThreeDBoardProgress.Key(boards[i]), -1);
+            }
         }
         [OneTimeTearDown]
         public void Restore()
@@ -24,6 +28,9 @@ namespace ScrewPuzzle.Tests
             else PlayerPrefs.SetInt(WorkshopTutorial.PreferenceKey, tutorial);
             for (int i = 0; i < boards.Length; i++)
             {
+                string runKey = WorkshopRunSave.Key(boards[i]);
+                if (runs[i] == null) PlayerPrefs.DeleteKey(runKey);
+                else PlayerPrefs.SetString(runKey, runs[i]);
                 string key = ThreeDBoardProgress.Key(boards[i]);
                 if (values[i] == -1) PlayerPrefs.DeleteKey(key);
                 else PlayerPrefs.SetInt(key, values[i]);

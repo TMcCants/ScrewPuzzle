@@ -129,3 +129,7 @@ Celebration validation: nine selected project tests passed across the initial an
 ## First-play guidance
 
 The Workshop now provides a skippable, action-driven introduction on the first board visit. Completion or dismissal is remembered per device. See [the tutorial guide](WORKSHOP_TUTORIAL.md) for behavior and acceptance checks.
+
+## Unfinished-run resume
+
+The earlier fresh-visit behavior is superseded by per-toy saved runs. Toy Shop buttons display RESUME where appropriate; Restart remains the fresh-start action. See [resume behavior and device checks](WORKSHOP_RESUME.md).

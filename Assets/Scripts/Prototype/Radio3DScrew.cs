@@ -8,6 +8,7 @@ namespace ScrewPuzzle
         public ScrewColorId ColorId { get; private set; }
         public bool IsRemoved { get; private set; }
         public bool IsInnerLayer => coveringPlate != null;
+        internal string SaveSignature => name + ":" + (int)ColorId + ":" + (coveringPlate == null ? "" : coveringPlate.name);
         public bool IsAccessible { get { return coveringPlate == null || (coveringPlate.IsReleased && !coveringPlate.IsAnimating); } }
         private Radio3DPlate coveringPlate;
         private Transform mount;

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class WorkshopCompletionTests
+    public sealed class WorkshopCompletionTests : WorkshopRunTestIsolation
     {
         [Test]
         public void NextToy_CyclesThroughAllBoards()

@@ -73,7 +73,7 @@ namespace ScrewPuzzle
             MakeCard(ThreeDBoardProgress.ToyCar, "Toy Car", "Art/Workshop/Shelf-Car", new Color(0.10f, 0.39f, 0.39f), ThreeDBoardNavigation.OpenToyCar);
             MakeCard(ThreeDBoardProgress.ToyRobot, "Toy Robot", "Art/Workshop/Shelf-Robot", new Color(0.65f, 0.25f, 0.14f), ThreeDBoardNavigation.OpenToyRobot);
             footerBacking = Panel("Footer Backing", layout, Vector2.zero, new Vector2(800, 65), new Color(0.98f, 0.95f, 0.88f, 0.92f)).rectTransform;
-            footer = Label(layout, "Choose a board to start a fresh puzzle", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
+            footer = Label(layout, "Choose a toy to play or resume", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
             RefreshLayout(Screen.safeArea);
         }
 
@@ -121,7 +121,7 @@ namespace ScrewPuzzle
             var play = Panel("Start " + name, card.transform, new Vector2(0, -116), new Vector2(240, 72), accent);
             play.raycastTarget = true;
             play.gameObject.AddComponent<Button>().onClick.AddListener(action);
-            var label = Label(play.transform, completed ? "REPLAY  →" : "PLAY  →", Vector2.zero, new Vector2(230, 68), 27);
+            var label = Label(play.transform, WorkshopRunSave.HasRun(boardId) ? "RESUME  →" : completed ? "REPLAY  →" : "PLAY  →", Vector2.zero, new Vector2(230, 68), 27);
             label.color = new Color(1f, 0.97f, 0.88f);
         }
 

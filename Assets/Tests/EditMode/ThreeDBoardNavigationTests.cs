@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class ThreeDBoardNavigationTests
+    public sealed class ThreeDBoardNavigationTests : WorkshopRunTestIsolation
     {
         [Test]
         public void TestBuilds_IncludeSelectorAndAllBoards_WithRequestedStartScene()
@@ -25,7 +25,7 @@ namespace ScrewPuzzle.Tests
         }
 
         [UnityTest]
-        public IEnumerator Selector_SwitchesBoardsDuringMotion_AndStartsFreshWithoutDuplicates()
+        public IEnumerator Selector_SwitchesBoardsDuringMotion_AndResumesWithoutDuplicates()
         {
             EditorSceneManager.OpenScene(ThreeDBoardNavigation.Selector);
             yield return new EnterPlayMode();
@@ -52,9 +52,9 @@ namespace ScrewPuzzle.Tests
             GameObject.Find("Play Toy Car").GetComponent<Button>().onClick.Invoke();
             yield return WaitForScene(ThreeDBoardNavigation.ToyCar);
             puzzle = Object.FindFirstObjectByType<Radio3DPuzzle>();
-            Assert.That(puzzle.RemovedCount, Is.Zero);
-            Assert.That(puzzle.Trays[2].IsOpen, Is.False);
-            Assert.That(Object.FindObjectsByType<Radio3DScrew>(FindObjectsSortMode.None).Length, Is.EqualTo(15));
+            Assert.That(puzzle.RemovedCount, Is.EqualTo(1));
+            Assert.That(puzzle.Trays[2].IsOpen, Is.True);
+            Assert.That(Object.FindObjectsByType<Radio3DScrew>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length, Is.EqualTo(15));
             Assert.That(FeedbackAudio.IsSoundEnabled, Is.EqualTo(sound));
             GameObject.Find("Boards").GetComponent<Button>().onClick.Invoke();
             yield return WaitForScene(ThreeDBoardNavigation.Selector);

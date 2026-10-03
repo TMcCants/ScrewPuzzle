@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class ToyCar3DTests
+    public sealed class ToyCar3DTests : WorkshopRunTestIsolation
     {
         [UnityTest]
         public IEnumerator Car_AllFacesAndInnerLayer_ClearWithFreeTrays_AndRestart()

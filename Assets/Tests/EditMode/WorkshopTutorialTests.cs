@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class WorkshopTutorialTests
+    public sealed class WorkshopTutorialTests : WorkshopRunTestIsolation
     {
         [UnityTest]
         public IEnumerator Tutorial_FollowsRealActions_ThenStaysFinishedAcrossBoards()

@@ -6,7 +6,7 @@ using UnityEngine.TestTools;
 
 namespace ScrewPuzzle.Tests
 {
-    public sealed class Radio3DInteractionTests
+    public sealed class Radio3DInteractionTests : WorkshopRunTestIsolation
     {
         [UnityTest]
         public IEnumerator Feedback_RespectsSoundPreference_AndStopsOnRestart()
