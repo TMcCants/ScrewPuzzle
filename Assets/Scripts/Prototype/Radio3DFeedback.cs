@@ -9,6 +9,7 @@ namespace ScrewPuzzle
         private AudioClip unscrew;
         private AudioClip arrival;
         private AudioClip release;
+        private AudioClip completion;
 
         private void Awake()
         {
@@ -18,11 +19,13 @@ namespace ScrewPuzzle
             unscrew = CreateCue("Screw ratchet", 0.36f, 0);
             arrival = CreateCue("Tray click", 0.07f, 1);
             release = CreateCue("Plate release", 0.22f, 2);
+            completion = CreateCue("Workshop celebration", 0.9f, 3);
         }
 
         public void PlayUnscrew() { Play(unscrew, 0.23f); }
         public void PlayArrival() { Play(arrival, 0.22f); }
         public void PlayRelease() { Play(release, 0.28f); }
+        public void PlayCompletion() { Play(completion, 0.22f); }
         public void Stop() { if (source != null) source.Stop(); }
         private void Play(AudioClip clip, float volume)
         {
@@ -46,6 +49,13 @@ namespace ScrewPuzzle
                     float pulse = Mathf.Pow(Mathf.Max(0f, Mathf.Sin(2f * Mathf.PI * 22f * t)), 6f);
                     value = pulse * (0.6f * Mathf.Sin(2f * Mathf.PI * 760f * t) + 0.25f * Mathf.Sin(2f * Mathf.PI * 1730f * t));
                 }
+                else if (kind == 3)
+                {
+                    int note = Mathf.Min(2, (int)(t / 0.18f));
+                    float frequency = note == 0 ? 523.25f : note == 1 ? 659.25f : 783.99f;
+                    float local = t - note * 0.18f;
+                    value = Mathf.Sin(2f * Mathf.PI * frequency * local) * Mathf.Exp(-local * 7f) * Mathf.Min(1f, local * 120f);
+                }
                 else
                 {
                     float frequency = kind == 1 ? 1200f : 185f;
@@ -65,6 +75,7 @@ namespace ScrewPuzzle
             if (unscrew != null) Destroy(unscrew);
             if (arrival != null) Destroy(arrival);
             if (release != null) Destroy(release);
+            if (completion != null) Destroy(completion);
         }
     }
 }

@@ -25,6 +25,7 @@ namespace ScrewPuzzle
         public bool CanInteract { get { return State == PuzzleState.Playing && !IsBusy; } }
         public System.Func<int, int, Vector3> HoleScreenPosition;
         public event System.Action Completed;
+        public event System.Action Restarted;
         private readonly Queue<ScrewColorId> jobs = new Queue<ScrewColorId>();
         private Camera view;
         private Radio3DScrew[] screws;
@@ -163,6 +164,7 @@ namespace ScrewPuzzle
             Message = "";
             State = PuzzleState.Playing;
             IsBusy = false;
+            Restarted?.Invoke();
         }
 
         private void OnDestroy()

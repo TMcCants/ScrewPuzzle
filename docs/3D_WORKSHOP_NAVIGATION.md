@@ -110,3 +110,18 @@ PC and a fresh phone build. Each device tracks its own wins.
 ## Third board: Toy Robot
 
 The selector and every experiment build now include Toy Robot alongside Radio and Toy Car. The robot has its own completion key and rendered thumbnail. The full 23-test project suite passed, plus two preview captures. See [the robot guide](TOY_ROBOT_3D_EXPERIMENT.md) for device checks.
+
+## Completion celebration (2026-10-03)
+
+After the final plate finishes releasing, a cream completion card appears with a
+short confetti animation and a three-note chime that respects Sound. Progress is
+saved before the card appears. Next Toy cycles Radio > Toy Car > Toy Robot > Radio;
+Back to Shop returns to selection; Play Again restores the current board without
+clearing its saved completion. Confetti stops after 2.5 seconds, and the card stays
+until the player chooses an action. Escape / Android Back still returns to the shop.
+
+Device checks: win each board, check the celebration and sound-on/off behavior,
+try each button, and verify fresh puzzles and retained completion. Repeat in a new
+Workshop Android build. User acceptance (2026-10-03): the user reported that the celebration looks amazing and all requested test scenarios passed successfully.
+
+Celebration validation: nine selected project tests passed across the initial and corrected runs, plus the render helper. The radio regression caught a one-frame input blocker after Restart; synchronous dismissal on the puzzle's Restarted event fixed it and the affected test passed on rerun. The new flow test wins all three boards, replays Radio, follows Next Toy, returns to the shop and checks single-listener cleanup. The final preview also waits for layout resizing before capture. Device acceptance was subsequently reported successful by the user.

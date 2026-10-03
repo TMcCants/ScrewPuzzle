@@ -13,6 +13,13 @@ namespace ScrewPuzzle
         public static void OpenSelector() { Open(Selector); }
         public static void OpenRadio() { Open(Radio); }
         public static void OpenToyCar() { Open(ToyCar); }
+        public static string NextScene(string boardId)
+        {
+            if (boardId == ThreeDBoardProgress.Radio) return ToyCar;
+            if (boardId == ThreeDBoardProgress.ToyCar) return ToyRobot;
+            return Radio;
+        }
+        public static void OpenNext(string boardId) { Open(NextScene(boardId)); }
 
         public static string[] BuildScenes(string first)
         {

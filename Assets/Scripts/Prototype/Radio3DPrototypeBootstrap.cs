@@ -46,6 +46,7 @@ namespace ScrewPuzzle
             interaction = gameObject.AddComponent<Radio3DInteraction>();
             interaction.Configure(camera, radio, screws.ToArray());
             BuildUi();
+            gameObject.AddComponent<WorkshopCompletion>().Configure(layout, puzzle, BoardId, WinTitle, interaction.ResetExperiment);
         }
 
         protected virtual string BoardTitle => "THE RADIO WORKSHOP";
