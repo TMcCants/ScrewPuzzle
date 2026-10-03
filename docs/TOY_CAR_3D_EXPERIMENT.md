@@ -77,3 +77,5 @@ User acceptance (2026-10-01): the user reported that all test scenarios passed
 successfully after the toy car visual polish and the requested PC/phone checks.
 
 ![Polished toy car](art/ToyCar3D_Polished_Preview.png)
+
+Puzzle-variety follow-up: side screws now form staggered rows and the far/rear panels use different color positions. Counts remain 15 screws / five plates. See [puzzle variety](WORKSHOP_PUZZLE_VARIETY.md).

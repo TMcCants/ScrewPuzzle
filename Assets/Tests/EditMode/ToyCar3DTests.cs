@@ -33,8 +33,8 @@ namespace ScrewPuzzle.Tests
                 Physics.SyncTransforms();
                 Assert.That(input.PickScrew(input.View.WorldToScreenPoint(inner.transform.position)), Is.Not.EqualTo(inner));
             }
-            foreach (string name in new[] { "Near 0", "Far 0", "Rear 0", "Near 2", "Far 2", "Rear 2",
-                "Near 1", "Far 1", "Rear 1", "Nose 0", "Nose 1", "Nose 2", "Inner 0", "Inner 1", "Inner 2" })
+            foreach (string name in new[] { "Near 0", "Far 2", "Rear 1", "Near 2", "Far 1", "Rear 0",
+                "Near 1", "Far 0", "Rear 2", "Nose 0", "Nose 1", "Nose 2", "Inner 0", "Inner 1", "Inner 2" })
             {
                 Vector3 normal = name.StartsWith("Near") || name.StartsWith("Inner") ? Vector3.back :
                     name.StartsWith("Far") ? Vector3.forward : name.StartsWith("Rear") ? Vector3.left : Vector3.right;

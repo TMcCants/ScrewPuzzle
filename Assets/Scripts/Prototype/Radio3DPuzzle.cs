@@ -31,6 +31,7 @@ namespace ScrewPuzzle
         private Radio3DScrew[] screws;
         private Radio3DPlate[] plates;
         private Radio3DFeedback feedback;
+        private ScrewColorId[] traySequence;
         public int TotalPlateCount { get { return plates.Length; } }
         public int ReleasedPlateCount
         {
@@ -42,11 +43,12 @@ namespace ScrewPuzzle
             }
         }
 
-        public void Configure(Camera camera, Radio3DScrew[] targets, Radio3DPlate[] panels)
+        public void Configure(Camera camera, Radio3DScrew[] targets, Radio3DPlate[] panels, ScrewColorId[] sequence = null)
         {
             view = camera;
             screws = targets;
             plates = panels;
+            traySequence = sequence == null ? new[] { ScrewColorId.Red, ScrewColorId.Blue, ScrewColorId.Yellow, ScrewColorId.Red, ScrewColorId.Blue } : (ScrewColorId[])sequence.Clone();
             feedback = gameObject.AddComponent<Radio3DFeedback>();
             Restart();
         }
@@ -145,12 +147,7 @@ namespace ScrewPuzzle
             StopAllCoroutines();
             if (feedback != null) feedback.Stop();
             jobs.Clear();
-            // Outer colors first, followed by the inner blue set; bonus trays remain optional.
-            jobs.Enqueue(ScrewColorId.Red);
-            jobs.Enqueue(ScrewColorId.Blue);
-            jobs.Enqueue(ScrewColorId.Yellow);
-            jobs.Enqueue(ScrewColorId.Red);
-            jobs.Enqueue(ScrewColorId.Blue);
+            foreach (ScrewColorId color in traySequence) jobs.Enqueue(color);
             for (int i = 0; i < Trays.Length; i++)
             {
                 Trays[i].IsOpen = i < 2;

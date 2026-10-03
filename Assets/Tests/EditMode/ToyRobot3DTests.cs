@@ -21,9 +21,11 @@ namespace ScrewPuzzle.Tests
             var input = Object.FindFirstObjectByType<Radio3DInteraction>();
             var puzzle = input.GetComponent<Radio3DPuzzle>();
             Assert.That(Object.FindFirstObjectByType<ToyRobot3DPrototypeBootstrap>(), Is.Not.Null);
-            Assert.That(input.TotalCount, Is.EqualTo(15));
+            Assert.That(input.TotalCount, Is.EqualTo(18));
             Quaternion initial = input.Radio.localRotation;
             var inner = GameObject.Find("Inner 0").GetComponent<Radio3DScrew>();
+            var core = GameObject.Find("Core 0").GetComponent<Radio3DScrew>();
+            Assert.That(puzzle.TryAdd(core), Is.False);
             var nose = GameObject.Find("Right 0").GetComponent<Radio3DScrew>();
             Vector3 noseScale = nose.transform.localScale;
             var targets = Object.FindObjectsByType<Radio3DScrew>(FindObjectsSortMode.None);
@@ -36,34 +38,36 @@ namespace ScrewPuzzle.Tests
                 Assert.That(input.PickScrew(input.View.WorldToScreenPoint(inner.transform.position)), Is.Not.EqualTo(inner));
             }
             foreach (string name in new[] { "Chest 0", "Back 0", "Left 0", "Chest 2", "Back 2", "Left 2",
-                "Chest 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1", "Inner 2" })
+                "Chest 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1", "Inner 2", "Core 0", "Core 1", "Core 2" })
             {
-                Vector3 normal = name.StartsWith("Chest") || name.StartsWith("Inner") ? Vector3.back :
+                Vector3 normal = name.StartsWith("Chest") || name.StartsWith("Inner") || name.StartsWith("Core") ? Vector3.back :
                     name.StartsWith("Back") ? Vector3.forward : name.StartsWith("Left") ? Vector3.left : Vector3.right;
                 input.Radio.rotation = Quaternion.FromToRotation(normal, Vector3.back);
                 Physics.SyncTransforms();
                 var screw = GameObject.Find(name).GetComponent<Radio3DScrew>();
                 Vector2 point = input.View.WorldToScreenPoint(screw.transform.position);
-                Assert.That(input.PickScrew(point), Is.EqualTo(screw), name + " must be reachable around the car geometry.");
+                Assert.That(input.PickScrew(point), Is.EqualTo(screw), name + " must be reachable around the robot geometry.");
                 input.BeginPointer(point);
                 input.EndPointer(point);
                 Assert.That(screw.IsRemoved, Is.True);
                 float deadline = Time.realtimeSinceStartup + 5f;
                 while (puzzle.IsBusy && Time.realtimeSinceStartup < deadline) yield return null;
                 Assert.That(puzzle.IsBusy, Is.False);
-                Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyRobot), Is.EqualTo(name == "Inner 2"));
+                Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyRobot), Is.EqualTo(name == "Core 2"));
                 Assert.That(puzzle.Trays[2].IsOpen, Is.False);
-                if (name == "Chest 1") Assert.That(inner.IsAccessible, Is.True);
+                if (name == "Chest 1") { Assert.That(inner.IsAccessible, Is.True); Assert.That(core.IsAccessible, Is.False); }
+                if (name == "Inner 2") { Assert.That(core.IsAccessible, Is.True); Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Playing)); }
                 if (name == "Right 2") Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Playing));
             }
             Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
-            Assert.That(puzzle.ClearedCount, Is.EqualTo(15));
-            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(5));
+            Assert.That(puzzle.ClearedCount, Is.EqualTo(18));
+            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(6));
             input.ResetExperiment();
             Assert.That(input.Radio.localRotation, Is.EqualTo(initial));
             Assert.That(puzzle.RemovedCount, Is.Zero);
             Assert.That(puzzle.ReleasedPlateCount, Is.Zero);
             Assert.That(inner.IsAccessible, Is.False);
+            Assert.That(core.IsAccessible, Is.False);
             Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.ToyRobot), Is.True, "Restart must preserve completion.");
             Assert.That(nose.transform.localScale, Is.EqualTo(noseScale));
             foreach (var screw in targets)
@@ -76,6 +80,40 @@ namespace ScrewPuzzle.Tests
             yield return null;
             Assert.That(GameObject.Find("Toy Robot Completed"), Is.Not.Null);
             Assert.That(GameObject.Find("Start Toy Robot").GetComponentInChildren<UnityEngine.UI.Text>().text, Does.StartWith("REPLAY"));
+        }
+
+        [UnityTest]
+        public IEnumerator Restart_DuringInnerRelease_RelocksCoreAndRestoresQueue()
+        {
+            EditorSceneManager.OpenScene(ThreeDBoardNavigation.ToyRobot);
+            yield return new EnterPlayMode(); yield return null;
+            var input = Object.FindFirstObjectByType<Radio3DInteraction>();
+            var puzzle = input.GetComponent<Radio3DPuzzle>();
+            var innerPlate = GameObject.Find("Inner Assembly").GetComponent<Radio3DPlate>();
+            var core = GameObject.Find("Core 0").GetComponent<Radio3DScrew>();
+            foreach (string name in new[] { "Chest 0", "Back 0", "Left 0", "Chest 2", "Back 2", "Left 2", "Chest 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1" })
+            {
+                Assert.That(puzzle.TryAdd(GameObject.Find(name).GetComponent<Radio3DScrew>()), Is.True);
+                float deadline = Time.realtimeSinceStartup + 8;
+                while (puzzle.IsBusy && Time.realtimeSinceStartup < deadline) yield return null;
+                Assert.That(puzzle.IsBusy, Is.False);
+            }
+            Assert.That(puzzle.TryAdd(GameObject.Find("Inner 2").GetComponent<Radio3DScrew>()), Is.True);
+            float releaseDeadline = Time.realtimeSinceStartup + 8;
+            while (!innerPlate.IsAnimating && Time.realtimeSinceStartup < releaseDeadline) yield return null;
+            Assert.That(innerPlate.IsAnimating, Is.True);
+            Assert.That(core.IsAccessible, Is.False);
+            input.ResetExperiment();
+            yield return null;
+            Assert.That(core.IsAccessible, Is.False);
+            Assert.That(innerPlate.IsReleased, Is.False);
+            Assert.That(innerPlate.gameObject.activeSelf, Is.True);
+            Assert.That(puzzle.RemovedCount, Is.Zero);
+            Assert.That(puzzle.TotalPlateCount, Is.EqualTo(6));
+            Assert.That(puzzle.Trays[0].Color, Is.EqualTo(ScrewColorId.Red));
+            Assert.That(puzzle.Trays[1].Color, Is.EqualTo(ScrewColorId.Blue));
+            foreach (var screw in Object.FindObjectsByType<Radio3DScrew>(FindObjectsSortMode.None))
+                Assert.That(screw.IsRemoved, Is.False);
         }
 
         [UnityTearDown]

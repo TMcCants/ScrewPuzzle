@@ -86,8 +86,8 @@ namespace ScrewPuzzle
                 var fasteners = new Radio3DScrew[3];
                 for (int i = 0; i < 3; i++)
                 {
-                    int color = face == 3 ? 0 : face == 4 ? 1 : i;
-                    Vector3 position = face < 2 ? new Vector3((i - 1) * 1.15f, 0.14f, face == 0 ? -0.98f : 0.98f) :
+                    int color = face == 3 ? 0 : face == 4 ? 1 : (i + face) % 3;
+                    Vector3 position = face < 2 ? new Vector3((i - 1) * 1.15f, i == 1 ? 0.24f : 0.04f, face == 0 ? -0.98f : 0.98f) :
                         face < 4 ? new Vector3(face == 2 ? -2.16f : 2.16f, 0.02f, (i - 1) * 0.53f) :
                         new Vector3((i - 1) * 0.85f, 0.14f, -0.79f);
                     fasteners[i] = Screw(prefixes[face] + " " + i, radio, position, normals[face], colors[color], dark);

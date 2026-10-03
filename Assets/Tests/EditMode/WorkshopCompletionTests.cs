@@ -56,10 +56,12 @@ namespace ScrewPuzzle.Tests
                 scene == ThreeDBoardNavigation.ToyCar ? new[] { "Near", "Far", "Rear", "Nose", "Inner" } : new[] { "Chest", "Back", "Left", "Right", "Inner" };
             foreach (int color in new[] { 0, 2, 1 })
                 for (int face = 0; face < 3; face++)
-                    yield return Take(faces[face] + " " + color, puzzle);
+                    yield return Take(faces[face] + " " + (scene == ThreeDBoardNavigation.ToyCar ? (color - face + 3) % 3 : color), puzzle);
             for (int face = 3; face < 5; face++)
                 for (int screw = 0; screw < 3; screw++)
                     yield return Take(faces[face] + " " + screw, puzzle);
+            if (scene == ThreeDBoardNavigation.ToyRobot)
+                for (int screw = 0; screw < 3; screw++) yield return Take("Core " + screw, puzzle);
             Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
         }
         private static IEnumerator Take(string name, Radio3DPuzzle puzzle)

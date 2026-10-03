@@ -42,7 +42,7 @@ namespace ScrewPuzzle
 
             BuildModel(out Transform radio, out List<Radio3DScrew> screws, out Radio3DPlate[] plates);
             puzzle = gameObject.AddComponent<Radio3DPuzzle>();
-            puzzle.Configure(camera, screws.ToArray(), plates);
+            puzzle.Configure(camera, screws.ToArray(), plates, TraySequence);
             puzzle.Completed += () => ThreeDBoardProgress.MarkCompleted(BoardId);
             interaction = gameObject.AddComponent<Radio3DInteraction>();
             interaction.Configure(camera, radio, screws.ToArray());
@@ -53,6 +53,7 @@ namespace ScrewPuzzle
 
         protected virtual string BoardTitle => "THE RADIO WORKSHOP";
         protected virtual string BoardId => ThreeDBoardProgress.Radio;
+        protected virtual ScrewColorId[] TraySequence => null;
         protected virtual float ModelVerticalOffset => 180f;
         protected virtual string WinTitle => "RADIO CLEARED!";
 
