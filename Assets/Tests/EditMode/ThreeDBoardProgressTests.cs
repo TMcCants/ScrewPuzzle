@@ -9,15 +9,19 @@ namespace ScrewPuzzle.Tests
     {
         private readonly string[] boards = { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar, ThreeDBoardProgress.ToyRobot };
         private readonly int[] values = new int[3];
+        private int tutorial;
         [OneTimeSetUp]
         public void Save()
         {
+            tutorial = PlayerPrefs.GetInt(WorkshopTutorial.PreferenceKey, -1);
             for (int i = 0; i < boards.Length; i++)
                 values[i] = PlayerPrefs.GetInt(ThreeDBoardProgress.Key(boards[i]), -1);
         }
         [OneTimeTearDown]
         public void Restore()
         {
+            if (tutorial == -1) PlayerPrefs.DeleteKey(WorkshopTutorial.PreferenceKey);
+            else PlayerPrefs.SetInt(WorkshopTutorial.PreferenceKey, tutorial);
             for (int i = 0; i < boards.Length; i++)
             {
                 string key = ThreeDBoardProgress.Key(boards[i]);

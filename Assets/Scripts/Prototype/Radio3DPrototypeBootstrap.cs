@@ -13,6 +13,7 @@ namespace ScrewPuzzle
         private Radio3DInteraction interaction;
         private Text status;
         private Text soundLabel;
+        private Text instructions;
         private Radio3DPuzzle puzzle;
         private Camera view;
         private RectTransform layout;
@@ -46,6 +47,7 @@ namespace ScrewPuzzle
             interaction = gameObject.AddComponent<Radio3DInteraction>();
             interaction.Configure(camera, radio, screws.ToArray());
             BuildUi();
+            gameObject.AddComponent<WorkshopTutorial>().Configure(layout, instructions, puzzle, interaction, screws.ToArray());
             gameObject.AddComponent<WorkshopCompletion>().Configure(layout, puzzle, BoardId, WinTitle, interaction.ResetExperiment);
         }
 
@@ -263,7 +265,7 @@ namespace ScrewPuzzle
             circleTexture.Apply();
             circle = Sprite.Create(circleTexture, new Rect(0, 0, 64, 64), Vector2.one * 0.5f);
             Label(layout, BoardTitle, 48, 0.94f);
-            Label(layout, "Drag to rotate • Match screws to their trays\nRemove all 3 screws to release a plate", 32, 0.87f);
+            instructions = Label(layout, "Drag to rotate • Match screws to their trays\nRemove all 3 screws to release a plate", 32, 0.87f);
             var sound = Panel("Sound", layout, new Vector2(0, 593), new Vector2(320, 64), new Color(0.22f, 0.23f, 0.25f));
             sound.gameObject.AddComponent<Button>().onClick.AddListener(() => FeedbackAudio.ToggleSound());
             soundLabel = Label(sound.transform, "", 28, 0.5f);

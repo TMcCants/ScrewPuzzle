@@ -12,6 +12,7 @@ namespace ScrewPuzzle
         public int RemovedCount { get { return puzzle.RemovedCount; } }
         public int TotalCount { get; private set; }
         public bool IsDragging { get; private set; }
+        public event System.Action<float> Rotated;
         public float DragThreshold { get { return Mathf.Max(12f, Mathf.Min(Screen.width, Screen.height) * 0.015f); } }
 
         private Radio3DPuzzle puzzle;
@@ -101,7 +102,11 @@ namespace ScrewPuzzle
             if (!tracking) return;
             if (!IsDragging && Vector2.Distance(start, point) >= DragThreshold) IsDragging = true;
             if (IsDragging)
-                Radio.Rotate(Vector3.up, -(point.x - previous.x) * 300f / Mathf.Max(1, Screen.width), Space.World);
+            {
+                float degrees = -(point.x - previous.x) * 300f / Mathf.Max(1, Screen.width);
+                Radio.Rotate(Vector3.up, degrees, Space.World);
+                Rotated?.Invoke(Mathf.Abs(degrees));
+            }
             previous = point;
         }
 

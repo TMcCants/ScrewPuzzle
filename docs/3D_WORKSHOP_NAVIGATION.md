@@ -125,3 +125,7 @@ try each button, and verify fresh puzzles and retained completion. Repeat in a n
 Workshop Android build. User acceptance (2026-10-03): the user reported that the celebration looks amazing and all requested test scenarios passed successfully.
 
 Celebration validation: nine selected project tests passed across the initial and corrected runs, plus the render helper. The radio regression caught a one-frame input blocker after Restart; synchronous dismissal on the puzzle's Restarted event fixed it and the affected test passed on rerun. The new flow test wins all three boards, replays Radio, follows Next Toy, returns to the shop and checks single-listener cleanup. The final preview also waits for layout resizing before capture. Device acceptance was subsequently reported successful by the user.
+
+## First-play guidance
+
+The Workshop now provides a skippable, action-driven introduction on the first board visit. Completion or dismissal is remembered per device. See [the tutorial guide](WORKSHOP_TUTORIAL.md) for behavior and acceptance checks.
