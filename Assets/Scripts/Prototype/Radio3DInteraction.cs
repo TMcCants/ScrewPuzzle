@@ -12,6 +12,8 @@ namespace ScrewPuzzle
         public int RemovedCount { get { return puzzle.RemovedCount; } }
         public int TotalCount { get; private set; }
         public bool IsDragging { get; private set; }
+        public bool AllowPitch { get; set; }
+        public bool ExplainLockedScrews { get; set; }
         public event System.Action<float> Rotated;
         public float DragThreshold { get { return Mathf.Max(12f, Mathf.Min(Screen.width, Screen.height) * 0.015f); } }
 
@@ -72,12 +74,66 @@ namespace ScrewPuzzle
 
         public Radio3DScrew PickScrew(Vector2 point)
         {
+            var screw = PickVisibleScrew(point);
+            return screw != null && screw.IsAccessible ? screw : null;
+        }
+
+        public Radio3DScrew PickVisibleScrew(Vector2 point)
+        {
             if (View == null) return null;
             // The nearest solid surface wins: the cabinet blocks screws on its far side.
             if (!Physics.Raycast(View.ScreenPointToRay(point), out RaycastHit hit, 100f,
                 ~0, QueryTriggerInteraction.Ignore)) return null;
             Radio3DScrew screw = hit.collider.GetComponentInParent<Radio3DScrew>();
-            return screw != null && screw.IsAccessible ? screw : null;
+            if (screw != null && !screw.IsAccessible && !IsHeadVisible(screw)) return null;
+            return screw;
+        }
+
+        private bool IsHeadVisible(Radio3DScrew screw)
+        {
+            // The generous tap proxy can protrude through a covering panel. A lock badge
+            // must refer to a visible head, not reveal a hidden screw through that panel.
+            Transform visual = screw.transform.Find("Head Visual");
+            if (visual == null) return true;
+            Vector3 target = visual.TransformPoint(Vector3.up * .8f);
+            Vector3 direction = target - View.transform.position;
+            foreach (var hit in Physics.RaycastAll(View.transform.position, direction.normalized,
+                direction.magnitude, ~0, QueryTriggerInteraction.Ignore))
+                if (hit.collider.GetComponentInParent<Radio3DScrew>() != screw) return false;
+            return true;
+        }
+
+        public Radio3DScrew FindHint()
+        {
+            if (!puzzle.CanInteract) return null;
+            CancelPointer();
+            var candidates = new List<Radio3DScrew>();
+            foreach (var screw in screws)
+            {
+                if (screw.IsRemoved || !screw.IsAccessible) continue;
+                bool matches = System.Array.Exists(puzzle.Trays, t => t.IsOpen && t.HasColor && t.Color == screw.ColorId && t.Count < Radio3DPuzzle.Capacity);
+                if (matches) candidates.Add(screw);
+            }
+            Physics.SyncTransforms();
+            foreach (var screw in candidates)
+                if (PickScrew(View.WorldToScreenPoint(screw.transform.position)) == screw) return screw;
+            Quaternion original = Radio.rotation;
+            foreach (var screw in candidates)
+            {
+                Vector3 normal = Radio.InverseTransformDirection(screw.transform.up);
+                float yaw = Vector3.SignedAngle(Vector3.ProjectOnPlane(normal, Vector3.up), Vector3.back, Vector3.up);
+                foreach (float offset in new[] { 0f, -15f, 15f, -30f, 30f })
+                {
+                    Radio.rotation = AllowPitch
+                        ? Quaternion.AngleAxis(offset, View.transform.up) * Quaternion.FromToRotation(normal, -View.transform.forward)
+                        : Quaternion.Euler(0, yaw + offset, 0);
+                    Physics.SyncTransforms();
+                    if (PickScrew(View.WorldToScreenPoint(screw.transform.position)) == screw) return screw;
+                }
+                Radio.rotation = original;
+            }
+            Physics.SyncTransforms();
+            return null;
         }
 
         private bool IsOverUi(Vector2 point)
@@ -94,7 +150,7 @@ namespace ScrewPuzzle
             if (Radio == null || !puzzle.CanInteract || IsOverUi(point)) return;
             tracking = true;
             start = previous = point;
-            pressedScrew = PickScrew(point);
+            pressedScrew = ExplainLockedScrews ? PickVisibleScrew(point) : PickScrew(point);
         }
 
         public void MovePointer(Vector2 point)
@@ -105,7 +161,11 @@ namespace ScrewPuzzle
             {
                 float degrees = -(point.x - previous.x) * 300f / Mathf.Max(1, Screen.width);
                 Radio.Rotate(Vector3.up, degrees, Space.World);
-                Rotated?.Invoke(Mathf.Abs(degrees));
+                float pitch = AllowPitch ? (point.y - previous.y) * 300f / Mathf.Max(1, Screen.height) : 0;
+                // Camera-relative pitch stays intuitive even after turning the toy around.
+                // Quaternions allow continuous rotation through the top and underside.
+                if (AllowPitch) Radio.Rotate(View.transform.right, pitch, Space.World);
+                Rotated?.Invoke(Mathf.Abs(degrees) + Mathf.Abs(pitch));
             }
             previous = point;
         }
@@ -115,8 +175,9 @@ namespace ScrewPuzzle
             if (!tracking) return;
             MovePointer(point); // Account for a final movement arriving on the release frame.
             if (!IsDragging && !IsOverUi(point) && pressedScrew != null
-                && pressedScrew == PickScrew(point) && pressedScrew.gameObject.activeSelf)
+                && pressedScrew == (ExplainLockedScrews ? PickVisibleScrew(point) : PickScrew(point)) && pressedScrew.gameObject.activeSelf)
             {
+                GetComponent<WorkshopHint>()?.Dismiss();
                 puzzle.TryAdd(pressedScrew);
             }
             CancelPointer();
@@ -129,10 +190,16 @@ namespace ScrewPuzzle
             pressedScrew = null;
         }
 
-        public void ResetExperiment()
+        public void ResetView()
         {
             CancelPointer();
             Radio.localRotation = initialRotation;
+            Rotated?.Invoke(0);
+        }
+
+        public void ResetExperiment()
+        {
+            ResetView();
             puzzle.Restart();
         }
 

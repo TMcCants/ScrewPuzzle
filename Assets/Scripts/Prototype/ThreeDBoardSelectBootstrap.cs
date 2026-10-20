@@ -8,7 +8,8 @@ namespace ScrewPuzzle
     public sealed class ThreeDBoardSelectBootstrap : MonoBehaviour
     {
         private RectTransform layout;
-        private Text sound;
+        private Text sound, music;
+        private RectTransform musicControl;
         private RectTransform heading, subtitle, soundControl, footer;
         private readonly List<RectTransform> cards = new List<RectTransform>();
         private readonly List<RectTransform> shadows = new List<RectTransform>();
@@ -23,6 +24,7 @@ namespace ScrewPuzzle
 
         private void Awake()
         {
+            WorkshopMusic.EnsurePlaying();
             var camera = new GameObject("Board Select Camera").AddComponent<Camera>();
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = new Color(0.88f, 0.83f, 0.74f);
@@ -50,12 +52,17 @@ namespace ScrewPuzzle
             CreateRoundedSprite();
             headerBacking = Panel("Title Backing", layout, Vector2.zero, Vector2.one, new Color(0.98f, 0.95f, 0.88f, 0.92f)).rectTransform;
             heading = Label(layout, "THE TOY SHOP", Vector2.zero, new Vector2(680, 90), 54).rectTransform;
-            subtitle = Label(layout, "Pick a project. Make it come apart.", Vector2.zero, new Vector2(900, 70), 28).rectTransform;
+            subtitle = Label(layout, "Toy Shop: " + ThreeDBoardProgress.CollectionStatus, Vector2.zero, new Vector2(620, 70), 28).rectTransform;
             var soundButton = Panel("Sound", layout, Vector2.zero, new Vector2(180, 64), new Color(0.78f, 0.72f, 0.61f));
             soundControl = soundButton.rectTransform;
             soundButton.raycastTarget = true;
             soundButton.gameObject.AddComponent<Button>().onClick.AddListener(() => FeedbackAudio.ToggleSound());
             sound = Label(soundControl, "", Vector2.zero, new Vector2(170, 60), 23);
+            var musicButton = Panel("Music", layout, Vector2.zero, new Vector2(180, 64), new Color(0.78f, 0.72f, 0.61f));
+            musicControl = musicButton.rectTransform;
+            musicButton.raycastTarget = true;
+            musicButton.gameObject.AddComponent<Button>().onClick.AddListener(WorkshopMusic.Toggle);
+            music = Label(musicControl, "", Vector2.zero, new Vector2(170, 60), 23);
             viewport = new GameObject("Board Grid", typeof(RectTransform), typeof(Image), typeof(RectMask2D), typeof(ScrollRect)).GetComponent<RectTransform>();
             viewport.SetParent(layout, false);
             viewport.GetComponent<Image>().color = Color.clear;
@@ -70,10 +77,14 @@ namespace ScrewPuzzle
             scroll.movementType = ScrollRect.MovementType.Clamped;
             scroll.scrollSensitivity = 35;
             MakeCard(ThreeDBoardProgress.Radio, "Radio", "Art/Workshop/Shelf-Radio", new Color(0.57f, 0.32f, 0.15f), ThreeDBoardNavigation.OpenRadio);
-            MakeCard(ThreeDBoardProgress.ToyCar, "Toy Car", "Art/Workshop/Shelf-Car", new Color(0.10f, 0.39f, 0.39f), ThreeDBoardNavigation.OpenToyCar);
-            MakeCard(ThreeDBoardProgress.ToyRobot, "Toy Robot", "Art/Workshop/Shelf-Robot", new Color(0.65f, 0.25f, 0.14f), ThreeDBoardNavigation.OpenToyRobot);
+            MakeCard(ThreeDBoardProgress.ToyCar, "Toy Car", "Art/Workshop/Shelf-Car", new Color(0.70f, 0.19f, 0.12f), ThreeDBoardNavigation.OpenToyCar);
+            MakeCard(ThreeDBoardProgress.ToyRobot, "Toy Robot", "Art/Workshop/Shelf-Robot", new Color(.49f, .34f, .66f), ThreeDBoardNavigation.OpenToyRobot);
+            MakeCard(ThreeDBoardProgress.ToyTrain, "Toy Train", "Art/Workshop/Shelf-Train", new Color(0.18f, 0.40f, 0.24f), ThreeDBoardNavigation.OpenToyTrain);
+            MakeCard(ThreeDBoardProgress.ToyPlane, "Toy Airplane", "Art/Workshop/Shelf-Plane", new Color(.24f, .47f, .82f), ThreeDBoardNavigation.OpenToyPlane);
             footerBacking = Panel("Footer Backing", layout, Vector2.zero, new Vector2(800, 65), new Color(0.98f, 0.95f, 0.88f, 0.92f)).rectTransform;
-            footer = Label(layout, "Choose a toy to play or resume", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
+            footerBacking.GetComponent<Image>().raycastTarget = true;
+            footerBacking.gameObject.AddComponent<Button>().onClick.AddListener(ThreeDBoardNavigation.OpenCategories);
+            footer = Label(layout, "BACK TO COLLECTIONS", Vector2.zero, new Vector2(900, 65), 25).rectTransform;
             RefreshLayout(Screen.safeArea);
         }
 
@@ -99,15 +110,12 @@ namespace ScrewPuzzle
             cards.Add(card.rectTransform);
             card.raycastTarget = true;
             card.gameObject.AddComponent<Button>().onClick.AddListener(action);
-            Label(card.transform, name.ToUpperInvariant(), new Vector2(0, 130), new Vector2(320, 44), 32);
+            string lesson = boardId == ThreeDBoardProgress.Radio ? "1. RADIO" : boardId == ThreeDBoardProgress.ToyCar ? "2. RACE CAR" : boardId == ThreeDBoardProgress.ToyRobot ? "3. TOY ROBOT" : boardId == ThreeDBoardProgress.ToyTrain ? "4. TOY TRAIN" : "5. TOY AIRPLANE";
+            Label(card.transform, lesson, new Vector2(0, 130), new Vector2(320, 44), 32);
             bool completed = ThreeDBoardProgress.IsCompleted(boardId);
-            if (completed)
-            {
-                var badge = Label(card.transform, "COMPLETED", new Vector2(0, 98), new Vector2(300, 24), 18);
-                badge.gameObject.name = name + " Completed";
-                badge.color = new Color(0.12f, 0.38f, 0.28f);
-            }
-
+            var badge = Label(card.transform, ThreeDBoardProgress.Status(boardId), new Vector2(0, 98), new Vector2(320, 24), 18);
+            badge.gameObject.name = name + (completed ? " Completed" : " Status");
+            badge.color = new Color(0.12f, 0.38f, 0.28f);
             // The soft grounding shadow and shelf sit behind the actual rendered game model.
             Panel("Object Shadow", card.transform, new Vector2(0, -53), new Vector2(200, 14), new Color(0.25f, 0.17f, 0.10f, 0.13f)).raycastTarget = false;
             Panel("Shelf Shadow", card.transform, new Vector2(0, -71), new Vector2(270, 16), new Color(0.26f, 0.15f, 0.06f, 0.17f)).raycastTarget = false;
@@ -156,7 +164,8 @@ namespace ScrewPuzzle
             headerBacking.anchoredPosition = new Vector2(0, IsWideLayout ? 330 : 650);
             headerBacking.sizeDelta = new Vector2(IsWideLayout ? 1360 : 840, 180);
             heading.anchoredPosition = IsWideLayout ? new Vector2(-330, 357) : new Vector2(-90, 660);
-            subtitle.anchoredPosition = IsWideLayout ? new Vector2(-220, 285) : new Vector2(0, 588);
+            subtitle.anchoredPosition = IsWideLayout ? new Vector2(-220, 285) : new Vector2(-90, 588);
+            musicControl.anchoredPosition = IsWideLayout ? new Vector2(590, 285) : new Vector2(325, 593);
             soundControl.anchoredPosition = IsWideLayout ? new Vector2(590, 356) : new Vector2(325, 665);
             footer.anchoredPosition = new Vector2(0, IsWideLayout ? -377 : -620);
             footerBacking.anchoredPosition = footer.anchoredPosition;
@@ -192,10 +201,11 @@ namespace ScrewPuzzle
                 shadows[i].anchoredPosition = position + new Vector2(0, -7);
                 shadows[i].sizeDelta = cards[i].sizeDelta;
             }
-            sound.text = FeedbackAudio.IsSoundEnabled ? "SOUND ON" : "SOUND OFF";
+            music.text = WorkshopMusic.IsEnabled ? "MUSIC ON" : "MUSIC OFF";
+            sound.text = FeedbackAudio.IsSoundEnabled ? "SFX ON" : "SFX OFF";
         }
 
-        private void Update() { RefreshLayout(Screen.safeArea); }
+        private void Update() { RefreshLayout(Screen.safeArea); if (Input.GetKeyDown(KeyCode.Escape)) ThreeDBoardNavigation.OpenCategories(); }
         private void OnDestroy()
         {
             if (rounded != null) Destroy(rounded);

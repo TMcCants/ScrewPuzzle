@@ -187,3 +187,7 @@ User acceptance (2026-10-01): the user reported that all test scenarios passed
 successfully after reviewing the new radio and being asked to check PC and phone.
 
 ![Toy radio art pass](art/Radio3D_Toy_Radio_Preview.png)
+
+## Assembly refinement
+
+The radio now has a removable speaker mechanism and circuit board, with 18 screws and six plates. This supersedes the earlier five-plate layout. See [the assembly guide](RADIO_DISASSEMBLY.md).

@@ -23,6 +23,7 @@ namespace ScrewPuzzle
         public int HeldCount { get { return RemovedCount - ClearedCount; } }
         public string Message { get; private set; }
         public bool CanInteract { get { return State == PuzzleState.Playing && !IsBusy; } }
+        public bool HasQueuedTrays => jobs.Count > 0;
         public System.Func<int, int, Vector3> HoleScreenPosition;
         public event System.Action Completed;
         public event System.Action Restarted;
@@ -33,13 +34,15 @@ namespace ScrewPuzzle
         private Radio3DFeedback feedback;
         private ScrewColorId[] traySequence;
         private string resumeBoard;
+        private int layoutSeed;
         private readonly List<int> savedActions = new List<int>();
         private string SaveSignature => string.Join("|", System.Array.ConvertAll(screws, s => s.SaveSignature)) + "/" +
             string.Join("|", System.Array.ConvertAll(plates, p => p.SaveSignature)) + "/" + string.Join(",", traySequence);
 
-        public void EnableResume(string boardId)
+        public void EnableResume(string boardId, int seed = 0)
         {
             resumeBoard = boardId;
+            layoutSeed = seed;
             var run = WorkshopRunSave.Read(boardId);
             if (run == null) return;
             if (run.signature != SaveSignature || run.actions == null || run.actions.Length > screws.Length + 2)
@@ -81,7 +84,7 @@ namespace ScrewPuzzle
         {
             if (resumeBoard == null) return;
             savedActions.Add(action);
-            WorkshopRunSave.Write(resumeBoard, SaveSignature, savedActions.ToArray());
+            WorkshopRunSave.Write(resumeBoard, SaveSignature, savedActions.ToArray(), layoutSeed);
         }
         public int TotalPlateCount { get { return plates.Length; } }
         public int ReleasedPlateCount
@@ -127,7 +130,7 @@ namespace ScrewPuzzle
             if (!CanInteract || screw == null || screw.IsRemoved) return false;
             if (!screw.IsAccessible)
             {
-                Message = "Remove the covering plate first.";
+                Message = screw.LockReason;
                 return false;
             }
             int index = System.Array.FindIndex(Trays, t => t.IsOpen && t.HasColor && t.Color == screw.ColorId && t.Count < Capacity);

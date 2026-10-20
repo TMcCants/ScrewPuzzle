@@ -11,6 +11,7 @@ namespace ScrewPuzzle
             public int version = 1;
             public string signature;
             public int[] actions;
+            public int layoutSeed;
         }
         public static string Key(string board) => "ScrewPuzzle.Workshop3D.Run.v1." + board;
         public static bool HasRun(string board)
@@ -30,9 +31,10 @@ namespace ScrewPuzzle
             Clear(board);
             return null;
         }
-        public static void Write(string board, string signature, int[] actions)
+        public static void Write(string board, string signature, int[] actions, int layoutSeed = 0)
         {
-            PlayerPrefs.SetString(Key(board), JsonUtility.ToJson(new Run { signature = signature, actions = actions }));
+            PlayerPrefs.SetString(Key(board), JsonUtility.ToJson(new Run { signature = signature, actions = actions, layoutSeed = layoutSeed }));
+            PlayerPrefs.SetString(WorkshopPlayerProfile.LastBoardKey, board);
             PlayerPrefs.Save();
         }
         public static void Clear(string board) { PlayerPrefs.DeleteKey(Key(board)); PlayerPrefs.Save(); }

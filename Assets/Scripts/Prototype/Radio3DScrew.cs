@@ -8,6 +8,9 @@ namespace ScrewPuzzle
         public ScrewColorId ColorId { get; private set; }
         public bool IsRemoved { get; private set; }
         public bool IsInnerLayer => coveringPlate != null;
+        public string LockReason => coveringPlate == null ? "" :
+            coveringPlate.IsAnimating ? "Wait for the " + coveringPlate.name.Replace(" Assembly", "").ToLowerInvariant() + " to come away." :
+            "Remove the " + coveringPlate.name.Replace(" Assembly", "").ToLowerInvariant() + " assembly first.";
         internal string SaveSignature => name + ":" + (int)ColorId + ":" + (coveringPlate == null ? "" : coveringPlate.name);
         public bool IsAccessible { get { return coveringPlate == null || (coveringPlate.IsReleased && !coveringPlate.IsAnimating); } }
         private Radio3DPlate coveringPlate;
@@ -16,6 +19,12 @@ namespace ScrewPuzzle
         private Quaternion rotation;
         private Vector3 scale;
         private Collider[] colliders;
+        public void Recolor(ScrewColorId color, Material material)
+        {
+            ColorId = color;
+            transform.Find("Head").GetComponent<Renderer>().sharedMaterial = material;
+            transform.Find("Head Visual").GetComponent<Renderer>().sharedMaterial = material;
+        }
 
         public void Initialize(ScrewColorId color, Radio3DPlate cover = null)
         {

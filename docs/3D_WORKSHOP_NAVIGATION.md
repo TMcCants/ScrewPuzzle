@@ -133,3 +133,17 @@ The Workshop now provides a skippable, action-driven introduction on the first b
 ## Unfinished-run resume
 
 The earlier fresh-visit behavior is superseded by per-toy saved runs. Toy Shop buttons display RESUME where appropriate; Restart remains the fresh-start action. See [resume behavior and device checks](WORKSHOP_RESUME.md).
+
+## Hints
+
+All three toys now have a free Hint button beside Sound. It highlights an accessible matching screw and turns the toy when needed. See [hint behavior and device checks](WORKSHOP_HINTS.md).
+
+### Installing the current workshop on a connected Android phone
+
+Use **Tools > ScrewPuzzle > Build and Run 3D Workshop on Phone** after switching
+to Android. This builds all four experiment scenes, disables scripts-only builds
+for this operation, and installs/launches the separate **ScrewPuzzle 3D Workshop**
+app. The original Build Profiles scene list still targets the older game; its
+standard Build and Run button does not select the workshop scenes. The refined
+Radio should display 18 screws and six plates. The APK-only workshop command also
+now disables scripts-only builds while building, then restores the editor setting.
