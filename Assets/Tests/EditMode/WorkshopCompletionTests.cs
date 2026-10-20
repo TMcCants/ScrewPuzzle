@@ -15,7 +15,7 @@ namespace ScrewPuzzle.Tests
         {
             Assert.That(ThreeDBoardNavigation.NextScene(ThreeDBoardProgress.Radio), Is.EqualTo(ThreeDBoardNavigation.ToyCar));
             Assert.That(ThreeDBoardNavigation.NextScene(ThreeDBoardProgress.ToyCar), Is.EqualTo(ThreeDBoardNavigation.ToyRobot));
-            Assert.That(ThreeDBoardNavigation.NextScene(ThreeDBoardProgress.ToyRobot), Is.EqualTo(ThreeDBoardNavigation.Radio));
+            Assert.That(ThreeDBoardNavigation.NextScene(ThreeDBoardProgress.ToyRobot), Is.EqualTo(ThreeDBoardNavigation.ToyTrain));
         }
 
         [UnityTest]
@@ -35,6 +35,9 @@ namespace ScrewPuzzle.Tests
                 if (scene == ThreeDBoardNavigation.Radio)
                 {
                     GameObject.Find("Replay Toy").GetComponent<Button>().onClick.Invoke();
+                    yield return null; yield return null;
+                    puzzle=Object.FindFirstObjectByType<Radio3DPuzzle>();
+                    celebration=Object.FindFirstObjectByType<WorkshopCompletion>();
                     Assert.That(celebration.IsVisible, Is.False);
                     Assert.That(puzzle.RemovedCount, Is.Zero);
                     Assert.That(ThreeDBoardProgress.IsCompleted(ThreeDBoardProgress.Radio), Is.True);
@@ -52,6 +55,15 @@ namespace ScrewPuzzle.Tests
 
         private static IEnumerator Win(string scene, Radio3DPuzzle puzzle)
         {
+            if (scene != ThreeDBoardNavigation.Radio)
+            {
+                string[] route = scene == ThreeDBoardNavigation.ToyRobot
+                    ? new[] { "Chest 0", "Chest 1", "Chest 2", "Right 1", "Back 1", "Left 1", "Back 0", "Back 2", "Left 0", "Inner 0", "Inner 1", "Inner 2", "Core 0", "Core 1", "Right 0", "Left 2", "Right 2", "Core 2" }
+                    : new[] { "Near 0", "Near 1", "Near 2", "Far 0", "Far 2", "Rear 1", "Nose 0", "Nose 1", "Inner 0", "Inner 1", "Rear 2", "Nose 2", "Far 1", "Rear 0", "Inner 2" };
+                foreach (string screw in route) yield return Take(screw, puzzle);
+                Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
+                yield break;
+            }
             string[] faces = scene == ThreeDBoardNavigation.Radio ? new[] { "Front", "Back", "Left", "Right", "Inner" } :
                 scene == ThreeDBoardNavigation.ToyCar ? new[] { "Near", "Far", "Rear", "Nose", "Inner" } : new[] { "Chest", "Back", "Left", "Right", "Inner" };
             foreach (int color in new[] { 0, 2, 1 })
@@ -62,6 +74,8 @@ namespace ScrewPuzzle.Tests
                     yield return Take(faces[face] + " " + screw, puzzle);
             if (scene == ThreeDBoardNavigation.ToyRobot)
                 for (int screw = 0; screw < 3; screw++) yield return Take("Core " + screw, puzzle);
+            if (scene == ThreeDBoardNavigation.Radio)
+                for (int screw = 0; screw < 3; screw++) yield return Take("Circuit " + screw, puzzle);
             Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
         }
         private static IEnumerator Take(string name, Radio3DPuzzle puzzle)

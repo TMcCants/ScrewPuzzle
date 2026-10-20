@@ -32,7 +32,7 @@ namespace ScrewPuzzle
             origin = transform.localPosition;
             orientation = transform.localRotation;
             scale = transform.localScale;
-            colliders = GetComponentsInChildren<Collider>();
+            colliders = System.Array.FindAll(GetComponentsInChildren<Collider>(), collider => collider.enabled);
         }
 
         // The puzzle owns this coroutine so Restart cancels tray and plate motion together.

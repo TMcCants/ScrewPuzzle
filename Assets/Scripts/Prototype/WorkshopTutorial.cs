@@ -71,7 +71,9 @@ namespace ScrewPuzzle
             instructions.rectTransform.anchoredPosition = new Vector2(IsActive ? -90 : 0, 0);
             instructions.rectTransform.sizeDelta = new Vector2(IsActive ? 800 : 1000, 140);
             if (!IsActive) { instructions.text = usualInstructions; return; }
-            if (Step == 0) instructions.text = "1 / 3  •  TURN THE TOY\nDrag left or right to find screws on every side.";
+            if (Step == 0) instructions.text = interaction.AllowPitch
+                ? "1 / 3  •  TURN THE TOY\nDrag sideways or up/down. Look above and underneath!"
+                : "1 / 3  •  TURN THE TOY\nDrag left or right to find screws on every side.";
             else if (Step == 1) instructions.text = "2 / 3  •  MATCH A TRAY\nTap screws matching an open tray. Collect 3 to clear it.";
             else
             {

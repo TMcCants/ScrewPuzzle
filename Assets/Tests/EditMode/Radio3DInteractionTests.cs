@@ -45,7 +45,7 @@ namespace ScrewPuzzle.Tests
             yield return null;
             yield return null;
             Radio3DInteraction input = Object.FindFirstObjectByType<Radio3DInteraction>();
-            Assert.That(input.TotalCount, Is.EqualTo(15));
+            Assert.That(input.TotalCount, Is.EqualTo(18));
             Radio3DScrew front = GameObject.Find("Front 0").GetComponent<Radio3DScrew>();
             Radio3DScrew rear = GameObject.Find("Back 0").GetComponent<Radio3DScrew>();
             Physics.SyncTransforms();
@@ -107,7 +107,7 @@ namespace ScrewPuzzle.Tests
             Assert.That(puzzle.RemovedCount, Is.Zero);
             // Both free trays alone must be sufficient to win.
             foreach (string name in new[] { "Front 0", "Back 0", "Left 0", "Front 2", "Back 2", "Left 2",
-                "Front 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1", "Inner 2" })
+                "Front 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1", "Inner 2", "Circuit 0", "Circuit 1", "Circuit 2" })
             {
                 Select(input, name);
                 yield return Settle(puzzle);
@@ -122,8 +122,8 @@ namespace ScrewPuzzle.Tests
             }
             Assert.That(puzzle.State, Is.EqualTo(Radio3DPuzzle.PuzzleState.Won));
             Assert.That(puzzle.HeldCount, Is.Zero);
-            Assert.That(puzzle.ClearedCount, Is.EqualTo(15));
-            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(5));
+            Assert.That(puzzle.ClearedCount, Is.EqualTo(18));
+            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(6));
             input.ResetExperiment();
             Assert.That(puzzle.UnlockTestTray(2), Is.True);
             Assert.That(puzzle.Trays[2].Color, Is.EqualTo(ScrewColorId.Yellow));
@@ -131,7 +131,7 @@ namespace ScrewPuzzle.Tests
             Assert.That(puzzle.Trays[3].Color, Is.EqualTo(ScrewColorId.Red));
             Assert.That(puzzle.UnlockTestTray(2), Is.False);
             foreach (string name in new[] { "Front 2", "Back 2", "Left 2", "Front 0", "Back 0", "Left 0",
-                "Right 0", "Right 1", "Right 2", "Front 1", "Inner 0", "Inner 1", "Inner 2", "Back 1", "Left 1" })
+                "Right 0", "Right 1", "Right 2", "Front 1", "Inner 0", "Inner 1", "Inner 2", "Back 1", "Left 1", "Circuit 0", "Circuit 1", "Circuit 2" })
             {
                 Select(input, name);
                 yield return Settle(puzzle);
@@ -236,12 +236,10 @@ namespace ScrewPuzzle.Tests
         }
         private static void Select(Radio3DInteraction input, string name)
         {
-            Vector3 normal = name.StartsWith("Front") || name.StartsWith("Inner") ? Vector3.back :
-                name.StartsWith("Back") ? Vector3.forward :
-                name.StartsWith("Left") ? Vector3.left : Vector3.right;
+            Radio3DScrew screw = GameObject.Find(name).GetComponent<Radio3DScrew>();
+            Vector3 normal = input.Radio.InverseTransformDirection(screw.transform.up);
             input.Radio.rotation = Quaternion.FromToRotation(normal, Vector3.back);
             Physics.SyncTransforms();
-            Radio3DScrew screw = GameObject.Find(name).GetComponent<Radio3DScrew>();
             Vector2 point = input.View.WorldToScreenPoint(screw.transform.position);
             Assert.That(input.PickScrew(point), Is.EqualTo(screw), name);
             input.BeginPointer(point);

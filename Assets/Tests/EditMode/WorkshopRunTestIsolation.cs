@@ -8,7 +8,7 @@ namespace ScrewPuzzle.Tests
         [SetUp]
         public void StartWithoutUnfinishedRuns()
         {
-            foreach (string board in new[] { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar, ThreeDBoardProgress.ToyRobot })
+            foreach (string board in new[] { ThreeDBoardProgress.Radio, ThreeDBoardProgress.ToyCar, ThreeDBoardProgress.ToyRobot, ThreeDBoardProgress.ToyTrain, ThreeDBoardProgress.ToyPlane })
                 PlayerPrefs.DeleteKey(WorkshopRunSave.Key(board));
             PlayerPrefs.Save();
         }

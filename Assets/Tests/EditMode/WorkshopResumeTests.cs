@@ -48,19 +48,20 @@ namespace ScrewPuzzle.Tests
             EditorSceneManager.OpenScene(ThreeDBoardNavigation.ToyRobot);
             yield return new EnterPlayMode(); yield return null;
             var puzzle = Object.FindFirstObjectByType<Radio3DPuzzle>();
-            foreach (string name in new[] { "Chest 0", "Back 0", "Left 0", "Chest 2", "Back 2", "Left 2", "Chest 1", "Back 1", "Left 1", "Right 0", "Right 1", "Right 2", "Inner 0", "Inner 1" })
+            foreach (string name in new[] { "Chest 0", "Chest 1", "Chest 2", "Right 1", "Back 1", "Left 1", "Back 0", "Back 2", "Left 0", "Inner 0", "Inner 1" })
                 yield return Take(puzzle, name);
             Assert.That(puzzle.TryAdd(GameObject.Find("Inner 2").GetComponent<Radio3DScrew>()), Is.True);
             ThreeDBoardNavigation.OpenRadio(); yield return null; yield return null;
             Assert.That(Object.FindFirstObjectByType<Radio3DPuzzle>().RemovedCount, Is.Zero);
             ThreeDBoardNavigation.OpenToyRobot(); yield return null; yield return null;
             puzzle = Object.FindFirstObjectByType<Radio3DPuzzle>();
-            Assert.That(puzzle.RemovedCount, Is.EqualTo(15));
-            Assert.That(puzzle.ClearedCount, Is.EqualTo(15));
-            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(5));
+            Assert.That(puzzle.RemovedCount, Is.EqualTo(12));
+            Assert.That(puzzle.ClearedCount, Is.EqualTo(9));
+            Assert.That(puzzle.ReleasedPlateCount, Is.EqualTo(3));
             Assert.That(GameObject.Find("Core 0").GetComponent<Radio3DScrew>().IsAccessible, Is.True);
             Assert.That(puzzle.Trays[2].IsOpen, Is.False);
             for (int i = 0; i < 2; i++) yield return Take(puzzle, "Core " + i);
+            foreach (string remaining in new[] { "Right 0", "Left 2", "Right 2" }) yield return Take(puzzle, remaining);
             Assert.That(puzzle.TryAdd(GameObject.Find("Core 2").GetComponent<Radio3DScrew>()), Is.True);
             ThreeDBoardNavigation.OpenToyRobot(); yield return null; yield return null;
             puzzle = Object.FindFirstObjectByType<Radio3DPuzzle>();
